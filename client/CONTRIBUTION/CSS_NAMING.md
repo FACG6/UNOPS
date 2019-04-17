@@ -25,4 +25,12 @@ An element is a component that needs context in which to function.
 
 Finally, a modifier is something that changes the properties of an element.
 > For example, a button with different color, or an input with different type.
-> **The modifier className**
+> **The modifier className is attached to the element with two dashes**
+```HTML
+ <form class="my-form">
+   <input class="my-form__input-field"
+   <input class="my-form__input-field--submit"
+   <input class="my-form__input-field--red"
+ </form>
+ ```
+

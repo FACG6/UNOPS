@@ -9,8 +9,8 @@
 }
 
 .main {
-    background: #333;
-    width: 30%;
+    background: transparent;
+    width: 400px;
     height: 600px;
     overflow: hidden;
 }
@@ -45,14 +45,52 @@
 .form {
     width: 100%;
     background: #fff;
-    height: 300px;
+    height: 330px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .label {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+}
+
+.label-text {
+    width: 350px;
+    margin: 0 auto;
+}
+
+.required {
+    color: red;
+}
+
+.input {
+    height: 35px;
+    padding: 5px;
+    border: 2px solid #c7c7c7;
+    border-radius: 3px;
+    width: 350px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.submit {
+    cursor: pointer;
+    width: 364px;
+    height: 45px;
+    color: #fff;
+    background: #437489;
+    border: 2px solid #437489;
+    border-radius: 3px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.submit:hover {
+    opacity: 0.96;
 }

@@ -21,14 +21,18 @@ export default class extends Component {
           </section>
           <form action="" className="form">
             <label htmlFor="" className="email-label label">
-              Email: <span className="required">*</span>
+              <span className="label-text">
+                Email: <span className="required">*</span>
+              </span>
               <input type="text" className="email-input input" />
             </label>
             <label htmlFor="" className="password-label label">
-              Password: <span className="required">*</span>
+              <span className="label-text">
+                Password: <span className="required">*</span>
+              </span>
               <input type="password" className="password-input input" />
             </label>
-            <input type="button" className="submit input" value="Login" />
+            <input type="button" className="submit" value="Login" />
           </form>
         </main>
       </div>

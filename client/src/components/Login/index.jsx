@@ -1,38 +1,42 @@
-import React, { Component } from "react";
-import "./style.css";
-import { ReactComponent as Logo } from "./../../logo.svg";
+import React, { Component } from 'react';
+import './style.css';
+import { ReactComponent as Logo } from '../../logo.svg';
 
 export default class extends Component {
   state = {
-    email: "",
-    password: ""
+    email: '',
+    password: '',
   };
 
   render() {
     return (
-      <div className="container">
-        <main className="main">
-          <section className="header">
+      <div className="login">
+        <main className="login__main">
+          <section className="login__header">
             <Logo />
-            <span className="logo-text">
-              <span className="logo-text--white">UN</span>
-              <span className="logo-text--black">OPS</span>
-            </span>
+            {/* <span className="login__logo-text"> */}
+            <span className="login__logo-text login__logo-text--white">UN</span>
+            <span className="login__logo-text login__logo-text--black">OPS</span>
+            {/* </span> */}
           </section>
-          <form action="" className="form">
-            <label htmlFor="" className="email-label label">
-              <span className="label-text">
-                Email: <span className="required">*</span>
+          <form action="" className="login__form">
+            <label htmlFor="email" className="login__label">
+              <span className="login__label-text">
+                Email:
+                {' '}
+                <span className="required">*</span>
               </span>
-              <input type="text" className="email-input input" />
+              <input type="email" id="email" className="login__input" />
             </label>
-            <label htmlFor="" className="password-label label">
-              <span className="label-text">
-                Password: <span className="required">*</span>
+            <label htmlFor="password" className="login__label">
+              <span className="login__label-text">
+                Password:
+                {' '}
+                <span className="required">*</span>
               </span>
-              <input type="password" className="password-input input" />
+              <input type="password" id="password" className="login__input" />
             </label>
-            <input type="button" className="submit" value="Login" />
+            <input type="button" className="login__submit" value="Login" />
           </form>
         </main>
       </div>

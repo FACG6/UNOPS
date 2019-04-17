@@ -5,31 +5,31 @@ import './style.css';
 class TicketsSidebar extends Component {
   render() {
     return (
-      <div className="ticket--side-bar">
-        <button className="new--ticket">
+      <div className="ticket-sidebar">
+        <button className="ticket-sidebar__new-ticket">
           <i className="fas fa-plus" />
-          {'                '}
+          {'          '}
           Ticket
         </button>
-        <div className="ticket--side-bar-links">
+        <div className="ticket-sidebar__links-container">
           <Router>
-            <div className="links">
-              <Link to="/tickets/all" className="anchor--all link">
+            <div className="ticket-sidebar__links ticket-sidebar__selected">
+              <Link to="/tickets/all" className="ticket-sidebar__all-link">
                 All
                 {' '}
               </Link>
               <i className="far fa-circle" />
             </div>
-            <div className="links">
-              <Link to="/tickets/my" className="anchor--my link">My</Link>
+            <div className="ticket-sidebar__links">
+              <Link to="/tickets/my" className="ticket-sidebar__my-link">My</Link>
               <i className="far fa-circle" />
             </div>
-            <div className="links">
-              <Link to="/tickets/drafts" className="anchor--drafts link">Drafts</Link>
+            <div className="ticket-sidebar__links">
+              <Link to="/tickets/drafts" className="ticket-sidebar__drafts-link">Drafts</Link>
               <i className="far fa-circle" />
             </div>
-            <div className="links">
-              <Link to="trash" className="anchor--trash link">Trash</Link>
+            <div className="ticket-sidebar__links">
+              <Link to="trash" className="ticket-sidebar__trash-link">Trash</Link>
               <i className="far fa-circle" />
             </div>
           </Router>

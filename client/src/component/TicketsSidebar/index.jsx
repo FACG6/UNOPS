@@ -7,7 +7,7 @@ class TicketsSidebar extends Component {
     return (
       <div className="ticket--side-bar">
         <button className="new--ticket">
-          <span><i className="fas fa-plus" /></span>
+          <i className="fas fa-plus" />
           {'                '}
           Ticket
         </button>

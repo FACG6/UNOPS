@@ -3,7 +3,7 @@ a {
     text-decoration: none;
 }
 
-.main-side-bar {
+.main-sidebar {
     background: #437489;
     width: 80px;
     height: 100vh;
@@ -13,7 +13,7 @@ a {
     align-items: center;
 }
 
-.tab {
+.main-sidebar__tab {
     width: 100%;
     height: 80px;
     display: flex;
@@ -26,11 +26,11 @@ a {
     border-bottom: 1px solid #fff;
 }
 
-.tab:hover {
+.main-sidebar__tab:hover {
     background: #315564;
 }
 
-.text {
+.main-sidebar__text {
     margin-top: 7px;
 }
 
@@ -38,10 +38,10 @@ a {
     width: 70px;
 }
 
-.focus {
+.main-sidebar__focus {
     background: #363936;
 }
 
-.focus:hover {
+.main-sidebar__focus:hover {
     background: #363936;
 }

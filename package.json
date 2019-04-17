@@ -38,5 +38,9 @@
     "nodemailer": "^6.1.0",
     "pg": "^7.9.0",
     "react-froala-wysiwyg": "^2.9.5-1"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": []
 }

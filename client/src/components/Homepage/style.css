@@ -1,0 +1,33 @@
+.statusdiv {
+  display: flex;
+  margin-left: 10vw;
+}
+.pendingDiv {
+  display: flex;
+  margin-right: 5%;
+}
+.closedDiv {
+  display: flex;
+}
+.selected {
+  background: #437489;
+}
+.status {
+  margin: 2.5vh 1.5vw;
+}
+.Logout {
+  margin-left: 58.7vw;
+  font-family: roboto;
+  color: #3e3c3c;
+}
+#circle {
+  margin-top: 2.2vh;
+  margin-left: -0.8vw;
+  margin-right: 1vw;
+  height: 18.8px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  background: #c4c4c4;
+  padding: 3%;
+}

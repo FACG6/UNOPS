@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
-import { ReactComponent as Logo } from '../../logo.svg';
+import Logo from '../Logo';
 
 export default class extends Component {
   state = {
@@ -13,7 +13,7 @@ export default class extends Component {
       <div className="login">
         <main className="login__main">
           <section className="login__header">
-            <Logo />
+            <Logo className="login__logo" />
             {/* <span className="login__logo-text"> */}
             <span className="login__logo-text login__logo-text--white">UN</span>
             <span className="login__logo-text login__logo-text--black">OPS</span>

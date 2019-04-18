@@ -7,7 +7,7 @@ export default () => (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={() => <div />} />
-      <Route exact path="/login" component={() => <Login />} />
+      <Route exact path="/login" component={Login} />
     </Switch>
   </BrowserRouter>
 );

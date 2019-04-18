@@ -17,27 +17,32 @@ export default class extends Component {
         <form className="main__form">
           <label htmlFor="subject" className="main__label">
             <span className="main__label-text">
-              Subject: <span className="required">*</span>
+              Subject:
+              {' '}
+              <span className="required">*</span>
             </span>
             <input type="text" id="subject" className="main__input" />
           </label>
-          <label htmlFor="to" className="main__label">
+          <label htmlFor="to" id="to-label" className="main__label">
             <span className="main__label-text">To:</span>
             <input type="email" id="to" className="main__input" />
           </label>
           <div className="main__carbon-copy">
-            <label htmlFor="to" className="main__carbon-label">
+            <div className="main__carbon-label">
               <span className="main__label-text">CC:</span>
               <i className="fas fa-plus-circle main__icon" />
-            </label>
-            <label htmlFor="to" className="main__carbon-label">
+            </div>
+            <div className="main__carbon-label">
               <span className="main__label-text">BCC:</span>
               <i className="fas fa-plus-circle main__icon" />
-            </label>
+            </div>
           </div>
-          <label htmlFor="text" className="main__label">
-            <textarea name="text" id="text" className="main__textarea" />
-          </label>
+          <textarea
+            name="text"
+            id="text"
+            className="main__textarea"
+            placeholder="Enter your ticket's description"
+          />
           <label htmlFor="checkbox" className="main__label">
             <input type="checkbox" id="checkbox" className="main__checkbox" />
             <span className="main__label-text">Send ticket as email</span>

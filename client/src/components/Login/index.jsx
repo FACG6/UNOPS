@@ -14,10 +14,8 @@ export default class extends Component {
         <main className="login__main">
           <section className="login__header">
             <Logo className="login__logo" />
-            {/* <span className="login__logo-text"> */}
             <span className="login__logo-text login__logo-text--white">UN</span>
             <span className="login__logo-text login__logo-text--black">OPS</span>
-            {/* </span> */}
           </section>
           <form action="" className="login__form">
             <label htmlFor="email" className="login__label">

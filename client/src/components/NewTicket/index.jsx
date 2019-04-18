@@ -26,11 +26,11 @@ export default class extends Component {
             <input type="email" id="to" className="main__input" />
           </label>
           <div className="main__carbon-copy">
-            <label htmlFor="to" className="main__label">
+            <label htmlFor="to" className="main__carbon-label">
               <span className="main__label-text">CC:</span>
               <i className="fas fa-plus-circle main__icon" />
             </label>
-            <label htmlFor="to" className="main__label">
+            <label htmlFor="to" className="main__carbon-label">
               <span className="main__label-text">BCC:</span>
               <i className="fas fa-plus-circle main__icon" />
             </label>

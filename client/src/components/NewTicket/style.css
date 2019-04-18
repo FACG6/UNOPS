@@ -1,4 +1,4 @@
-.main {
+.new-ticket {
   width: 60%;
   height: 450px;
   padding: 30px 0 0 40px;
@@ -12,7 +12,7 @@
   border-radius: 3px;
 }
 
-.main__form {
+.new-ticket__form {
   width: 100%;
   height: 100%;
   display: flex;
@@ -20,20 +20,20 @@
   align-items: flex-start;
 }
 
-.main__header {
+.new-ticket__header {
   width: 100%;
   font: normal 2rem "Roboto", sans-serif;
   margin-bottom: 20px;
 }
 
-.main__carbon-copy {
+.new-ticket__carbon-copy {
   width: 100%;
   display: flex;
   justify-content: space-between;
   margin: 20px 0;
 }
 
-.main__carbon-label {
+.new-ticket__carbon-label {
   width: 49%;
 }
 
@@ -41,12 +41,12 @@
   color: var(--required, red);
 }
 
-.main__label-text {
+.new-ticket__label-text {
   font-family: Roboto;
   margin-right: 10px;
 }
 
-.main__input {
+.new-ticket__input {
   height: 25px;
   padding-left: 5px;
   width: 250px;
@@ -58,11 +58,11 @@
   margin-left: 37px;
 }
 
-.main__label {
+.new-ticket__label {
   margin: 10px 0;
 }
 
-.main__textarea {
+.new-ticket__textarea {
   width: 80%;
   height: 110px;
   padding: 10px 0 0 10px;
@@ -71,12 +71,12 @@
   resize: none;
 }
 
-.main__textarea::placeholder {
+.new-ticket__textarea::placeholder {
   font-family: "Roboto", sans-serif;
   font-size: 1rem;
 }
 
-.main__submit {
+.new-ticket__submit {
   color: #fff;
   font-family: "Roboto", sans-serif;
   font-size: 1.2rem;
@@ -88,16 +88,16 @@
   margin-top: 10px;
 }
 
-.main__icon {
+.new-ticket__icon {
   font-size: 1.1rem;
 }
 
-.main__icon:hover {
+.new-ticket__icon:hover {
   cursor: pointer;
   opacity: 0.97;
 }
 
-.main__submit:hover {
+.new-ticket__submit:hover {
   cursor: pointer;
   opacity: 0.97;
 }

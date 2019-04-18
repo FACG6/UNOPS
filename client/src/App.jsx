@@ -12,7 +12,7 @@ export default () => (
       <Route exact path="/" component={() => <div />} />
       <Route path="/search" render={() => <SearchSidebar />} />
       <Route path="/tickets/all/pending" component={() => <Home pendingClass="selected" />} />
-      <Route path="/homepage/closed" component={() => <Home closedClass="selected" />} />
+      <Route path="/tickets/all/closed" component={() => <Home closedClass="selected" />} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/main-sidebar" component={() => <MainSidebar selected="tickets" />} />
     </Switch>

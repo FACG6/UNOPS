@@ -2,8 +2,8 @@ BEGIN;
 DROP TABLE IF EXISTS users, tickets_status, tickets CASCADE;
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
-    email TEXT NOT NULL,
-    name VARCHAR NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    name VARCHAR NOT NULL ,
     password VARCHAR NOT NULL
 );
 CREATE TABLE tickets_status(

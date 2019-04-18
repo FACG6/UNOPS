@@ -2,15 +2,13 @@ const { readFileSync } = require('fs');
 const path = require('path');
 const connect = require('./connection.js');
 
+const error = new TypeError('error in building database');
 const sql = readFileSync(path.join(__dirname, 'build.sql')).toString();
-const DBRun = cb => connect.query(sql, (err, res) => {
-  if (err) cb(err);
-  cb(null, res);
-});
 
-DBRun((err) => {
-  if (err) console.log('err', err);
-  else console.log('DB built');
-});
+const DBRun = () => connect.query(sql);
+DBRun().then((result) => {
+  if(result) {
+    return result;  
+  }
+}).catch(error);
 module.exports = DBRun;
-

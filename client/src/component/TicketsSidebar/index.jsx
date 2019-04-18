@@ -13,23 +13,23 @@ class TicketsSidebar extends Component {
         </button>
         <div className="ticket-sidebar__links-container">
           <Router>
-            <div className="ticket-sidebar__links ticket-sidebar__selected">
-              <Link to="/tickets/all" className="ticket-sidebar__all-link">
+            <div className="ticket-sidebar__links">
+              <Link to="/tickets/all-ticket" className="ticket-sidebar__all-link">
                 All
                 {' '}
               </Link>
               <i className="far fa-circle" />
             </div>
             <div className="ticket-sidebar__links">
-              <Link to="/tickets/my" className="ticket-sidebar__my-link">My</Link>
+              <Link to="/tickets/my-ticket" className="ticket-sidebar__my-link">My</Link>
               <i className="far fa-circle" />
             </div>
             <div className="ticket-sidebar__links">
-              <Link to="/tickets/drafts" className="ticket-sidebar__drafts-link">Drafts</Link>
+              <Link to="/tickets/drafts-ticket" className="ticket-sidebar__drafts-link">Drafts</Link>
               <i className="far fa-circle" />
             </div>
             <div className="ticket-sidebar__links">
-              <Link to="trash" className="ticket-sidebar__trash-link">Trash</Link>
+              <Link to="/tickets/trash-ticket" className="ticket-sidebar__trash-link">Trash</Link>
               <i className="far fa-circle" />
             </div>
           </Router>

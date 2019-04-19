@@ -4,8 +4,8 @@ import Login from './components/Login';
 import './App.css';
 import SearchSidebar from './components/searchSidebar/sidebar';
 import Home from './components/Homepage/index';
-import MainSidebar from './components/MainSidebar';
 import NewTicket from './components/NewTicket';
+import MainSidebar from './components/MainSidebar';
 
 export default () => (
   <BrowserRouter>
@@ -14,6 +14,7 @@ export default () => (
       <Route path="/search" render={() => <SearchSidebar />} />
       <Route path="/tickets/all/pending" component={() => <Home pendingClass="selected" />} />
       <Route path="/tickets/all/closed" component={() => <Home closedClass="selected" />} />
+      <Route exact path="/" />
       <Route exact path="/login" component={Login} />
       <Route exact path="/main-sidebar" component={() => <MainSidebar selected="tickets" />} />
       <Route exact path="/new-ticket" component={() => <NewTicket />} />

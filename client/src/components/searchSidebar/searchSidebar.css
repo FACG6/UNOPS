@@ -19,9 +19,9 @@
   height: 4vh;
   border-radius: 0.7%;
   border: none;
-  height: 3.5vh;
   font-family: FontAwesome;
   padding-left: 5px;
+  width: 16.2vw;
 }
 .button {
   height: 4vh;
@@ -37,8 +37,18 @@
   margin: 1.5% 10%;
 }
 
+#user-select {
+  height: 4vh;
+  background: #fff ;
+}
+#status-select {
+  height: 4vh;
+  background: #fff;
+}
+
 .label {
     color: #ffffff;
+    font-size: 3vh;
 }
 
 .searchbar{
@@ -47,9 +57,11 @@
 
 .icon-div{
   background: #fff;
-  height: 3.8vh;
+  height: 3.4vh;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 3vw;
+  margin-left: -42px;
+  margin-top: 2%;
 }

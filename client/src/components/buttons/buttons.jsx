@@ -1,8 +1,6 @@
-import React from "react";
+import React from 'react';
 
-function Buttons(props) {
-  if (props.value === 'search') {
-    return <input className="button" type="submit" value="Search" />;
-  }
+function Buttons({ value }) {
+  return <input className="button" type="submit" value={value} />;
 }
 export default Buttons;

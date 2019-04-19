@@ -15,16 +15,16 @@ function SearchSidebar() {
             />
             <div className="icon-div"><i className="fas fa-search" /></div>
           </div>
-          <label style={{ 'margin-top': `${2}vh` }} className="margin label">Users:</label>
-          <select style={{ height: `${4}vh`, background: '#fff' }} className="margin" name="users">
+          <label htmlFor="user-select" className="margin label">Users:</label>
+          <select id="user-select" className="margin" name="users-select">
             <option value="All">All</option>
             <option value="Anies">Anies</option>
             <option value="Ahmed">Ahmed</option>
             <option value="Jamalat">Jamalat</option>
             <option value="Alaa">Alaa</option>
           </select>
-          <label className="margin label">Status:</label>
-          <select style={{ height: `${4}vh`, background: '#fff' }} className="margin" name="status">
+          <label htmlFor="status-select" className="margin label">Status:</label>
+          <select id="status-select" className="margin" name="status">
             <option value="All">All</option>
             <option value="pending">pending</option>
             <option value="closed">closed</option>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Navbar from '../navbar/Navbar';
 import './style.css';
 import MainSidebar from '../MainSidebar';
@@ -6,7 +6,7 @@ import MainSidebar from '../MainSidebar';
 class Home extends Component {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <MainSidebar selected="tickets" />
         <Navbar
           className="homeNav"
@@ -24,7 +24,7 @@ class Home extends Component {
             </div>,
           ]}
         />
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

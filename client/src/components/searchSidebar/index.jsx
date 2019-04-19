@@ -35,5 +35,4 @@ function SearchSidebar() {
     </div>
   );
 }
-
 export default SearchSidebar;

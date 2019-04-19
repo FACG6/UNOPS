@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './components/Login';
-import './App.css';
-import SearchSidebar from './components/searchSidebar/sidebar';
+import SearchSidebar from './components/searchSidebar/index';
 import Home from './components/Homepage/index';
 import NewTicket from './components/NewTicket';
 import MainSidebar from './components/MainSidebar';
+import './App.css';
 
 export default () => (
   <BrowserRouter>

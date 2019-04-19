@@ -5,7 +5,6 @@
   width: 21vw;
   position: fixed;
 }
-
 .search-sidebar {
   display: flex;
   flex-direction: column;
@@ -13,8 +12,6 @@
   position: fixed;
   top: 29%;
 }
-
-
 .searchform {
   height: 4vh;
   border-radius: 0.7%;
@@ -32,7 +29,6 @@
   border-radius: 0.7%;
   border: none;
 }
-
 .margin {
   margin: 1.5% 10%;
 }
@@ -45,16 +41,13 @@
   height: 4vh;
   background: #fff;
 }
-
 .label {
     color: #ffffff;
     font-size: 3vh;
 }
-
 .searchbar{
   display: flex;
 }
-
 .icon-div{
   background: #fff;
   height: 3.4vh;

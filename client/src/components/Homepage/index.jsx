@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Navbar from '../navbar/Navbar';
 import './style.css';
+import MainSidebar from '../MainSidebar';
 
 class Home extends Component {
   render() {
     return (
       <React.Fragment>
+        <MainSidebar selected="tickets" />
         <Navbar
           className="homeNav"
           children={[
@@ -17,9 +19,7 @@ class Home extends Component {
               {' '}
               <div className={`closedDiv ${this.props.closedClass}`}>
                 <h4 className="status">Closed</h4>
-                <div id="circle">
-                  10
-                </div>
+                <div id="circle">10</div>
               </div>
             </div>,
           ]}

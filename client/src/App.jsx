@@ -5,6 +5,7 @@ import './App.css';
 import SearchSidebar from './components/searchSidebar/sidebar';
 import Home from './components/Homepage/index';
 import MainSidebar from './components/MainSidebar';
+import NewTicket from './components/NewTicket';
 
 export default () => (
   <BrowserRouter>
@@ -15,6 +16,7 @@ export default () => (
       <Route path="/tickets/all/closed" component={() => <Home closedClass="selected" />} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/main-sidebar" component={() => <MainSidebar selected="tickets" />} />
+      <Route exact path="/new-ticket" component={() => <NewTicket />} />
     </Switch>
   </BrowserRouter>
 );

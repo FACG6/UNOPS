@@ -1,24 +1,23 @@
 .statusdiv {
   display: flex;
-  margin-left: 10vw;
+  /* margin-left: 10vw; */
 }
 .pendingDiv {
   display: flex;
   margin-right: 5%;
+  text-align: center;
+  padding-top: 3vh;
 }
 .closedDiv {
   display: flex;
+  text-align: center;
+  padding-top: 3vh;
 }
 .selected {
-  background: #437489;
+  background: var(--main-color, blue);
 }
 .status {
   margin: 2.5vh 1.5vw;
-}
-.Logout {
-  margin-left: 58.7vw;
-  font-family: roboto;
-  color: #3e3c3c;
 }
 #circle {
   margin-top: 2.2vh;

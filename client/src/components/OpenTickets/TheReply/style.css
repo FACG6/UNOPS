@@ -1,0 +1,56 @@
+.reply{
+    margin-left: 295px;
+}
+.content_reply{
+    width: 631px;
+    height: 300px;
+    margin: 100px;
+    margin-left:300px;
+    background: #ECECEC;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+}
+.contentText-area{
+    width: 546px;
+    height: 164px;
+    margin-left: 36px;
+    margin-top: 71px;
+    border-radius: 10px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: normal;
+}
+#btn_reply{
+    position: absolute;
+    width: 140px;
+    height: 42px;
+    margin-left: 200px;
+    background: #437489;
+    border-radius: 20px;
+    top: 394px;
+    left: 550px; 
+}
+.name_email1{
+    position: absolute;
+    margin-left: 40px;
+}
+.title_email1{
+    position: absolute;
+    margin-left: 80px;
+    margin-top: 23px;
+    
+}
+.name_email2{
+    position: absolute;
+    margin-left: 384px;
+}
+.title_email2{
+    position: absolute;
+    margin-left: 421px;
+    margin-top: 25px;
+}
+.text_in_area{
+   
+}

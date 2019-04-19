@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './components/Login';
 import './App.css';
 import MainSidebar from './components/MainSidebar';
-import openTicket from './components/OpenTickets/TickectSubject';
+import openTicket from './components/OpenTickets/TheReply';
 export default () => (
   <BrowserRouter>
     <Switch>

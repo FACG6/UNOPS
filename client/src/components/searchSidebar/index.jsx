@@ -1,12 +1,12 @@
 import React from 'react';
-import './searchSidebar.css';
+import './style.css';
 import Buttons from '../buttons/buttons';
 
 function SearchSidebar() {
   return (
     <div className="container">
       <form>
-        <div className="SearchSidebar">
+        <div className="search-sidebar">
           <div className="margin searchbar">
             <input
               className=" searchform"
@@ -16,7 +16,7 @@ function SearchSidebar() {
             <div className="icon-div"><i className="fas fa-search" /></div>
           </div>
           <label htmlFor="user-select" className="margin label">Users:</label>
-          <select id="user-select" className="margin" name="users-select">
+          <select id="user-select" className="margin user-select" name="users-select">
             <option value="All">All</option>
             <option value="Anies">Anies</option>
             <option value="Ahmed">Ahmed</option>
@@ -24,7 +24,7 @@ function SearchSidebar() {
             <option value="Alaa">Alaa</option>
           </select>
           <label htmlFor="status-select" className="margin label">Status:</label>
-          <select id="status-select" className="margin" name="status">
+          <select id="status-select" className="margin status-select" name="status">
             <option value="All">All</option>
             <option value="pending">pending</option>
             <option value="closed">closed</option>

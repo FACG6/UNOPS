@@ -6,7 +6,7 @@
   position: fixed;
 }
 
-.SearchSidebar {
+.search-sidebar {
   display: flex;
   flex-direction: column;
   width: 21vw;
@@ -37,11 +37,11 @@
   margin: 1.5% 10%;
 }
 
-#user-select {
+.user-select {
   height: 4vh;
   background: #fff ;
 }
-#status-select {
+.status-select {
   height: 4vh;
   background: #fff;
 }

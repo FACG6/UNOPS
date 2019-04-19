@@ -1,5 +1,5 @@
 import React from 'react';
-import './searchSidebar.css';
+import './style.css';
 import Buttons from '../buttons/buttons';
 
 function SearchSidebar() {

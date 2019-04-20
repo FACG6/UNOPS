@@ -29,8 +29,8 @@ class Replies extends Component {
     render() {
       return (
         <React.Fragment>
-          <div>
-            <p>Replies :</p>
+          <div className="replies-component">
+            <p className="replies-component__replies-text">Replies :</p>
             <div>
               {this.state.replies.map(reply => <Conversation key={reply.email} reply={reply} />)}
 

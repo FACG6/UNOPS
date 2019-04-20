@@ -8,7 +8,7 @@ import Replies from './components/Replies/index';
 export default () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path="/" component={Replies} />
+      <Route exact path="/" />
       <Route exact path="/login" component={Login} />
       <Route exact path="/main-sidebar" component={() => <MainSidebar selected="tickets" />} />
     </Switch>

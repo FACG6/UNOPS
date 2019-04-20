@@ -9,7 +9,7 @@ import WrappedTicket from './components/WrappedTicket';
 export default () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path="/"  component={WrappedTicket}/>
+      <Route exact path="/"/>
       <Route exact path="/new-ticket" component={NewTicket} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/main-sidebar" component={() => <MainSidebar selected="tickets" />} />

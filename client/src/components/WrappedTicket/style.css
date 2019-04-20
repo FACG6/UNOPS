@@ -1,7 +1,7 @@
 .wrapped-ticket-container {
     margin-left: 320px;
     margin-top: 170px;
-    font-size: 19px;
+    font-size: 18px;
     font-family: roboto;
 }
 
@@ -26,4 +26,7 @@
 }
 .wrapped-ticket-container__check-email-container {
     margin-top: 20px;
+}
+.wrapped-ticket-container__wrappedticket__ticket-descreption{
+    font-size:16px;
 }

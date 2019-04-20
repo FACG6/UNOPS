@@ -47,7 +47,7 @@ class WrappedTicket extends Component {
                                         {wrappedticket.email}
                                     </div>
                                     <p>{wrappedticket.subject}</p>
-                                    <p>{wrappedticket.description}</p>
+                                    <p className="wrapped-ticket-container__wrappedticket__ticket-descreption">{wrappedticket.description.substring(0, 49)}...</p>
                                     <p className="wrapped-ticket-container__date"> {wrappedticket.date} </p>
                                 </div></Link>
                         </Route>

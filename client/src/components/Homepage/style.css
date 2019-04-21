@@ -1,29 +1,39 @@
 .statusdiv {
   display: flex;
-  /* margin-left: 10vw; */
 }
 .pendingDiv {
   display: flex;
   margin-right: 5%;
   text-align: center;
-  padding-top: 3vh;
+  font-family: Roboto;
+  font-style: normal;
+  font-size: medium;
+  letter-spacing: 0.06vw;
+  color: #363936;
 }
 .closedDiv {
   display: flex;
   text-align: center;
-  padding-top: 3vh;
+  font-family: Roboto;
+  font-style: normal;
+  font-size: medium;
+  letter-spacing: 0.06vw;
+  color: #363936;
 }
 .selected {
   background: var(--main-color, blue);
+  color: #ffffff;
 }
 .status {
   margin: 2.5vh 1.5vw;
+  cursor: pointer;
 }
-#circle {
+.circle {
   margin-top: 2.2vh;
   margin-left: -0.8vw;
   margin-right: 1vw;
-  height: 18.8px;
+  height: 38%;
+  width: 25%;
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
   border-radius: 25px;

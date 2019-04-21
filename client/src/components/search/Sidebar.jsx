@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import Buttons from '../buttons/buttons';
 
-function SearchSidebar() {
+function Sidebar() {
   return (
     <div className="container">
       <form>
@@ -35,4 +35,4 @@ function SearchSidebar() {
     </div>
   );
 }
-export default SearchSidebar;
+export default Sidebar;

@@ -1,27 +1,25 @@
 import React, { Component, Fragment } from 'react';
 import Navbar from '../navbar/Navbar';
 import MainSidebar from '../MainSidebar';
-import NewTicketForm from './New-ticket-form';
 import './style.css';
 
-class NewTicket extends Component {
+class OverAll extends Component {
   render() {
     return (
       <Fragment>
-        <MainSidebar selected="tickets" />
+        <MainSidebar selected="reports" />
         <Navbar
-          className="new-ticket-nav"
+          logoutClass="home-logout"
+          className="reports-nav"
           secondNavDisplay="display-none"
           children={[
-            <div className="new-ticket-header">
-              <h3>New Ticket</h3>
+            <div className="statusdiv">
+              <h3>{this.props.subject}</h3>
             </div>,
           ]}
         />
-        <NewTicketForm />
       </Fragment>
     );
   }
 }
-
-export default NewTicket;
+export default OverAll;

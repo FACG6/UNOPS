@@ -1,12 +1,37 @@
 import React from 'react';
 import './style.css';
 
-export default ({ children, className }) => (
+export default ({
+  children,
+  className,
+  logoutClass,
+  secondNavDisplay,
+  markDisplay,
+  status,
+  statusDsiplay,
+}) => (
   <nav className="nav">
-    <div className={className}>
-      {children.map(element => element)}
-      <div>
-        <p className="Logout">Logout</p>
+    <div className="wrapped-bars">
+      <div className={className}>
+        {children.map(element => element)}
+        <div className="Logout-and-status">
+          <p className={logoutClass}>Logout</p>
+          <h4 className={`opened-ticket-status ${statusDsiplay} `}>{status}</h4>
+        </div>
+      </div>
+      <div className="second-nav">
+        <p className={`select-all ${secondNavDisplay}`}>Select all</p>
+        <div className={`mark-as ${secondNavDisplay} ${markDisplay}`}>
+          <p>Mark as &#9662;</p>
+          <div className="mark-as-options">
+            <p onClick="function" className="mark-pending">
+              Pending
+            </p>
+            <p onClick="function" className="mark-resolved">
+              Resolved
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </nav>

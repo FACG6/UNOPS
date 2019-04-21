@@ -1,32 +1,19 @@
-import React, { Component, Fragment } from 'react';
-import Navbar from '../navbar/Navbar';
-import './style.css';
-import MainSidebar from '../MainSidebar';
+import React from 'react';
+import HomeAll from './tickets-home-all';
+import HomeTrash from './tickets-home-trash';
+import HomeDraft from './tickets-home-draft';
+import HomeMy from './tickets-home-my';
 
-class Home extends Component {
-  render() {
-    return (
-      <Fragment>
-        <MainSidebar selected="tickets" />
-        <Navbar
-          className="homeNav"
-          children={[
-            <div className="statusdiv">
-              <div className={`pendingDiv ${this.props.pendingClass}`}>
-                <h4 className="status">Pending</h4>
-                <div id="circle">10</div>
-              </div>
-              {' '}
-              <div className={`closedDiv ${this.props.closedClass}`}>
-                <h4 className="status">Closed</h4>
-                <div id="circle">10</div>
-              </div>
-            </div>,
-          ]}
-        />
-      </Fragment>
-    );
+function Home({ page, pendingClass, closedClass }) {
+  switch (page) {
+    case 'HomeAll':
+      return <HomeAll pendingClass={pendingClass} closedClass={closedClass} />;
+    case 'HomeMy':
+      return <HomeMy pendingClass={pendingClass} closedClass={closedClass} />;
+    case 'HomeDraft':
+      return <HomeDraft />;
+    case 'HomeTrash':
+      return <HomeTrash />;
   }
 }
-
 export default Home;

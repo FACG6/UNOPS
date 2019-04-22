@@ -18,7 +18,9 @@ A ticketing system which categorizes emails as tickets allowing users to manipul
 
 ## Running Instructions
 - Clone the repo.
-- Navigate to repo/client `$ cd UNOPS/client`
+- Navigate to the repo `$ cd UNOPS`
+- Install dependencies `$ npm install`
+- Navigate to client `$ cd client`
 - Install dependencies `$ npm install`
 - Run the server `$ npm start` 
 

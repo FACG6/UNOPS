@@ -9,10 +9,11 @@ import Replies from './components/Replies/index';
 export default () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path="/" />
+      <Route exact path="/" component={Replies} />
       <Route exact path="/new-ticket" component={NewTicket} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/main-sidebar" component={() => <MainSidebar selected="tickets" />} />
+      <Route exact path="/ticket" component={() => <MainSidebar selected="tickets" />} />
     </Switch>
   </BrowserRouter>
 );

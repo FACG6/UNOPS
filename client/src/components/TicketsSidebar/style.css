@@ -29,7 +29,6 @@
 .fa-plus {
     color: white;
 }
-
 .ticket-sidebar__links {
     width: 200px;
     height: 30px;
@@ -40,7 +39,6 @@
     margin-left: 5px;
     margin-right: 5px;
     font-family: Roboto;
-
 }
 .ticket-sidebar__all-link,
 .ticket-sidebar__my-link ,
@@ -52,7 +50,23 @@
     font-size: 22px;
     letter-spacing: 1px;
 }
+.ticket-sidebar__all-link-selected{
+    color: #363936;
+    text-decoration: none;
+    width: 49%;
+    font-size: 22px;
+    letter-spacing: 1px;
+}
 .fa-circle {
     font-size: 30px;
     color: white;
+}
+.selected-tab{
+    background: white;
+    color: #363936;
+    height: 60px;
+}
+.fa-circle-selected{
+    font-size: 30px;
+    color:  #363936;
 }

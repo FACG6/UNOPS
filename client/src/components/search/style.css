@@ -2,16 +2,18 @@
   background: #363936;
   left: 80px;
   height: 100%;
-  width: 21vw;
+  width: 200px;
   position: fixed;
 }
+
 .search-sidebar {
   display: flex;
   flex-direction: column;
-  width: 21vw;
+  width: 200px;
   position: fixed;
   top: 29%;
 }
+
 .searchform {
   height: 4vh;
   border-radius: 0.7%;
@@ -20,6 +22,7 @@
   padding-left: 5px;
   width: 16.2vw;
 }
+
 .button {
   height: 4vh;
   margin: 1.8vh 10% 0 10%;
@@ -29,26 +32,31 @@
   border-radius: 0.7%;
   border: none;
 }
+
 .margin {
   margin: 1.5% 10%;
 }
 
 .user-select {
   height: 4vh;
-  background: #fff ;
+  background: #fff;
 }
+
 .status-select {
   height: 4vh;
   background: #fff;
 }
+
 .label {
-    color: #ffffff;
-    font-size: 3vh;
+  color: #ffffff;
+  font-size: 3vh;
 }
-.searchbar{
+
+.searchbar {
   display: flex;
 }
-.icon-div{
+
+.icon-div {
   background: #fff;
   height: 3.4vh;
   display: flex;

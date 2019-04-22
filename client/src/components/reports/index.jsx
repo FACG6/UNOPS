@@ -1,21 +1,23 @@
 import React from 'react';
-import OverAll from './OverAll';
-import Today from './OverAll';
-import LastWeek from './OverAll';
-import LastMonth from './OverAll';
+import Report from './Report';
 
 import './style.css';
 
-function Reports({ page, subject }) {
-  switch (page) {
+export default ({
+  match: {
+    params: { timespan },
+  },
+}) => {
+  switch (timespan) {
     case 'overall':
-      return <OverAll subject={subject} />;
+      return <Report subject="OverAll" />;
     case 'today':
-      return <Today subject={subject} />;
+      return <Report subject="Today" />;
     case 'last-week':
-      return <LastWeek subject={subject} />;
+      return <Report subject="Last Week" />;
     case 'last-month':
-      return <LastMonth subject={subject} />;
+      return <Report subject="Last Month" />;
+    default:
+      return <React.Fragment />;
   }
-}
-export default Reports;
+};

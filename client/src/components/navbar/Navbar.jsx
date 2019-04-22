@@ -13,7 +13,7 @@ export default ({
   <nav className="nav">
     <div className="wrapped-bars">
       <div className={className}>
-        {children.map(element => element)}
+        {children}
         <div className="Logout-and-status">
           <p className={logoutClass}>Logout</p>
           <h4 className={`opened-ticket-status ${statusDsiplay} `}>{status}</h4>
@@ -24,12 +24,8 @@ export default ({
         <div className={`mark-as ${secondNavDisplay} ${markDisplay}`}>
           <p>Mark as &#9662;</p>
           <div className="mark-as-options">
-            <p onClick="function" className="mark-pending">
-              Pending
-            </p>
-            <p onClick="function" className="mark-resolved">
-              Resolved
-            </p>
+            <p className="mark-pending">Pending</p>
+            <p className="mark-resolved">Resolved</p>
           </div>
         </div>
       </div>

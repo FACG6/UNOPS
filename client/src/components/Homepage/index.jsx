@@ -4,16 +4,21 @@ import HomeTrash from './tickets-home-trash';
 import HomeDraft from './tickets-home-draft';
 import HomeMy from './tickets-home-my';
 
-function Home({ page, pendingClass, closedClass }) {
-  switch (page) {
-    case 'HomeAll':
-      return <HomeAll pendingClass={pendingClass} closedClass={closedClass} />;
-    case 'HomeMy':
-      return <HomeMy pendingClass={pendingClass} closedClass={closedClass} />;
-    case 'HomeDraft':
+export default ({
+  match: {
+    params: { cat, status },
+  },
+}) => {
+  switch (cat) {
+    case 'all':
+      return <HomeAll status={status} />;
+    case 'my':
+      return <HomeMy status={status} />;
+    case 'draft':
       return <HomeDraft />;
-    case 'HomeTrash':
+    case 'trash':
       return <HomeTrash />;
+    default:
+      return <React.Fragment />;
   }
-}
-export default Home;
+};

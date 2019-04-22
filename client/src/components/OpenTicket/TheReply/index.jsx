@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 
-export default class TheRely extends Component {
+export default class TheReply extends Component {
   render() {
 		return (
 			<section className="tex_reply">
@@ -20,7 +20,7 @@ export default class TheRely extends Component {
 				</div>
 				<input type="submit" name="reply" id="btn_reply" />
 			</section>
-		// eslint-disable-next-line no-tabs
+	
 		);
   }
 }

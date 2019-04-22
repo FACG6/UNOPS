@@ -1,14 +1,12 @@
-import React , { Component } from "react";
+import React from 'react';
+import './style.css';
 
-export default  class TickectSubject extends Component {
-    render() {
-        return (    
-                <div className="content_ticket">
-                <p className="pragragh_content">
-                    Please send us your browser details by visiting https://aboutmybrowser.com and sharing the link that it generates for you. Please send us your browser details by visiting https://aboutmybrowser.com and sharing the link that it generates for you. Please send us your browser details by visiting https://aboutmybrowser.com and sharing the link that it generates for you.
-                </p>
-                </div>
-            
-        )
-    }
-} 
+const TickectSubject = () => (
+  <div className="content_ticket">
+    <p className="pragragh_content">
+      Please send us your browser details by visiting https://aboutmybrowser.com and sharing the link that it generates for you. Please send us your browser details by visiting https://aboutmybrowser.com and sharing the link that it generates for you. Please send us your browser details by visiting https://aboutmybrowser.com and sharing the link that it generates for you.
+    </p>
+  </div>
+
+);
+export default TickectSubject;

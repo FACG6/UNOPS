@@ -1,0 +1,49 @@
+.h5_from
+{
+  
+    margin-top: -4px;  
+}
+.h5_cc
+{
+    
+      margin-top: -4px;  
+}
+.h5_bcc
+{
+    
+     margin-top: -4px;  
+}    
+.div_from{
+  display: flex;
+  margin-left: 80px;
+}
+.div_cc{
+  display: flex;
+  margin-left: 80px;
+}
+.div_bcc{
+  display: flex;
+  margin-left: 80px;
+}
+.span_from{
+font-size: 11px;
+margin-left: 8px;  
+}
+.span_cc{
+  font-size: 11px;
+  margin-left: 8px;  
+  }
+  
+  .span_bcc{
+    font-size: 11px;
+    margin-left: 8px;  
+    }
+    .pragragh_content {
+      margin-left: 77px;
+      margin-top: 110px;
+  }    
+.content_ticket{
+  margin-left: 291px;
+  margin-top: -63px;
+  height: 63px;
+}

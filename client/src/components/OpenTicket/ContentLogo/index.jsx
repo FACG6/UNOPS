@@ -1,23 +1,30 @@
-import React , { Component } from "react";
+import React from 'react';
+import './style.css';
 
-export default  class TickectSubject extends Component {
-    render() {
-        return (    
-                <div className="content_ticket">
-                <h3>
-                    From: 
-                    <h4>senderemail@gmail.com</h4>
-                </h3>
-                <h3>
+const TickectSubject = () => (
+  <div className="content_ticket">
+    <div className="div_from">
+      <p className="h5_from">
+                    From:
+        {' '}
+      </p>
+      <span className="span_from">senderemail@gmail.com</span>
+    </div>
+    <div className="div_cc">
+      <p className="h5_cc">
                     CC:
-                    <h4>cc.email@gmail.com</h4>
-                </h3>
-                <h3>
-                    BCC : 
-                    <h4>bcc.email@gmail.com</h4>
-                </h3>
-                </div>
-            
-        )
-    }
-} 
+        {' '}
+      </p>
+      <span className="span_cc">cc.email@gmail.com</span>
+    </div>
+    <div className="div_bcc">
+      <p className="h5_bcc">
+                    BCC :
+        {' '}
+
+      </p>
+      <span className="span_bcc">bcc.email@gmail.com</span>
+    </div>
+  </div>
+);
+export default TickectSubject;

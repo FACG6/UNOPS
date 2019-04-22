@@ -1,10 +1,13 @@
+.text_reply{
+    margin-left: -15px;
+}
 .reply{
     margin-left: 295px;
 }
 .content_reply{
     width: 631px;
     height: 300px;
-    margin: 100px;
+    margin-top: 10px;
     margin-left:300px;
     background: #ECECEC;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
@@ -13,8 +16,8 @@
 .contentText-area{
     width: 546px;
     height: 164px;
-    margin-left: 36px;
-    margin-top: 71px;
+    margin-left: 33px;
+    margin-top: 33px;
     border-radius: 10px;
     font-family: Roboto;
     font-style: normal;
@@ -29,8 +32,9 @@
     margin-left: 200px;
     background: #437489;
     border-radius: 20px;
-    top: 394px;
-    left: 550px; 
+    
+    top: 614px;
+    left: 536px; 
 }
 .name_email1{
     position: absolute;
@@ -49,8 +53,24 @@
 .title_email2{
     position: absolute;
     margin-left: 421px;
-    margin-top: 25px;
+    margin-top: 24px;
 }
 .text_in_area{
    
 }
+.far{
+    margin-left: 542px; 
+}
+.icon1{
+    margin-left: 220px;
+    margin-top: 22px;
+}
+.icon2{
+    margin-top: 25px;
+    margin-left: 558px;
+  }
+  .icon2_reply{
+      margin-top: -39px;
+  }
+
+  

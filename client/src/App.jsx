@@ -43,7 +43,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.wrappedTickets)
     if (this.state.wrappedTickets) {
       return (
         <BrowserRouter>
@@ -55,7 +54,7 @@ class App extends Component {
           </Switch>
         </BrowserRouter>
       );
-    } else return ""
+    } else return <h2>There are no messages yet.</h2>
 
   }
 }

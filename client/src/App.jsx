@@ -11,18 +11,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={
-            () => (
-              <Fragment>
-                <MainSidebar />
-                <TicketsSidebar selected="all" />
-              </Fragment>
-            )
-          }
-          />
+          <Route exact path="/" />
           <Route exact path="/new-ticket" component={NewTicket} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/main-sidebar" component={() => <MainSidebar selected="tickets" />} />

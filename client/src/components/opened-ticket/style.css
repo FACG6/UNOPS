@@ -19,7 +19,7 @@
   width: 13vw;
 }
 .opened-ticket-status {
-  margin-top: 8vh;
+  margin-top: -16px;
   font-family: roboto;
   font-size: 75%;
   color: darkgray;

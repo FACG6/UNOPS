@@ -4,7 +4,7 @@ import Login from './components/Login';
 import './App.css';
 import NewTicket from './components/NewTicket';
 import MainSidebar from './components/MainSidebar';
-import Replies from './components/Replies/index';
+import Replies from './components/Replies';
 
 export default () => (
   <BrowserRouter>

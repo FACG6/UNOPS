@@ -1,5 +1,5 @@
 .nav {
-  margin-left: 13vw;
+  margin-left: 280px;
   position: fixed;
   /* overflow: hidden; */
 }
@@ -29,9 +29,10 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin-right: 42px;
 }
 .home-logout {
-  /* margin-left: 60vw; */
+  margin-left: 1000px;
   color: #3e3c3c;
   font-family: Roboto;
   font-style: normal;

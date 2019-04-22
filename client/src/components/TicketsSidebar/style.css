@@ -50,7 +50,7 @@
     font-size: 22px;
     letter-spacing: 1px;
 }
-.ticket-sidebar__all-link-selected{
+.ticket-sidebar__all-link--selected{
     color: #363936;
     text-decoration: none;
     width: 49%;

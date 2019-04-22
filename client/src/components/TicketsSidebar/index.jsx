@@ -12,7 +12,7 @@ const TicketsSidebar = ({ selected }) => (
     <div className="ticket-sidebar__links-container">
       <Router>
         <div className={`ticket-sidebar__links  ${selected === 'all' ? 'selected-tab' : ''}`}>
-          <Link to="/tickets/all-ticket" className={`ticket-sidebar__all-link ${selected === 'all' ? 'ticket-sidebar__all-link-selected' : ''}`}>
+          <Link to="/tickets/all-ticket" className={`ticket-sidebar__all-link ${selected === 'all' ? 'ticket-sidebar__all-link--selected' : ''}`}>
             All
             {' '}
           </Link>

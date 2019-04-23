@@ -1,0 +1,13 @@
+.replies-component{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 320px;
+    left: 350px;
+}
+.replies-component__replies-text{
+    font-size: 20px;
+    font-style: bold;
+    font-weight: bold;
+    letter-spacing: 1px;
+}

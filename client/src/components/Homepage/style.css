@@ -1,0 +1,42 @@
+.home-nav__status-div {
+  display: flex;
+  height: 51px;
+  position: absolute;
+}
+.home-nav__pending-div {
+  display: flex;
+  margin-right: 5%;
+  text-align: center;
+  font-family: Roboto;
+  font-style: normal;
+  font-size: medium;
+  letter-spacing: 0.06vw;
+  color: #363936;
+  padding: 14px 14px 0 0;
+}
+.home-nav__closed-div {
+  display: flex;
+  text-align: center;
+  font-family: Roboto;
+  font-style: normal;
+  font-size: medium;
+  letter-spacing: 0.06vw;
+  color: #363936;
+  padding: 14px 14px 0 0;
+}
+.selected {
+  background: var(--main-color, blue);
+  color: #ffffff;
+}
+.status {
+  margin: 0 18px;
+  cursor: pointer;
+}
+.circle {
+  margin-top: 0px 10px 0 -11px;
+  height: 50%;
+  width: 16%;
+  border-radius: 25px;
+  background: #c4c4c4;
+  padding: 3%;
+}

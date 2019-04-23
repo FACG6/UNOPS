@@ -1,3 +1,6 @@
+.new-ticket-header {
+    height: 8vh;
+}
 .new-ticket {
   width: 60%;
   height: 450px;

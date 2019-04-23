@@ -7,8 +7,8 @@ const sql = readFileSync(path.join(__dirname, 'build.sql')).toString();
 
 const DBRun = () => connect.query(sql);
 DBRun().then((result) => {
-  if(result) {
-    return result;  
+  if (result) {
+    return result;
   }
 }).catch(error);
 module.exports = DBRun;

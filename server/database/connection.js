@@ -18,5 +18,5 @@ const option = {
   ssl: process.env.hostname !== 'localhost',
 };
 
-module.exports = new Pool(option);
 
+module.exports = new Pool(option);

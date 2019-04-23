@@ -21,3 +21,4 @@ CREATE TABLE tickets(
     user_id INTEGER REFERENCES users(id)
 );
 COMMIT;
+

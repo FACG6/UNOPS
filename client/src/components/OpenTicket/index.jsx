@@ -6,17 +6,17 @@ import TheReply from './TheReply';
 import Logo from '../Logo';
 
 const OpenTicket = () => (
-  <section className="containerticket">
-    <div className="div_logo">
-      <Logo className="ticket_logo" />
+  <section className="container-ticket">
+    <div className="container-ticket__div-logo">
+      <Logo className="container-ticket__ticket-logo" />
     </div>
-    <div className="content_logo">
+    <div className="content-logo">
       <ContentLogo />
     </div>
-    <div className="ticket_subject">
+    <div className="ticket-subject">
       <ContentSubject />
     </div>
-    <div className="the_reply">
+    <div className="the-reply">
       <TheReply />
     </div>
   </section>

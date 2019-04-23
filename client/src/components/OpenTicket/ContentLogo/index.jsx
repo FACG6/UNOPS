@@ -2,28 +2,28 @@ import React from 'react';
 import './style.css';
 
 const TickectSubject = () => (
-  <div className="content_ticket">
-    <div className="div_from">
-      <p className="h5_from">
+  <div className="content-ticket">
+    <div className="content-ticket__div-from">
+      <p className="content-ticket__p-from">
                     From:
         {' '}
       </p>
-      <span className="span_from">senderemail@gmail.com</span>
+      <span className="content-ticket__span-from">senderemail@gmail.com</span>
     </div>
-    <div className="div_cc">
-      <p className="h5_cc">
+    <div className="div-cc">
+      <p className="div-cc__p-cc">
                     CC:
         {' '}
       </p>
-      <span className="span_cc">cc.email@gmail.com</span>
+      <span className="div-cc__span-cc">cc.email@gmail.com</span>
     </div>
-    <div className="div_bcc">
-      <p className="h5_bcc">
+    <div className="div-bcc">
+      <p className="div-bcc__p-bcc">
                     BCC :
         {' '}
 
       </p>
-      <span className="span_bcc">bcc.email@gmail.com</span>
+      <span className="div-bcc__span-bcc">bcc.email@gmail.com</span>
     </div>
   </div>
 );

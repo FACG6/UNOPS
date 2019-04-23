@@ -1,23 +1,24 @@
-.text_reply{
+.text-reply{
     margin-left: -15px;
 }
-.reply{
+.text-reply__h2-reply{
     margin-left: 295px;
 }
-.content_reply{
+.text-reply__div-reply{
     width: 631px;
     height: 300px;
-    margin-top: 10px;
-    margin-left:300px;
+
+    margin: 10px 0 0 300px;
     background: #ECECEC;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
 }
-.contentText-area{
+.iconBCC-reply__contentText-area{
     width: 546px;
     height: 164px;
     margin-left: 33px;
     margin-top: 33px;
+    margin: 33px 0 0 33px;
     border-radius: 10px;
     font-family: Roboto;
     font-style: normal;
@@ -36,40 +37,33 @@
     top: 614px;
     left: 536px; 
 }
-.name_email1{
+.text-reply__div-reply__name-emailCC{
     position: absolute;
     margin-left: 40px;
 }
-.title_email1{
+.text-reply__div-reply__title_emailCC{
     position: absolute;
-    margin-left: 80px;
-    margin-top: 23px;
+    margin: 23px 0 0 80px;
     
 }
-.name_email2{
+.iconBCC-reply__name-emailBCC{
     position: absolute;
     margin-left: 384px;
 }
-.title_email2{
+.iconBCC-reply__title-emailBCC{
     position: absolute;
-    margin-left: 421px;
-    margin-top: 24px;
-}
-.text_in_area{
-   
+    margin: 24px 0 0 421px
 }
 .far{
     margin-left: 542px; 
 }
-.icon1{
-    margin-left: 220px;
-    margin-top: 22px;
+.iconCC{
+    margin: 22px 0 0 220px;
 }
-.icon2{
-    margin-top: 25px;
-    margin-left: 558px;
+.iconBCC{
+    margin: 25px 0 0 558px;
   }
-  .icon2_reply{
+  .iconBCC-reply{
       margin-top: -39px;
   }
 

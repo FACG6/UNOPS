@@ -1,14 +1,11 @@
-.ticket_logo{
+.container-ticket__ticket-logo{
    
     width: 70px;
 }
-.div_logo{
+.container-ticket__div-logo{
     background: #437489;
     width: 74px;
     height: 65px;
-    margin-left: 284px;
-    margin-top: 114px;
+    margin: 114px 0 0 284px
 }
-.content_logo{
 
-}

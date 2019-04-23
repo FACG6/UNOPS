@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './components/Login';
-import './App.css';
+import SearchComponent from './components/search';
+import Home from './components/Homepage';
 import NewTicket from './components/NewTicket';
 import MainSidebar from './components/parts/MainSidebar';
 import WrappedTicket from './components/WrappedTicket';

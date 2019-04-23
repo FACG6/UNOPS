@@ -1,28 +1,9 @@
-<<<<<<< HEAD
-import React from 'react';
-=======
 import React, { Component} from 'react';
->>>>>>> ffb140b52f85e2e89b44111229add10fdb3c0b0d
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './components/Login';
 import './App.css';
 import NewTicket from './components/NewTicket';
 import MainSidebar from './components/MainSidebar';
-<<<<<<< HEAD
-import OpenTicket from './components/OpenTicket';
-
-export default () => (
-  <BrowserRouter>
-    <Switch>
-      <Route exact path="/" />
-      <Route exact path="/new-ticket" component={NewTicket} />
-      <Route exact path="/login" component={Login} />
-      <Route exact path="/main-sidebar" component={() => <MainSidebar selected="tickets" />} />
-      <Route exact path="/openTicket" component={OpenTicket} />
-    </Switch>
-  </BrowserRouter>
-);
-=======
 import WrappedTicket from './components/WrappedTicket';
 import Replies from './components/Replies';
 
@@ -97,4 +78,3 @@ class App extends Component {
   }
 }
 export default App;
->>>>>>> ffb140b52f85e2e89b44111229add10fdb3c0b0d

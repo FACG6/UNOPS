@@ -8,6 +8,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 .tickets-sidebar__new-ticket {
@@ -52,8 +54,8 @@
 }
 
 .tickets-sidebar__num-div {
-    height: 23px;
-    width: 23px;
+    height: 25px;
+    width: 25px;
     border-radius: 50%;
     border: 1.3px solid white;
     margin-right: 20px;
@@ -61,7 +63,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .tickets-sidebar__text {

@@ -1,55 +1,98 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Login from './components/Login';
-import SearchComponent from './components/search';
-import Home from './components/Homepage';
-import NewTicket from './components/NewTicket';
 import MainSidebar from './components/parts/MainSidebar';
-import WrappedTicket from './components/WrappedTicket';
-import Replies from './components/Replies';
 import TicketsSidebar from './components/parts/TicketsSidebar';
-
-class App extends Component {
+import SearchSidebar from './components/parts/SearchSidebar';
+import Navbar from './components/parts/Navbar';
+import WrappedTicket from './components/parts/WrappedTicket';
+import './App.css';
+export default class App extends Component {
   state = {
-    wrappedTickets: [],
-    replies: [],
+    tickets: {
+      all: [],
+      drafts: [],
+      trash: [],
+    },
+    search: {
+      query: '',
+      user: '',
+      status: '',
+    },
+    newTicket: {
+      to: '',
+      cc: '',
+      bcc: '',
+      subject: '',
+      body: '',
+      send: false,
+    },
   };
 
   componentDidMount() {}
 
   render() {
-    if (this.state.replies) {
-      return (
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/" />
-            <Route exact path="/new-ticket" component={NewTicket} />
-            <Route exact path="/login" component={Login} />
-            <Route
-              exact
-              path="/main-sidebar"
-              component={() => <MainSidebar selected="tickets" />}
-            />
-            <Route
-              exact
-              path="/ticket"
-              component={() => <Replies replies={this.state.replies} />}
-            />
-            <Route
-              exact
-              path="/tickets-sidebar"
-              component={() => (
-                <React.Fragment>
-                  <MainSidebar selected="tickets" />
-                  <TicketsSidebar selected="all" all={5} my={4} drafts={3} trash={9} />
-                </React.Fragment>
-              )}
-            />
-          </Switch>
-        </BrowserRouter>
-      );
-    }
-    return <h2>There are no Replies yet.</h2>;
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            component={() => (
+              <React.Fragment>
+                <Navbar selected="pending" pending="15" closed="35" currentCat="all" />
+                <MainSidebar selected="tickets" />
+                <TicketsSidebar selected="all" all={15} my={11} drafts={3} trash={1} />
+                <main
+                  style={{
+                    width: 'calc(100% - 280px)',
+                    height: '100%',
+                    position: 'fixed',
+                    right: '0',
+                    top: '50px',
+                    padding: '50px',
+                    overflowY: 'auto',
+                  }}
+                >
+                  <WrappedTicket
+                    from="ahmedisam9922@gmail.com"
+                    subject="Subject"
+                    description="This is a sample ticket with a sample description"
+                    date="April 09"
+                  />
+                </main>
+              </React.Fragment>
+            )}
+          />
+          <Route
+            exact
+            path="/ticket"
+            component={() => (
+              <React.Fragment>
+                <MainSidebar selected="tickets" />
+                <TicketsSidebar selected="all" all={15} my={11} drafts={3} trash={1} />
+                <main
+                  style={{
+                    width: 'calc(100% - 280px)',
+                    height: '100%',
+                    position: 'fixed',
+                    right: '0',
+                    top: '50px',
+                    padding: '50px',
+                    overflowY: 'auto',
+                  }}
+                >
+                  <WrappedTicket
+                    from="ahmedisam9922@gmail.com"
+                    subject="Subject"
+                    description="This is a sample ticket with a sample description"
+                    date="April 09"
+                  />
+                </main>
+              </React.Fragment>
+            )}
+          />
+        </Switch>
+      </BrowserRouter>
+    );
   }
 }
-export default App;

@@ -1,13 +1,3 @@
-
-:root{
-  --color: brown;
-}
-
-a {
-  color: #fff;
-  text-decoration: none;
-}
-
 .main-sidebar {
   background: var(--main-color, darkblue);
   width: 80px;

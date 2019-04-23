@@ -2,12 +2,35 @@ import React, { Component } from 'react';
 import './style.css';
 import Logo from '../Logo';
 
+
 export default class extends Component {
   state = {
     email: '',
     password: '',
+    msg:''
   };
 
+   
+  onSubmit = event => {
+    event.preventDefault();
+    console.log(event.target.email.value);
+    const requestInfo = {
+      emailValue: event.target.email.value,
+
+      passwordValue: event.target.password.value
+    }
+    fetch('/login', {
+      method: 'POST',
+      body: JSON.stringify(requestInfo),
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
+    .then(res=>res.json())
+    .then(({msg}) => {
+     this.setState({msg:'login successfully'});
+    });
+  }
   render() {
     return (
       <div className="login">
@@ -17,7 +40,7 @@ export default class extends Component {
             <span className="login__logo-text login__logo-text--white">UN</span>
             <span className="login__logo-text login__logo-text--black">OPS</span>
           </section>
-          <form action="" className="login__form">
+          <form onSubmit={this.onSubmit} className="login__form">
             <label htmlFor="email" className="login__label">
               <span className="login__label-text">
                 Email:
@@ -35,9 +58,11 @@ export default class extends Component {
               <input type="password" id="password" className="login__input" />
             </label>
             <input type="button" className="login__submit" value="Login" />
+            <span className="message">{this.state.msg}</span>
           </form>
         </main>
       </div>
     );
   }
+
 }

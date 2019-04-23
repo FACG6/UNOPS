@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
-import Logo from '../Logo';
+import Logo from '../parts/Logo';
 
 export default class extends Component {
   state = {
@@ -20,17 +20,13 @@ export default class extends Component {
           <form action="" className="login__form">
             <label htmlFor="email" className="login__label">
               <span className="login__label-text">
-                Email:
-                {' '}
-                <span className="required">*</span>
+                Email: <span className="required">*</span>
               </span>
               <input type="email" id="email" className="login__input" />
             </label>
             <label htmlFor="password" className="login__label">
               <span className="login__label-text">
-                Password:
-                {' '}
-                <span className="required">*</span>
+                Password: <span className="required">*</span>
               </span>
               <input type="password" id="password" className="login__input" />
             </label>

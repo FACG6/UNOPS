@@ -4,7 +4,7 @@ a {
 }
 
 .main-sidebar {
-  background: var(--main-color, blue);
+  background: var(--main-color, darkblue);
   width: 80px;
   height: 100vh;
   position: fixed;
@@ -27,7 +27,7 @@ a {
 }
 
 .main-sidebar__tab:hover {
-  background: #315564;
+  background: var(--main-color-light, blue);
 }
 
 .main-sidebar__text {
@@ -39,9 +39,9 @@ a {
 }
 
 .tab__focus {
-  background: #363936;
+  background: var(--second-color, #333);
 }
 
 .tab__focus:hover {
-  background: #363936;
+  background: var(--second-color, #333);
 }

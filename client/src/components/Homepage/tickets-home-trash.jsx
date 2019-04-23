@@ -3,11 +3,12 @@ import Navbar from '../navbar/Navbar';
 import './style.css';
 import MainSidebar from '../MainSidebar';
 
-export default () => (
+const HomeTrash = () => (
   <Fragment>
     <MainSidebar selected="tickets" />
-    <Navbar logoutClass="trash-logout" className="homeNav" markDisplay="mark-as-display">
+    <Navbar className="home-nav" markDisplay="second-nav__mark-as-display">
       <h1 className="trash-header">Trash Emails:</h1>
     </Navbar>
   </Fragment>
 );
+export default HomeTrash;

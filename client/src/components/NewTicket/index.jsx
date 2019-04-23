@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import Navbar from '../navbar/Navbar';
 import MainSidebar from '../MainSidebar';
-import NewTicketForm from './New-ticket-form';
+import NewTicketForm from './NewTicketForm';
 import './style.css';
 
 class NewTicket extends Component {

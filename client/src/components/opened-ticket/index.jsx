@@ -9,7 +9,6 @@ class OpenedTicket extends Component {
       <Fragment>
         <MainSidebar selected="tickets" />
         <Navbar
-          logoutClass="opened-ticket-logout"
           className="opened-ticket-nav"
           children={[
             <div className="opened-ticket-header">
@@ -21,7 +20,7 @@ class OpenedTicket extends Component {
             </div>,
           ]}
           status={this.props.status}
-          statusDsiplay="opened-ticket-status-display"
+          statusDsiplay="nav__opened-ticket-status-display"
         />
       </Fragment>
     );

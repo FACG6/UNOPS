@@ -3,16 +3,16 @@ import Navbar from '../navbar/Navbar';
 import './style.css';
 import MainSidebar from '../MainSidebar';
 
-export default ({ status }) => (
+const HomeAll = ({ status }) => (
   <Fragment>
     <MainSidebar selected="tickets" />
-    <Navbar logoutClass="home-logout" className="homeNav">
-      <div className="statusdiv">
-        <div className={`pendingDiv ${status === 'pending' ? 'selected' : ''}`}>
+    <Navbar className="home-nav">
+      <div className="home-nav__status-div">
+        <div className={`home-nav__pending-div ${status === 'pending' ? 'selected' : ''}`}>
           <h4 className="status">Pending</h4>
           <div className="circle">10</div>
         </div>
-        <div className={`closedDiv ${status === 'closed' ? 'selected' : ''}`}>
+        <div className={`home-nav__closed-div ${status === 'closed' ? 'selected' : ''}`}>
           <h4 className="status">Closed</h4>
           <div className="circle">10</div>
         </div>
@@ -20,3 +20,4 @@ export default ({ status }) => (
     </Navbar>
   </Fragment>
 );
+export default HomeAll;

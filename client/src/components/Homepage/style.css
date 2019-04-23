@@ -1,9 +1,9 @@
-.statusdiv {
+.home-nav__status-div {
   display: flex;
   height: 51px;
   position: absolute;
 }
-.pendingDiv {
+.home-nav__pending-div {
   display: flex;
   margin-right: 5%;
   text-align: center;
@@ -12,9 +12,9 @@
   font-size: medium;
   letter-spacing: 0.06vw;
   color: #363936;
-  padding: 14px 0 0 0;
+  padding: 14px 14px 0 0;
 }
-.closedDiv {
+.home-nav__closed-div {
   display: flex;
   text-align: center;
   font-family: Roboto;
@@ -22,7 +22,7 @@
   font-size: medium;
   letter-spacing: 0.06vw;
   color: #363936;
-  padding: 14px 0 0 0;
+  padding: 14px 14px 0 0;
 }
 .selected {
   background: var(--main-color, blue);
@@ -33,13 +33,9 @@
   cursor: pointer;
 }
 .circle {
-  margin-top: 0px;
-  margin-left: -11px;
-  margin-right: 10px;
+  margin-top: 0px 10px 0 -11px;
   height: 50%;
   width: 16%;
-  -webkit-border-radius: 25px;
-  -moz-border-radius: 25px;
   border-radius: 25px;
   background: #c4c4c4;
   padding: 3%;

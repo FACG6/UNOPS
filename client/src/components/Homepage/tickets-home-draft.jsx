@@ -3,9 +3,10 @@ import Navbar from '../navbar/Navbar';
 import './style.css';
 import MainSidebar from '../MainSidebar';
 
-export default () => (
+const HomeDraft = () => (
   <Fragment>
     <MainSidebar selected="tickets" />
-    <Navbar logoutClass="trash-logout" className="homeNav" secondNavDisplay="display-none" />
+    <Navbar className="home-nav" secondNavDisplay="display-none" />
   </Fragment>
 );
+export default HomeDraft;

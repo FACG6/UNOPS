@@ -18,14 +18,14 @@
   margin-top: 27px;
   width: 13vw;
 }
-.opened-ticket-status {
+.nav__opened-ticket-status {
   margin-top: -16px;
   font-family: roboto;
   font-size: 75%;
   color: darkgray;
   display: none;
 }
-.opened-ticket-status-display {
+.nav__opened-ticket-status-display {
   display:inline-block;
   margin-top: auto;
 }

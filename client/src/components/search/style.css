@@ -5,7 +5,9 @@
   width: 200px;
   position: fixed;
 }
-
+.search-components {
+  display: flex;
+}
 .search-sidebar {
   display: flex;
   flex-direction: column;

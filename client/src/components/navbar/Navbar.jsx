@@ -11,19 +11,19 @@ export default ({
   statusDsiplay,
 }) => (
   <nav className="nav">
-    <div className="wrapped-bars">
+    <div className="nav__wrapped-bars">
       <div className={className}>
         {children}
-        <div className="Logout-and-status">
-          <p className={logoutClass}>Logout</p>
-          <h4 className={`opened-ticket-status ${statusDsiplay} `}>{status}</h4>
+        <div className="nav__Logout-and-status">
+          <p className="nav__logout">Logout</p>
+          <h4 className={`nav__opened-ticket-status ${statusDsiplay} `}>{status}</h4>
         </div>
       </div>
       <div className="second-nav">
-        <p className={`select-all ${secondNavDisplay}`}>Select all</p>
-        <div className={`mark-as ${secondNavDisplay} ${markDisplay}`}>
+        <p className={`second-nav__select-all ${secondNavDisplay}`}>Select all</p>
+        <div className={`second-nav__mark-as ${secondNavDisplay} ${markDisplay}`}>
           <p>Mark as &#9662;</p>
-          <div className="mark-as-options">
+          <div className="second-nav__mark-as-options">
             <p className="mark-pending">Pending</p>
             <p className="mark-resolved">Resolved</p>
           </div>

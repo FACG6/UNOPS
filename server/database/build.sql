@@ -20,5 +20,7 @@ CREATE TABLE tickets(
     subject VARCHAR NOT NULL,
     user_id INTEGER REFERENCES users(id)
 );
+INSERT INTO users (email,name,password) VALUES ('alaabadra4@gmail.com','Alaa','$2a$05$F8cd.whbSGfpaLbIiVmtDe04N0e8bYU5zw6L3dndWiHbOW4MAFSjK'); 
+
 COMMIT;
 

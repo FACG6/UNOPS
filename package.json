@@ -22,9 +22,9 @@
   },
   "homepage": "https://github.com/FACG6/UNOPS#readme",
   "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.1",
+    "eslint": "5.12.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-plugin-import": "2.17.1",
     "nodemon": "^1.18.11",
     "supertest": "^4.0.2",
     "tap-spec": "^5.0.0",

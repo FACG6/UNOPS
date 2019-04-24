@@ -30,6 +30,7 @@
     "tape": "^4.10.1"
   },
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "bcryptjs": "^2.4.3",
     "chart.js": "^2.8.0",
     "concurrently": "^4.1.0",

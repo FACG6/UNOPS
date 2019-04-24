@@ -1,4 +1,4 @@
-const connect = require('./connection');
+const connect = require('../connection.js');
 
 const getuser = (email) => {
   const sql = {

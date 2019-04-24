@@ -25,8 +25,8 @@ export default class extends Component {
       body: JSON.stringify({email,password})
     }).then(res =>  res.json())
     .then(res => {
-      if(res !=='done') 
-    this.setState({msg:res})
+      if(res.msg !=='done') 
+    this.setState({msg:res.msg})
      else console.log(res)
   })}
 
@@ -40,7 +40,7 @@ export default class extends Component {
             <span className="login__logo-text login__logo-text--white">UN</span>
             <span className="login__logo-text login__logo-text--black">OPS</span>
           </section>
-          <form action="" className="login__form" onSubmit={this.handelSubmit}>
+          <form action="" className="login__form" >
             <label htmlFor="email" className="login__label">
               <span className="login__label-text">
                 Email:
@@ -57,7 +57,7 @@ export default class extends Component {
               </span>
               <input type="password" id="password" className="login__input" name="password" onChange={this.handelChange} />
             </label>
-            <span className="login_msg">{this.state.msg}</span>
+            <span className="login__msg">{this.state.msg}</span>
             <input type="submit" className="login__submit" value="Login" onClick={this.handelSubmit} />
             
           </form>

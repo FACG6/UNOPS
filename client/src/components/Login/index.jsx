@@ -6,8 +6,31 @@ export default class extends Component {
   state = {
     email: '',
     password: '',
+    msg:''
   };
+  handelChange = ({ target: { name, value } }) => {
+    if(name ==="email"&& value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))
+    this.setState({ [name]: value })
+    else this.setState({[name]:value})
+  }
+  handelSubmit = (e) => {
+    this.setState({msg:''})
+    e.preventDefault();
+    const { email, password } = this.state
+    if(email && password){
+    fetch('/api/login', {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {'Content-Type': 'application/json' },
+      body: JSON.stringify({email,password})
+    }).then(res =>  res.json())
+    .then(res => {
+      if(res !=='done') 
+    this.setState({msg:res})
+     else console.log(res)
+  })}
 
+  }
   render() {
     return (
       <div className="login">
@@ -17,14 +40,14 @@ export default class extends Component {
             <span className="login__logo-text login__logo-text--white">UN</span>
             <span className="login__logo-text login__logo-text--black">OPS</span>
           </section>
-          <form action="" className="login__form">
+          <form action="" className="login__form" onSubmit={this.handelSubmit}>
             <label htmlFor="email" className="login__label">
               <span className="login__label-text">
                 Email:
                 {' '}
                 <span className="required">*</span>
               </span>
-              <input type="email" id="email" className="login__input" />
+              <input name="email" type="email" id="email" className="login__input" onChange={this.handelChange} />
             </label>
             <label htmlFor="password" className="login__label">
               <span className="login__label-text">
@@ -32,9 +55,11 @@ export default class extends Component {
                 {' '}
                 <span className="required">*</span>
               </span>
-              <input type="password" id="password" className="login__input" />
+              <input type="password" id="password" className="login__input" name="password" onChange={this.handelChange} />
             </label>
-            <input type="button" className="login__submit" value="Login" />
+            <span className="login_msg">{this.state.msg}</span>
+            <input type="submit" className="login__submit" value="Login" onClick={this.handelSubmit} />
+            
           </form>
         </main>
       </div>

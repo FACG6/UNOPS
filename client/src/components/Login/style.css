@@ -45,7 +45,7 @@
 .login__form {
     width: 100%;
     background: #fff;
-    height: 330px;
+    height: 360px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -90,7 +90,12 @@
     margin: 0 auto;
     margin-top: 10px;
 }
-
+.login_msg{
+    margin: 0px 100px;
+    color: red;
+    text-align: center;
+    font-size: 14px;
+}
 .login__submit:hover {
     opacity: 0.96;
 }

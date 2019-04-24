@@ -83,8 +83,8 @@
   color: #fff;
   font-family: "Roboto", sans-serif;
   font-size: 1.2rem;
-  background: var(--main-color, blue);
-  border: 1px solid var(--main-color, blue);
+  background: var(--main-color, #437489);
+  border: 1px solid var(--main-color, #437489);
   border-radius: 4px;
   width: 140px;
   height: 35px;

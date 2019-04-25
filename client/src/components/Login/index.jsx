@@ -9,15 +9,20 @@ export default class extends Component {
     msg:''
   };
   handelChange = ({ target: { name, value } }) => {
-    if(name ==="email"&& value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))
-    this.setState({ [name]: value })
-    else this.setState({[name]:value})
+    this.setState({msg:''})
+    if(name ==="email"&& !value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))
+    this.setState({ msg: "enter valid email" })
+    else if (name ==="email"&& value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))
+    this.setState({[name]:value})
+     else if (name === "password") this.setState({[name]:value})
+    else return ""
   }
   handelSubmit = (e) => {
     this.setState({msg:''})
     e.preventDefault();
     const { email, password } = this.state
-    if(email && password){
+    if(!email || !password) this.setState({msg: "please fill all fields"})
+    else {
     fetch('/api/login', {
       credentials: 'same-origin',
       method: 'POST',
@@ -25,7 +30,7 @@ export default class extends Component {
       body: JSON.stringify({email,password})
     }).then(res =>  res.json())
     .then(res => {
-      if(res.msg !=='done') 
+      if(res.statusCode !== 200) 
     this.setState({msg:res.msg})
      else console.log(res)
   })}

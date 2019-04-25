@@ -12,7 +12,7 @@ const login = (req, response) => {
             response.cookie('email', token, { maxAge: 60 * 60 * 60 });
             response.status(200).json({ msg: 'done' });
           });
-        } else response.json({ msg: 'password error' });
+        } else response.status(401).json({ msg: 'password error' });
       });
     } else response.json({ msg: 'This email does not exist' });
   }).catch(error => response.json('internal server error'));

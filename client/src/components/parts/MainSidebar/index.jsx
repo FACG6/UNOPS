@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import Logo from "../Logo";
-import "./style.css";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Logo from '../Logo';
+import './style.css';
 
 export default function MainSideBar({ selected }) {
   return (
@@ -13,9 +13,7 @@ export default function MainSideBar({ selected }) {
 
       <Link
         to="/tickets"
-        className={`main-sidebar__tab ${
-          selected === "tickets" ? "tab__focus" : ""
-        }`}
+        className={`main-sidebar__tab ${selected === 'tickets' ? 'tab__focus' : ''}`}
       >
         <i className="fas fa-ticket-alt ticket-icon" />
         <span className="main-sidebar__text">Tickets</span>
@@ -23,9 +21,7 @@ export default function MainSideBar({ selected }) {
 
       <Link
         to="/search"
-        className={`main-sidebar__tab ${
-          selected === "search" ? "tab__focus" : ""
-        }`}
+        className={`main-sidebar__tab ${selected === 'search' ? 'tab__focus' : ''}`}
       >
         <i className="fas fa-search search-icon" />
         <span className="main-sidebar__text">Search</span>
@@ -33,9 +29,7 @@ export default function MainSideBar({ selected }) {
 
       <Link
         to="/reports"
-        className={`main-sidebar__tab ${
-          selected === "reports" ? "tab__focus" : ""
-        }`}
+        className={`main-sidebar__tab ${selected === 'reports' ? 'tab__focus' : ''}`}
       >
         <i className="fas fa-chart-bar chart-icon" />
         <span className="main-sidebar__text">Reports</span>
@@ -45,5 +39,5 @@ export default function MainSideBar({ selected }) {
 }
 
 MainSideBar.propTypes = {
-  selected: PropTypes.string.isRequired
+  selected: PropTypes.string.isRequired,
 };

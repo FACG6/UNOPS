@@ -1,13 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function Logo({ className, colorClass }) {
   return (
-    <svg
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 92 74"
-    >
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 74">
       <g className={colorClass} fill="#ffffff" stroke="none" strokeWidth="1px">
         <path
           className={colorClass}
@@ -30,10 +26,10 @@ export default function Logo({ className, colorClass }) {
 
 Logo.propTypes = {
   className: PropTypes.string,
-  colorClass: PropTypes.string
+  colorClass: PropTypes.string,
 };
 
 Logo.defaultProps = {
-  className: "",
-  colorClass: ""
+  className: '',
+  colorClass: '',
 };

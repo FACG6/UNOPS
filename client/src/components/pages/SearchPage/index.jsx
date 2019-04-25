@@ -1,13 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import SearchSidebar from '../../parts/SearchSidebar';
-import MainSidebar from '../../parts/MainSidebar';
-import Navbar from '../../parts/Navbar';
-import WrappedTicket from '../../parts/WrappedTicket';
-import './style.css';
+import React from "react";
+import PropTypes from "prop-types";
+import SearchSidebar from "../../parts/SearchSidebar";
+import MainSidebar from "../../parts/MainSidebar";
+import Navbar from "../../parts/Navbar";
+import WrappedTicket from "../../parts/WrappedTicket";
+import "./style.css";
 
 export default function SearchPage({
-  searchResults, tickets, searchAction, pending, closed,
+  searchResults,
+  tickets,
+  searchAction,
+  pending,
+  closed
 }) {
   if (searchResults) {
     return (
@@ -27,7 +31,12 @@ export default function SearchPage({
   }
   return (
     <>
-      <Navbar selected="pending" pending={pending} closed={closed} currentCategory="all" />
+      <Navbar
+        selected="pending"
+        pending={pending}
+        closed={closed}
+        currentCategory="all-tickets"
+      />
       <MainSidebar selected="search" />
       <SearchSidebar />
       <main className="search-page__tickets-section">
@@ -44,12 +53,12 @@ SearchPage.propTypes = {
   tickets: PropTypes.instanceOf(Array),
   searchAction: PropTypes.instanceOf(Function).isRequired,
   pending: PropTypes.number,
-  closed: PropTypes.number,
+  closed: PropTypes.number
 };
 
 SearchPage.defaultProps = {
   searchResults: undefined,
   tickets: undefined,
   pending: 0,
-  closed: 0,
+  closed: 0
 };

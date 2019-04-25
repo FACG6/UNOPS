@@ -4,7 +4,9 @@
   "description": "This is a ticketing system to manage tickets from a shared inbox email",
   "main": "index.js",
   "scripts": {
-    "test": "node test/server.test.js | tap-spec"
+    "test": "NODE_ENV=test tape  test/server.test.js | tap-spec",
+     "testdb":"NODE_ENV=test tape test/dbtest.js | tap-spec"
+    
   },
   "repository": {
     "type": "git",
@@ -38,5 +40,9 @@
     "nodemailer": "^6.1.0",
     "pg": "^7.9.0",
     "react-froala-wysiwyg": "^2.9.5-1"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": []
 }

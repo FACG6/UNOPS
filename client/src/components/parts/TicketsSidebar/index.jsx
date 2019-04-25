@@ -1,10 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import './style.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import "./style.css";
 
 export default function TicketsSidebar({
-  selected, all, my, drafts, trash,
+  selected,
+  allTickets,
+  myTickets,
+  drafts,
+  trash
 }) {
   return (
     <aside className="tickets-sidebar">
@@ -15,43 +19,61 @@ export default function TicketsSidebar({
 
       <div className="tickets-sidebar__links-container">
         <Link
-          to="/tickets/all/pending"
-          className={`tickets-sidebar__link ${selected === 'all' ? 'selected-tab' : ''}`}
+          to="/tickets/all-tickets/pending"
+          className={`tickets-sidebar__link ${
+            selected === "all" ? "selected-tab" : ""
+          }`}
         >
           <span className="tickets-sidebar__text">All Tickets</span>
           <div
-            className={`tickets-sidebar__num-div ${selected === 'all' ? 'circle-selected' : ''}`}
+            className={`tickets-sidebar__num-div ${
+              selected === "all" ? "circle-selected" : ""
+            }`}
           >
-            {all}
+            {allTickets}
           </div>
         </Link>
         <Link
-          to="/tickets/my/pending"
-          className={`tickets-sidebar__link ${selected === 'my' ? 'selected-tab' : ''}`}
+          to="/tickets/my-tickets/pending"
+          className={`tickets-sidebar__link ${
+            selected === "my" ? "selected-tab" : ""
+          }`}
         >
           <span className="tickets-sidebar__text">My Tickets</span>
-          <div className={`tickets-sidebar__num-div ${selected === 'my' ? 'circle-selected' : ''}`}>
-            {my}
+          <div
+            className={`tickets-sidebar__num-div ${
+              selected === "my" ? "circle-selected" : ""
+            }`}
+          >
+            {myTickets}
           </div>
         </Link>
         <Link
           to="/tickets/drafts"
-          className={`tickets-sidebar__link ${selected === 'drafts' ? 'selected-tab' : ''}`}
+          className={`tickets-sidebar__link ${
+            selected === "drafts" ? "selected-tab" : ""
+          }`}
         >
           <span className="tickets-sidebar__text">Drafts</span>
           <div
-            className={`tickets-sidebar__num-div ${selected === 'drafts' ? 'circle-selected' : ''}`}
+            className={`tickets-sidebar__num-div ${
+              selected === "drafts" ? "circle-selected" : ""
+            }`}
           >
             {drafts}
           </div>
         </Link>
         <Link
           to="/tickets/trash"
-          className={`tickets-sidebar__link ${selected === 'trash' ? 'selected-tab' : ''}`}
+          className={`tickets-sidebar__link ${
+            selected === "trash" ? "selected-tab" : ""
+          }`}
         >
           <span className="tickets-sidebar__text">Trash</span>
           <div
-            className={`tickets-sidebar__num-div ${selected === 'trash' ? 'circle-selected' : ''}`}
+            className={`tickets-sidebar__num-div ${
+              selected === "trash" ? "circle-selected" : ""
+            }`}
           >
             {trash}
           </div>
@@ -63,8 +85,8 @@ export default function TicketsSidebar({
 
 TicketsSidebar.propTypes = {
   selected: PropTypes.string.isRequired,
-  all: PropTypes.number.isRequired,
-  my: PropTypes.number.isRequired,
+  allTickets: PropTypes.number.isRequired,
+  myTickets: PropTypes.number.isRequired,
   drafts: PropTypes.number.isRequired,
-  trash: PropTypes.number.isRequired,
+  trash: PropTypes.number.isRequired
 };

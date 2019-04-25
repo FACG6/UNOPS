@@ -1,0 +1,11 @@
+.replies-section {
+    display: flex;
+    flex-direction: column;
+    width: 700px;
+    margin-top: 80px;
+}
+
+.replies-section__text {
+    font-size: 26px;
+    margin-bottom: 30px;
+}

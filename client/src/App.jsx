@@ -1,81 +1,145 @@
-import React, { Component} from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Login from './components/Login';
-import SearchComponent from './components/search';
-import Home from './components/Homepage';
-import NewTicket from './components/NewTicket';
-import MainSidebar from './components/MainSidebar';
-import WrappedTicket from './components/WrappedTicket';
-import Replies from './components/Replies';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import Login from './components/pages/Login';
+import TicketsPage from './components/pages/TicketsPage';
+import NewTicketPage from './components/pages/NewTicketPage';
+import ticketsSample from './components/model.js';
+import './App.css';
+import OpenedTicketPage from './components/pages/OpenedTicketPage';
+import SearchPage from './components/pages/SearchPage';
 
-class App extends Component {
+export default class App extends Component {
   state = {
-    wrappedTickets: [],
-    replies: [],
-  }
+    tickets: {
+      all: {
+        pending: [],
+        closed: [],
+      },
+      my: {
+        pending: [],
+        closed: [],
+      },
+      drafts: [],
+      trash: [],
+    },
+    search: {
+      query: '',
+      user: '',
+      status: '',
+    },
+    searchResults: null,
+  };
 
   componentDidMount() {
-    this.setState({
-      replies: [
-        {
-          id: 1,
-          email: 'jamalat@getsMaxListeners.com',
-          message: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, ',
-        },
-        {
-          id: 2,
-          email: 'jamalat@getMadxListeners.com',
-          message: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, ',
-        },
-        {
-          id: 3,
-          email: 'jamalat@getMaxListeners.com',
-          message: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, ',
-        },
-      ],
-      wrappedTickets: [{
-        id: 1,
-        email: 'jamalat@gmail.com',
-        description: 'This is a sample ticket with some sample description',
-        date: 'April 9'
-        , subject: "subject"
-      },
-      {
-        id: 2,
-        email: 'jamalat@gmail.com',
-        description: 'This is a sample ticket with some sample description',
-        date: 'April 9'
-        , subject: "subject"
-      }, {
-        id: 3,
-        email: 'jamalat@gmail.com',
-        description: 'This is a sample ticket with some sample description',
-        date: 'April 9'
-        , subject: "subject"
-      }, {
-        id: 4,
-        email: 'jamalat@gmail.com',
-        description: 'This is a sample ticket with some sample description',
-        date: 'April 9'
-        , subject: "subject"
-      }]
-    });
+    this.setState(ticketsSample);
   }
 
+  getTicketByUid = uid => {
+    const { tickets } = this.state;
+    for (let key in tickets) {
+      if (tickets[key] instanceof Array)
+        if (tickets[key].find(ticket => ticket.uid === uid))
+          return { ticket: tickets[key].find(ticket => ticket.uid === uid), category: `${key}` };
+        else continue;
+      else {
+        for (let statusKey in tickets[key]) {
+          if (tickets[key][statusKey].find(ticket => ticket.uid === uid))
+            return {
+              ticket: tickets[key][statusKey].find(ticket => ticket.uid === uid),
+              category: `${key}`,
+            };
+          else continue;
+        }
+      }
+    }
+  };
+
+  getAllLength = () => {
+    const { all } = this.state.tickets;
+    return all.pending.length + all.closed.length;
+  };
+  getMyLength = () => {
+    const { my } = this.state.tickets;
+    return my.pending.length + my.closed.length;
+  };
+  getAllPendingLength = () => this.state.tickets.all.pending.length;
+
+  getMyPendingLength = () => this.state.tickets.my.pending.length;
+
+  getAllClosedLength = () => this.state.tickets.all.closed.length;
+
+  getMyClosedLength = () => this.state.tickets.my.closed.length;
+
+  getDraftsLength = () => this.state.tickets.drafts.length;
+
+  getTrashLength = () => this.state.tickets.trash.length;
+
   render() {
-    if (this.state.replies) {
-      return (
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/"/>}/>
-            <Route exact path="/new-ticket" component={NewTicket} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/main-sidebar" component={() => <MainSidebar selected="tickets" />} />
-            <Route exact path="/ticket" component={() => <Replies replies={this.state.replies} />} />
-          </Switch>
-        </BrowserRouter>
-      );
-    } return <h2>There are no Replies yet.</h2>;
+    return (
+      <Router>
+        <Switch>
+          <Route path="/login" component={Login} />
+          <Route exact path="/" component={() => <Redirect to="/tickets" />} />
+          <Route exact path="/tickets" component={() => <Redirect to="/tickets/all" />} />
+          <Route
+            exact
+            path="/tickets/:category"
+            component={({
+              match: {
+                params: { category },
+              },
+            }) => {
+              if (category === 'all' || category === 'my')
+                return <Redirect to={`/tickets/${category}/pending`} />;
+              return <Redirect to={`/tickets/${category}`} />;
+            }}
+          />
+          <Route
+            exact
+            path="/tickets/:category/:status"
+            component={props => <TicketsPage {...props} tickets={this.state.tickets} />}
+          />
+          <Route
+            path="/new-ticket"
+            component={() => (
+              <NewTicketPage
+                all={this.getAllLength()}
+                my={this.getMyLength()}
+                drafts={this.getDraftsLength()}
+                trash={this.getTrashLength()}
+              />
+            )}
+          />
+          <Route
+            path="/ticket/:uid"
+            component={({
+              match: {
+                params: { uid },
+              },
+            }) => (
+              <OpenedTicketPage
+                {...this.getTicketByUid(parseInt(uid))}
+                all={this.getAllLength()}
+                my={this.getMyLength()}
+                drafts={this.getDraftsLength()}
+                trash={this.getTrashLength()}
+              />
+            )}
+          />
+          <Route
+            path="/search"
+            component={() => (
+              <SearchPage
+                {...this.state.search}
+                searchResults={this.searchResults}
+                tickets={this.state.tickets.all.pending}
+                pending={this.getAllPendingLength()}
+                closed={this.getAllClosedLength()}
+              />
+            )}
+          />
+        </Switch>
+      </Router>
+    );
   }
 }
-export default App;

@@ -15,10 +15,10 @@ export default function TicketsSidebar({
 
       <div className="tickets-sidebar__links-container">
         <Link
-          to="/tickets/all"
+          to="/tickets/all/pending"
           className={`tickets-sidebar__link ${selected === 'all' ? 'selected-tab' : ''}`}
         >
-          <span className="tickets-sidebar__text">All</span>
+          <span className="tickets-sidebar__text">All Tickets</span>
           <div
             className={`tickets-sidebar__num-div ${selected === 'all' ? 'circle-selected' : ''}`}
           >
@@ -26,10 +26,10 @@ export default function TicketsSidebar({
           </div>
         </Link>
         <Link
-          to="/tickets/my"
+          to="/tickets/my/pending"
           className={`tickets-sidebar__link ${selected === 'my' ? 'selected-tab' : ''}`}
         >
-          <span className="tickets-sidebar__text">My</span>
+          <span className="tickets-sidebar__text">My Tickets</span>
           <div className={`tickets-sidebar__num-div ${selected === 'my' ? 'circle-selected' : ''}`}>
             {my}
           </div>

@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import MainSidebar from './components/parts/MainSidebar';
-import TicketsSidebar from './components/parts/TicketsSidebar';
-import SearchSidebar from './components/parts/SearchSidebar';
-import Navbar from './components/parts/Navbar';
-import WrappedTicket from './components/parts/WrappedTicket';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import Login from './components/pages/Login';
+import TicketsPage from './components/pages/TicketsPage';
+import NewTicketPage from './components/pages/NewTicketPage';
+import ticketsSample from './components/model.js';
 import './App.css';
+import OpenedTicketPage from './components/pages/OpenedTicketPage';
+import SearchPage from './components/pages/SearchPage';
+
 export default class App extends Component {
   state = {
     tickets: {
-      all: [],
+      all: {
+        pending: [],
+        closed: [],
+      },
+      my: {
+        pending: [],
+        closed: [],
+      },
       drafts: [],
       trash: [],
     },
@@ -18,81 +27,119 @@ export default class App extends Component {
       user: '',
       status: '',
     },
-    newTicket: {
-      to: '',
-      cc: '',
-      bcc: '',
-      subject: '',
-      body: '',
-      send: false,
-    },
+    searchResults: null,
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState(ticketsSample);
+  }
+
+  getTicketByUid = uid => {
+    const { tickets } = this.state;
+    for (let key in tickets) {
+      if (tickets[key] instanceof Array)
+        if (tickets[key].find(ticket => ticket.uid === uid))
+          return { ticket: tickets[key].find(ticket => ticket.uid === uid), category: `${key}` };
+        else continue;
+      else {
+        for (let statusKey in tickets[key]) {
+          if (tickets[key][statusKey].find(ticket => ticket.uid === uid))
+            return {
+              ticket: tickets[key][statusKey].find(ticket => ticket.uid === uid),
+              category: `${key}`,
+            };
+          else continue;
+        }
+      }
+    }
+  };
+
+  getAllLength = () => {
+    const { all } = this.state.tickets;
+    return all.pending.length + all.closed.length;
+  };
+  getMyLength = () => {
+    const { my } = this.state.tickets;
+    return my.pending.length + my.closed.length;
+  };
+  getAllPendingLength = () => this.state.tickets.all.pending.length;
+
+  getMyPendingLength = () => this.state.tickets.my.pending.length;
+
+  getAllClosedLength = () => this.state.tickets.all.closed.length;
+
+  getMyClosedLength = () => this.state.tickets.my.closed.length;
+
+  getDraftsLength = () => this.state.tickets.drafts.length;
+
+  getTrashLength = () => this.state.tickets.trash.length;
 
   render() {
     return (
-      <BrowserRouter>
+      <Router>
         <Switch>
+          <Route path="/login" component={Login} />
+          <Route exact path="/" component={() => <Redirect to="/tickets" />} />
+          <Route exact path="/tickets" component={() => <Redirect to="/tickets/all" />} />
           <Route
             exact
-            path="/"
-            component={() => (
-              <React.Fragment>
-                <Navbar selected="pending" pending="15" closed="35" currentCat="all" />
-                <MainSidebar selected="tickets" />
-                <TicketsSidebar selected="all" all={15} my={11} drafts={3} trash={1} />
-                <main
-                  style={{
-                    width: 'calc(100% - 280px)',
-                    height: '100%',
-                    position: 'fixed',
-                    right: '0',
-                    top: '50px',
-                    padding: '50px',
-                    overflowY: 'auto',
-                  }}
-                >
-                  <WrappedTicket
-                    from="ahmedisam9922@gmail.com"
-                    subject="Subject"
-                    description="This is a sample ticket with a sample description"
-                    date="April 09"
-                  />
-                </main>
-              </React.Fragment>
-            )}
+            path="/tickets/:category"
+            component={({
+              match: {
+                params: { category },
+              },
+            }) => {
+              if (category === 'all' || category === 'my')
+                return <Redirect to={`/tickets/${category}/pending`} />;
+              return <Redirect to={`/tickets/${category}`} />;
+            }}
           />
           <Route
             exact
-            path="/ticket"
+            path="/tickets/:category/:status"
+            component={props => <TicketsPage {...props} tickets={this.state.tickets} />}
+          />
+          <Route
+            path="/new-ticket"
             component={() => (
-              <React.Fragment>
-                <MainSidebar selected="tickets" />
-                <TicketsSidebar selected="all" all={15} my={11} drafts={3} trash={1} />
-                <main
-                  style={{
-                    width: 'calc(100% - 280px)',
-                    height: '100%',
-                    position: 'fixed',
-                    right: '0',
-                    top: '50px',
-                    padding: '50px',
-                    overflowY: 'auto',
-                  }}
-                >
-                  <WrappedTicket
-                    from="ahmedisam9922@gmail.com"
-                    subject="Subject"
-                    description="This is a sample ticket with a sample description"
-                    date="April 09"
-                  />
-                </main>
-              </React.Fragment>
+              <NewTicketPage
+                all={this.getAllLength()}
+                my={this.getMyLength()}
+                drafts={this.getDraftsLength()}
+                trash={this.getTrashLength()}
+              />
+            )}
+          />
+          <Route
+            path="/ticket/:uid"
+            component={({
+              match: {
+                params: { uid },
+              },
+            }) => (
+              <OpenedTicketPage
+                {...this.getTicketByUid(parseInt(uid))}
+                all={this.getAllLength()}
+                my={this.getMyLength()}
+                drafts={this.getDraftsLength()}
+                trash={this.getTrashLength()}
+              />
+            )}
+          />
+          <Route
+            path="/search"
+            component={() => (
+              <SearchPage
+                {...this.state.search}
+                searchResults={this.searchResults}
+                tickets={this.state.tickets.all.pending}
+                pending={this.getAllPendingLength()}
+                closed={this.getAllClosedLength()}
+              />
             )}
           />
         </Switch>
-      </BrowserRouter>
+      </Router>
     );
   }
 }

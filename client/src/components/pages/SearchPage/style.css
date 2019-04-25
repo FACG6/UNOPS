@@ -1,0 +1,9 @@
+.search-page__tickets-section {
+    width: calc(100% - 280px);
+    max-height: calc(100% - 50px);
+    position: fixed;
+    top: 50px;
+    right: 0;
+    padding: 30px 50px;
+    overflow-y: auto;
+}

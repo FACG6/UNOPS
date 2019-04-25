@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
-import Logo from '../Logo';
+import Logo from '../../parts/Logo';
 
 export default class extends Component {
   state = {

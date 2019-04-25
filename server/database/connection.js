@@ -2,11 +2,11 @@ const { Pool } = require('pg');
 const url = require('url');
 require('dotenv').config();
 
-let dbUrl = process.env.DATABASE_URL;
-if (process.env.NODE_ENV === 'dbtest' || process.env.NODE_ENV === 'test') {
-  dbUrl = process.env.DATABASE_URLTEST;
-}
-const params = url.parse(dbUrl);
+let DB_URL = '';
+if (process.env.NODE_ENV === 'test') DB_URL = process.env.DB_URL_TEST;
+else if (process.env.NODE_ENV === 'production') { DB_URL = process.env.DATABASE_URL; } else DB_URL = process.env.DB_URL;
+
+const params = url.parse(DB_URL);
 const [user, password] = params.auth.split(':');
 const option = {
   host: params.hostname,
@@ -17,6 +17,5 @@ const option = {
   password,
   ssl: process.env.hostname !== 'localhost',
 };
-
 
 module.exports = new Pool(option);

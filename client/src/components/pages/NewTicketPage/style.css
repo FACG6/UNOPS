@@ -1,0 +1,14 @@
+.new-ticket-page {
+    width: calc(100% - 280px);
+    max-height: calc(100% - 50px);
+    position: fixed;
+    top: 50px;
+    right: 0;
+    padding: 30px 50px;
+    overflow-y: auto;
+}
+
+.new-ticket-page__navbar-header {
+    font-size: 24px;
+    font-family: 'Lato', sans-serif;
+}

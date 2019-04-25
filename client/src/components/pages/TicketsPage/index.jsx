@@ -50,14 +50,14 @@ export default class extends Component {
     if (!(currentCategory === "trash" || currentCategory === "drafts")) {
       var pendingTicketsCount = tickets[currentCategory].pending.length,
         closedTicketsCount = tickets[currentCategory].closed.length,
-        allTicketsCound =
+        allTicketsCount =
           tickets.all.pending.length + tickets.all.closed.length,
         myTicketsCount = tickets.my.pending.length + tickets.my.closed.length,
         ticketsToRender = tickets[currentCategory][currentStatus];
     } else {
       var pendingTicketsCount = null,
         closedTicketsCount = null,
-        allTicketsCound =
+        allTicketsCount =
           tickets.all.pending.length + tickets.all.closed.length,
         myTicketsCount = tickets.my.pending.length + tickets.my.closed.length,
         ticketsToRender = tickets[currentCategory][currentStatus];
@@ -68,7 +68,7 @@ export default class extends Component {
         <MainSidebar selected="tickets" />
         <TicketsSidebar
           selected={currentCategory}
-          allTickets={allTicketsCound}
+          allTickets={allTicketsCount}
           myTickets={myTicketsCount}
           trash={tickets.trash.length}
           drafts={tickets.drafts.length}

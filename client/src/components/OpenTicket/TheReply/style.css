@@ -1,0 +1,70 @@
+.text-reply{
+    margin-left: -15px;
+}
+.text-reply__h2-reply{
+    margin-left: 295px;
+}
+.text-reply__div-reply{
+    width: 631px;
+    height: 300px;
+
+    margin: 10px 0 0 300px;
+    background: #ECECEC;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+}
+.iconBCC-reply__contentText-area{
+    width: 546px;
+    height: 164px;
+    margin-left: 33px;
+    margin-top: 33px;
+    margin: 33px 0 0 33px;
+    border-radius: 10px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: normal;
+}
+#btn_reply{
+    position: absolute;
+    width: 140px;
+    height: 42px;
+    margin-left: 200px;
+    background: #437489;
+    border-radius: 20px;
+    
+    top: 614px;
+    left: 536px; 
+}
+.text-reply__div-reply__name-emailCC{
+    position: absolute;
+    margin-left: 40px;
+}
+.text-reply__div-reply__title_emailCC{
+    position: absolute;
+    margin: 23px 0 0 80px;
+    
+}
+.iconBCC-reply__name-emailBCC{
+    position: absolute;
+    margin-left: 384px;
+}
+.iconBCC-reply__title-emailBCC{
+    position: absolute;
+    margin: 24px 0 0 421px
+}
+.far{
+    margin-left: 542px; 
+}
+.iconCC{
+    margin: 22px 0 0 220px;
+}
+.iconBCC{
+    margin: 25px 0 0 558px;
+  }
+  .iconBCC-reply{
+      margin-top: -39px;
+  }
+
+  

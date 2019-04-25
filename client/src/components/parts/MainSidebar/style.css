@@ -1,0 +1,36 @@
+:root {
+    --color: brown;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.main-sidebar {
+    background: var(--main-color, blue);
+    background: var(--main-color, darkblue);
+    width: 80px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @@ -32, 7+24, 7 @@ a {}
+    .main-sidebar__tab:hover {
+        background: #315564;
+        background: var(--main-color-light, blue);
+    }
+    .main-sidebar__text {
+        @@ -44, 9+36, 9 @@ a {}
+        .tab__focus {
+            background: #363936;
+            background: var(--second-color, #333);
+        }
+        .tab__focus:hover {
+            background: #363936;
+        }
+        background: var(--second-color, #333);
+    }

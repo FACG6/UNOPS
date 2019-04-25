@@ -1,33 +1,38 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import Login from './components/pages/Login';
-import TicketsPage from './components/pages/TicketsPage';
-import NewTicketPage from './components/pages/NewTicketPage';
-import ticketsSample from './components/model.js';
-import './App.css';
-import OpenedTicketPage from './components/pages/OpenedTicketPage';
-import SearchPage from './components/pages/SearchPage';
+import React, { Component } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
+import Login from "./components/pages/Login";
+import TicketsPage from "./components/pages/TicketsPage";
+import NewTicketPage from "./components/pages/NewTicketPage";
+import ticketsSample from "./components/model.js";
+import "./App.css";
+import OpenedTicketPage from "./components/pages/OpenedTicketPage";
+import SearchPage from "./components/pages/SearchPage";
 
 export default class App extends Component {
   state = {
     tickets: {
-      all: {
+      allTickets: {
         pending: [],
-        closed: [],
+        closed: []
       },
-      my: {
+      myTickets: {
         pending: [],
-        closed: [],
+        closed: []
       },
       drafts: [],
-      trash: [],
+      trash: []
     },
     search: {
-      query: '',
-      user: '',
-      status: '',
+      query: "",
+      user: "",
+      status: ""
     },
-    searchResults: null,
+    searchResults: null
   };
 
   componentDidMount() {
@@ -39,14 +44,19 @@ export default class App extends Component {
     for (let key in tickets) {
       if (tickets[key] instanceof Array)
         if (tickets[key].find(ticket => ticket.uid === uid))
-          return { ticket: tickets[key].find(ticket => ticket.uid === uid), category: `${key}` };
+          return {
+            ticket: tickets[key].find(ticket => ticket.uid === uid),
+            category: `${key}`
+          };
         else continue;
       else {
         for (let statusKey in tickets[key]) {
           if (tickets[key][statusKey].find(ticket => ticket.uid === uid))
             return {
-              ticket: tickets[key][statusKey].find(ticket => ticket.uid === uid),
-              category: `${key}`,
+              ticket: tickets[key][statusKey].find(
+                ticket => ticket.uid === uid
+              ),
+              category: `${key}`
             };
           else continue;
         }
@@ -55,24 +65,24 @@ export default class App extends Component {
   };
 
   getAllLength = () => {
-    const { all } = this.state.tickets;
-    return all.pending.length + all.closed.length;
+    const { allTickets } = this.state.tickets;
+    return allTickets.pending.length + allTickets.closed.length;
   };
-  getMyLength = () => {
+  myTicketsCount = () => {
     const { my } = this.state.tickets;
     return my.pending.length + my.closed.length;
   };
-  getAllPendingLength = () => this.state.tickets.all.pending.length;
+  allPendingTicketsCount = () => this.state.tickets.all.pending.length;
 
-  getMyPendingLength = () => this.state.tickets.my.pending.length;
+  myPendingTicketsCount = () => this.state.tickets.my.pending.length;
 
-  getAllClosedLength = () => this.state.tickets.all.closed.length;
+  addClosedTicketsCount = () => this.state.tickets.all.closed.length;
 
-  getMyClosedLength = () => this.state.tickets.my.closed.length;
+  myClosedTicketsCount = () => this.state.tickets.my.closed.length;
 
-  getDraftsLength = () => this.state.tickets.drafts.length;
+  draftsCount = () => this.state.tickets.drafts.length;
 
-  getTrashLength = () => this.state.tickets.trash.length;
+  trashCount = () => this.state.tickets.trash.length;
 
   render() {
     return (
@@ -80,16 +90,20 @@ export default class App extends Component {
         <Switch>
           <Route path="/login" component={Login} />
           <Route exact path="/" component={() => <Redirect to="/tickets" />} />
-          <Route exact path="/tickets" component={() => <Redirect to="/tickets/all" />} />
+          <Route
+            exact
+            path="/tickets"
+            component={() => <Redirect to="/tickets/all-tickets" />}
+          />
           <Route
             exact
             path="/tickets/:category"
             component={({
               match: {
-                params: { category },
-              },
+                params: { category }
+              }
             }) => {
-              if (category === 'all' || category === 'my')
+              if (category === "all-tickets" || category === "my-ticekts")
                 return <Redirect to={`/tickets/${category}/pending`} />;
               return <Redirect to={`/tickets/${category}`} />;
             }}
@@ -97,16 +111,18 @@ export default class App extends Component {
           <Route
             exact
             path="/tickets/:category/:status"
-            component={props => <TicketsPage {...props} tickets={this.state.tickets} />}
+            component={props => (
+              <TicketsPage {...props} tickets={this.state.tickets} />
+            )}
           />
           <Route
             path="/new-ticket"
             component={() => (
               <NewTicketPage
                 all={this.getAllLength()}
-                my={this.getMyLength()}
-                drafts={this.getDraftsLength()}
-                trash={this.getTrashLength()}
+                my={this.myTicketsCount()}
+                drafts={this.draftsCount()}
+                trash={this.trashCount()}
               />
             )}
           />
@@ -114,15 +130,15 @@ export default class App extends Component {
             path="/ticket/:uid"
             component={({
               match: {
-                params: { uid },
-              },
+                params: { uid }
+              }
             }) => (
               <OpenedTicketPage
                 {...this.getTicketByUid(parseInt(uid))}
                 all={this.getAllLength()}
-                my={this.getMyLength()}
-                drafts={this.getDraftsLength()}
-                trash={this.getTrashLength()}
+                my={this.myTicketsCount()}
+                drafts={this.draftsCount()}
+                trash={this.trashCount()}
               />
             )}
           />
@@ -133,8 +149,8 @@ export default class App extends Component {
                 {...this.state.search}
                 searchResults={this.searchResults}
                 tickets={this.state.tickets.all.pending}
-                pending={this.getAllPendingLength()}
-                closed={this.getAllClosedLength()}
+                pending={this.allPendingTicketsCount()}
+                closed={this.addClosedTicketsCount()}
               />
             )}
           />

@@ -14,7 +14,7 @@ CREATE TABLE tickets(
     uid SERIAL PRIMARY KEY,
     from_tickets VARCHAR NOT NULL,
     to_tickets VARCHAR NOT NULL,
-    date INTEGER ,
+    date_time TIMESTAMP NOT NULL,
     body VARCHAR NOT NULL,
     status  VARCHAR NOT NULL,
     subject VARCHAR NOT NULL,

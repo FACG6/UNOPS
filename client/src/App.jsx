@@ -12,15 +12,6 @@ import ticketsSample from "./components/model.js";
 import "./App.css";
 import OpenedTicketPage from "./components/pages/OpenedTicketPage";
 import SearchPage from "./components/pages/SearchPage";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-// import Login from "./components/Login";
-// import SearchComponent from "./components/search";
-// import Home from "./components/Homepage";
-// import NewTicket from "./components/NewTicket";
-// import MainSidebar from "./components/MainSidebar";
-// import WrappedTicket from "./components/WrappedTicket";
-// import Replies from "./components/Replies";
-import Reply from "./components/parts/Reply";
 
 export default class App extends Component {
   state = {

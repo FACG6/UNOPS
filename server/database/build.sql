@@ -6,7 +6,7 @@ BEGIN;
 CREATE TABLE users
 (
     id SERIAL PRIMARY KEY,
-    email TEXT NOT NULL UNIQUE,
+    email VARCHAR NOT NULL UNIQUE,
     name VARCHAR NOT NULL ,
     password VARCHAR NOT NULL
 );
@@ -30,4 +30,3 @@ CREATE TABLE tickets
 );
 
 COMMIT;
-

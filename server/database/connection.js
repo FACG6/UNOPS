@@ -12,8 +12,10 @@ if (NODE_ENV === 'dbtest' || NODE_ENV === 'test') {
 }
 
 const params = parse(dbUrl);
-const [user, password] = params.auth.split(':');
-const { hostname: host, port, pathname } = params;
+const {
+  hostname: host, port, pathname, auth,
+} = params;
+const [user, password] = auth.split(':');
 
 const options = {
   host,

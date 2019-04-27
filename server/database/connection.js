@@ -1,22 +1,28 @@
 const { Pool } = require('pg');
-const url = require('url');
+const { parse } = require('url');
 require('dotenv').config();
 
-let dbUrl = process.env.DATABASE_URL;
-if (process.env.NODE_ENV === 'dbtest' || process.env.NODE_ENV === 'test') {
-  dbUrl = process.env.DATABASE_URLTEST;
+let { DATABASE_URL: dbUrl } = process.env;
+const {
+  MAX_DB_CONNECTION, NODE_ENV, hostname, DATABASE_URLTEST,
+} = process.env;
+
+if (NODE_ENV === 'dbtest' || NODE_ENV === 'test') {
+  dbUrl = DATABASE_URLTEST;
 }
-const params = url.parse(dbUrl);
+
+const params = parse(dbUrl);
 const [user, password] = params.auth.split(':');
-const option = {
-  host: params.hostname,
-  port: params.port,
-  database: params.pathname.split('/')[1],
-  max: process.env.MAX_DB_CONNECTION || 2,
+const { hostname: host, port, pathname } = params;
+
+const options = {
+  host,
+  port,
+  database: pathname.split('/')[1],
+  max: MAX_DB_CONNECTION || 2,
   user,
   password,
-  ssl: process.env.hostname !== 'localhost',
+  ssl: hostname !== 'localhost',
 };
 
-
-module.exports = new Pool(option);
+module.exports = new Pool(options);

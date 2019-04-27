@@ -8,12 +8,12 @@ export default function WrappedTicket({
 }) {
   return (
     <section className="wrapped-ticket">
+      {allChecked ? (
+        <input type="checkbox" className="wrapped-ticket__checkbox" checked />
+      ) : (
+        <input type="checkbox" className="wrapped-ticket__checkbox" />
+      )}
       <Link to={`/ticket/${uid}`}>
-        {allChecked ? (
-          <input type="checkbox" className="wrapped-ticket__checkbox" checked />
-        ) : (
-          <input type="checkbox" className="wrapped-ticket__checkbox" />
-        )}
         <span className="wrapped-ticket__from wrapped-ticket__text">{from}</span>
         <span className="wrapped-ticket__subject wrapped-ticket__text">
           {subject.length > 17 ? `${subject.substring(0, 17)}...` : subject}

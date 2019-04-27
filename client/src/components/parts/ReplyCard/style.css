@@ -1,0 +1,40 @@
+.reply-card {
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 4px 4px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+    padding: 10px 15px;
+}
+
+.reply-card__header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.reply-card__text {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #333;
+}
+
+.reply-card__text--strong {
+    margin-right: 5px;
+    font-size: 16px;
+    color: #000;
+}
+
+.reply-card__copies-div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.reply-card__body {
+    text-align: justify;
+    margin-top: 10px;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: #070707;
+    line-height: 20px;
+}

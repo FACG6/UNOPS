@@ -1,0 +1,73 @@
+.opened-ticket {
+    display: flex;
+    flex-direction: column;
+}
+
+.opened-ticket__header {
+    height: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 3px 3px 1px rgba(0, 0, 0, 0.1);
+}
+
+.opened-ticket__edit-icon {
+    cursor: pointer;
+    color: #929292;
+}
+
+.opened-ticket__subject {
+    font-family: 'Roboto', sans-serif;
+    margin-left: 20px;
+}
+
+.opened-ticket__status {
+    position: absolute;
+    right: 20px;
+    color: #929292;
+}
+
+.opened-ticket__details {
+    display: flex;
+    margin-top: 40px;
+}
+
+.opened-ticket__logo-div {
+    width: 90px;
+    height: 85px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--main-color, darkblue);
+    border-radius: 2px;
+}
+
+.opened-ticket__logo {
+    width: 85px;
+}
+
+.opened-ticket__details-emails-div {
+    height: 85px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-left: 10px;
+}
+
+.opened-ticket__details-text {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.opened-ticket__details-text--strong {
+    margin-right: 5px;
+    font-size: 16px;
+    color: #000;
+}
+
+.opened-ticket__body {
+    margin-top: 40px;
+    text-align: justify;
+}

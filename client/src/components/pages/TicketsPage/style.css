@@ -1,0 +1,36 @@
+.tickets-page {
+    width: calc(100% - 280px);
+    max-height: calc(100% - 50px);
+    position: fixed;
+    top: 50px;
+    right: 0;
+    padding: 10px 50px;
+    overflow-y: auto;
+}
+
+.tickets-page__header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #bdbdbd;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+.tickets-page__select-all {
+    cursor: pointer;
+    color: var(--main-color, darkblue);
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    margin-right: 50px;
+}
+
+.tickets-page__mark-as {
+    cursor: pointer;
+    width: 80px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+}

@@ -1,0 +1,82 @@
+.tickets-sidebar {
+    background: var(--second-color, #333);
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    left: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.tickets-sidebar__new-ticket {
+    cursor: pointer;
+    height: 50px;
+    width: 155px;
+    margin: 50px 0;
+    background: var(--main-color, darkblue);
+    border-radius: 5px;
+    color: white;
+    font-size: 23px;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tickets-sidebar__plus-icon {
+    margin-right: 10px;
+    color: white;
+}
+
+.tickets-sidebar__links-container {
+    width: 200px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.tickets-sidebar__link {
+    width: 200px;
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-family: Roboto;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.tickets-sidebar__num-div {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    border: 1.3px solid white;
+    margin-right: 20px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+
+.tickets-sidebar__text {
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+.selected-tab {
+    background: white;
+    color: #363936;
+}
+
+.circle-selected {
+    border: 1.3px solid var(--second-color, #333);
+    color: var(--second-color, #333)
+}

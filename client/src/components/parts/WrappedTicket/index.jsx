@@ -16,9 +16,12 @@ export default function WrappedTicket({
         )}
         <span className="wrapped-ticket__from wrapped-ticket__text">{from}</span>
         <span className="wrapped-ticket__subject wrapped-ticket__text">
-          {subject.substring(0, 14)}
+          {subject.length > 17 ? `${subject.substring(0, 17)}...` : subject}
         </span>
-        <span className="wrapped-ticket__description">{body.substring(0, 59)}</span>
+
+        <span className="wrapped-ticket__description">
+          {body.length > 59 ? `${body.substring(0, 59)}...` : body}
+        </span>
         <span className="wrapped-ticket__date wrapped-ticket__text">{date}</span>
       </Link>
     </section>

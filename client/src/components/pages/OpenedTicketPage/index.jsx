@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import OpenedTicket from "../../parts/OpenedTicket";
-import MainSidebar from "../../parts/MainSidebar";
-import TicketsSidebar from "../../parts/TicketsSidebar";
-import Replies from "../../parts/Replies";
-import Reply from "../../parts/Reply";
-import "./style.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import OpenedTicket from '../../parts/OpenedTicket';
+import MainSidebar from '../../parts/MainSidebar';
+import TicketsSidebar from '../../parts/TicketsSidebar';
+import Replies from '../../parts/Replies';
+import Reply from '../../parts/Reply';
+import './style.css';
 
 export default function OpenedTicketPage({
   ticket,
@@ -13,7 +13,7 @@ export default function OpenedTicketPage({
   myTickets,
   drafts,
   trash,
-  category
+  category,
 }) {
   if (!ticket) {
     return (
@@ -31,7 +31,9 @@ export default function OpenedTicketPage({
       </>
     );
   }
-  const { from, subject, date, body, cc } = ticket;
+  const {
+    from, subject, date, body, cc,
+  } = ticket;
   return (
     <>
       <MainSidebar selected="tickets" />
@@ -43,13 +45,7 @@ export default function OpenedTicketPage({
         selected={category}
       />
       <main className="opened-ticket-page">
-        <OpenedTicket
-          from={from}
-          subject={subject}
-          date={date}
-          body={body}
-          cc={cc}
-        />
+        <OpenedTicket from={from} subject={subject} date={date} body={body} cc={cc} />
         <Replies tickets={[]} />
         <Reply />
       </main>
@@ -63,5 +59,5 @@ OpenedTicketPage.propTypes = {
   myTickets: PropTypes.number.isRequired,
   trash: PropTypes.number.isRequired,
   drafts: PropTypes.number.isRequired,
-  category: PropTypes.string.isRequired
+  category: PropTypes.string.isRequired,
 };

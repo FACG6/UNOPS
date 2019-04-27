@@ -64,7 +64,7 @@ export default class App extends Component {
     }
   };
 
-  getAllLength = () => {
+  allTicketsCount = () => {
     const { allTickets } = this.state.tickets;
     return allTickets.pending.length + allTickets.closed.length;
   };
@@ -119,7 +119,7 @@ export default class App extends Component {
             path="/new-ticket"
             component={() => (
               <NewTicketPage
-                all={this.getAllLength()}
+                all={this.allTicketsCount()}
                 my={this.myTicketsCount()}
                 drafts={this.draftsCount()}
                 trash={this.trashCount()}
@@ -135,7 +135,7 @@ export default class App extends Component {
             }) => (
               <OpenedTicketPage
                 {...this.getTicketByUid(parseInt(uid))}
-                all={this.getAllLength()}
+                all={this.allTicketsCount()}
                 my={this.myTicketsCount()}
                 drafts={this.draftsCount()}
                 trash={this.trashCount()}

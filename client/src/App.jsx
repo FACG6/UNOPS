@@ -39,7 +39,7 @@ export default class App extends Component {
     socket.emit("getmails");
     socket.on("mails", data => {
       this.setState({
-        receivedMails: this.state.receivedMails + JSON.parse(data).html
+        tickets: this.state.receivedMails + JSON.parse(data).html
       });
   })}
 

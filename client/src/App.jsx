@@ -9,6 +9,8 @@ import ticketsSample from './components/model';
 import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
+import socketIOClient from "socket.io-client";
+const socket = socketIOClient("http://localhost:7425");
 
 export default class App extends Component {
   state = {
@@ -34,7 +36,12 @@ export default class App extends Component {
 
   componentDidMount() {
     this.setState(ticketsSample);
-  }
+    socket.emit("getmails");
+    socket.on("mails", data => {
+      this.setState({
+        receivedMails: this.state.receivedMails + JSON.parse(data).html
+      });
+  })}
 
   getTicketByUid = (uid) => {
     const { tickets } = this.state;

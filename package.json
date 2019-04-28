@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test tape  test/server.test.js | tap-spec",
-     "testdb":"NODE_ENV=test tape test/dbtest.js | tap-spec"
-    
+    "testdb": "NODE_ENV=test tape test/dbtest.js | tap-spec"
   },
   "repository": {
     "type": "git",
@@ -30,6 +29,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "chart.js": "^2.8.0",
+    "cookie": "^0.3.1",
     "cookie-parser": "^1.4.4",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
@@ -39,7 +39,8 @@
     "mailparser": "^2.6.0",
     "nodemailer": "^6.1.0",
     "pg": "^7.9.0",
-    "react-froala-wysiwyg": "^2.9.5-1"
+    "react-froala-wysiwyg": "^2.9.5-1",
+    "socket.io": "^2.2.0"
   },
   "directories": {
     "test": "test"

@@ -35,8 +35,8 @@ imap.on('ready', () => {
 imap.once('error', (connError) => {
   throw connError;
 });
-imap.once('end', () => {
-  app.listen(app.get('port'), app.get('host') || 'localhost', () => console.log(`Server is up on http://${app.get('host')}:${app.get('port')}`));
-});
+imap.once('end', () => console.log('imap connection was closed'));
+
+module.exports = app.listen(app.get('port'), app.get('host') || 'localhost', () => console.log(`Server is up on http://${app.get('host')}:${app.get('port')}`));
 
 imap.connect();

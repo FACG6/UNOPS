@@ -38,13 +38,12 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    this.setState(ticketsSample);
-    socket.emit("getmails");
     socket.on("mails", data => {
       this.setState({
         tickets: [...this.state.tickets, JSON.parse(data)]
       });
     });
+    socket.emit("getmails");
   }
 
   getTicketByUid = uid => {

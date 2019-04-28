@@ -7,7 +7,7 @@
     "test": "NODE_ENV=test tape  test/server.test.js | tap-spec",
     "testdb": "NODE_ENV=test tape test/dbtest.js | tap-spec",
     "start": "node ./server/index.js",
-    "dev": "nodemon ./server/socket.js",
+    "dev": "nodemon ./server/index.js",
     "client": "npm start --prefix client",
     "server": "concurrently \"npm run dev\" \"npm run client\" "
   },
@@ -33,6 +33,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "chart.js": "^2.8.0",
+    "concurrently": "^4.1.0",
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.4",
     "dotenv": "^7.0.0",

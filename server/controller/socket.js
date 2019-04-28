@@ -1,39 +1,28 @@
-const socket = require('socket.io');
 const { verify } = require('jsonwebtoken');
 const cookie = require('cookie');
 const Imap = require('imap');
 const { MailParser } = require('mailparser-mit');
-const express = require('express');
-
-const app = express();
-const server = app.listen(7425, () => {
-  console.log('listening on port 7425');
-});
-
-const io = socket(server);
+require('dotenv').config();
 require('dotenv').config();
 
-io.on('connection', (socket) => {
+const events = (socket, io) => {
   const imap = new Imap({
-    user: '',
-    password: '',
+    user: process.env.IMAP_USER,
+    password: process.env.IMAP_USER_PASS,
     host: 'imap.gmail.com',
     port: 993,
     tls: true,
   });
-  const openInbox = (cb) => {
-    imap.openBox('INBOX', true, cb);
-  };
+
   const mails = (callback) => {
     imap.once('ready', () => {
-      openInbox((err, box) => {
+      imap.openBox('INBOX', true, (err, box) => {
         const f = imap.fetch('1:5', { bodies: '' });
         f.on('message', (msg, seqno) => {
           const parser = new MailParser();
           msg.on('body', (stream, info) => {
-            parser.on('end', (x) => {
-              console.log(x);
-              callback(JSON.stringify(x));
+            parser.on('end', (mailObject) => {
+              callback(JSON.stringify(mailObject));
             });
             stream.pipe(parser);
           });
@@ -52,11 +41,11 @@ io.on('connection', (socket) => {
       (err, decoded) => {
         if (decoded) {
           // need a database query here
-          io.to(socket.id).emit('mails', 'database query for tickets fetching');
-          mails((cb) => {
-            io.to(socket.id).emit('mails', cb);
+          // io.to(socket.id).emit('mails', 'database query for tickets fetching');
+          mails((mailObject) => {
+            io.to(socket.id).emit('mails');
           });
-        }
+        } else console.log('not verified');
       },
     );
   });
@@ -86,7 +75,6 @@ io.on('connection', (socket) => {
       },
     );
   });
-
 
   socket.on('search', (data) => {
     verify(
@@ -158,10 +146,12 @@ io.on('connection', (socket) => {
   imap.once('error', (err) => {
     console.log(err);
   });
+
   imap.once('end', () => {
     console.log('Connection ended');
   });
+
   imap.connect();
   console.log('made socket connection', socket.id);
-  io.on('disconnect', () => socket.close());
-});
+};
+module.exports = events;

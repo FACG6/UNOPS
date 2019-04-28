@@ -1,37 +1,40 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
-  BrowserRouter as Router, Route, Switch, Redirect,
-} from 'react-router-dom';
-import Login from './components/pages/Login';
-import TicketsPage from './components/pages/TicketsPage';
-import NewTicketPage from './components/pages/NewTicketPage';
-import ticketsSample from './components/model';
-import './App.css';
-import OpenedTicketPage from './components/pages/OpenedTicketPage';
-import SearchPage from './components/pages/SearchPage';
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
+import Login from "./components/pages/Login";
+import TicketsPage from "./components/pages/TicketsPage";
+import NewTicketPage from "./components/pages/NewTicketPage";
+import ticketsSample from "./components/model";
+import "./App.css";
+import OpenedTicketPage from "./components/pages/OpenedTicketPage";
+import SearchPage from "./components/pages/SearchPage";
 import socketIOClient from "socket.io-client";
 const socket = socketIOClient("http://localhost:7425");
 
 export default class App extends Component {
   state = {
     tickets: {
-      'all-tickets': {
+      "all-tickets": {
         pending: [],
-        closed: [],
+        closed: []
       },
-      'my-tickets': {
+      "my-tickets": {
         pending: [],
-        closed: [],
+        closed: []
       },
       drafts: [],
-      trash: [],
+      trash: []
     },
     search: {
-      query: '',
-      user: '',
-      status: '',
+      query: "",
+      user: "",
+      status: ""
     },
-    searchResults: null,
+    searchResults: null
   };
 
   componentDidMount() {
@@ -39,18 +42,19 @@ export default class App extends Component {
     socket.emit("getmails");
     socket.on("mails", data => {
       this.setState({
-        receivedMails: this.state.receivedMails + JSON.parse(data).html
+        tickets: [...this.state.tickets, JSON.parse(data)]
       });
-  })}
+    });
+  }
 
-  getTicketByUid = (uid) => {
+  getTicketByUid = uid => {
     const { tickets } = this.state;
     for (const key in tickets) {
       if (tickets[key] instanceof Array) {
         if (tickets[key].find(ticket => ticket.uid === uid)) {
           return {
             ticket: tickets[key].find(ticket => ticket.uid === uid),
-            category: `${key}`,
+            category: `${key}`
           };
         }
         continue;
@@ -58,8 +62,10 @@ export default class App extends Component {
         for (const statusKey in tickets[key]) {
           if (tickets[key][statusKey].find(ticket => ticket.uid === uid)) {
             return {
-              ticket: tickets[key][statusKey].find(ticket => ticket.uid === uid),
-              category: `${key}`,
+              ticket: tickets[key][statusKey].find(
+                ticket => ticket.uid === uid
+              ),
+              category: `${key}`
             };
           }
           continue;
@@ -70,22 +76,23 @@ export default class App extends Component {
   };
 
   allTicketsCount = () => {
-    const allTickets = this.state.tickets['all-tickets'];
+    const allTickets = this.state.tickets["all-tickets"];
     return allTickets.pending.length + allTickets.closed.length;
   };
 
   myTicketsCount = () => {
-    const myTickets = this.state.tickets['my-tickets'];
+    const myTickets = this.state.tickets["my-tickets"];
     return myTickets.pending.length + myTickets.closed.length;
   };
 
-  allPendingTicketsCount = () => this.state.tickets['all-tickets'].pending.length;
+  allPendingTicketsCount = () =>
+    this.state.tickets["all-tickets"].pending.length;
 
-  myPendingTicketsCount = () => this.state.tickets['my-tickets'].pending.length;
+  myPendingTicketsCount = () => this.state.tickets["my-tickets"].pending.length;
 
-  addClosedTicketsCount = () => this.state.tickets['all-tickets'].closed.length;
+  addClosedTicketsCount = () => this.state.tickets["all-tickets"].closed.length;
 
-  myClosedTicketsCount = () => this.state.tickets['my-tickets'].closed.length;
+  myClosedTicketsCount = () => this.state.tickets["my-tickets"].closed.length;
 
   draftsCount = () => this.state.tickets.drafts.length;
 
@@ -97,23 +104,30 @@ export default class App extends Component {
         <Switch>
           <Route path="/login" component={Login} />
           <Route exact path="/" component={() => <Redirect to="/tickets" />} />
-          <Route exact path="/tickets" component={() => <Redirect to="/tickets/all-tickets" />} />
+          <Route
+            exact
+            path="/tickets"
+            component={() => <Redirect to="/tickets/all-tickets" />}
+          />
           <Route
             exact
             path="/tickets/:category"
             component={({
               match: {
-                params: { category },
-              },
+                params: { category }
+              }
             }) => {
-              if (category === 'all-tickets' || category === 'my-ticekts') return <Redirect to={`/tickets/${category}/pending`} />;
+              if (category === "all-tickets" || category === "my-ticekts")
+                return <Redirect to={`/tickets/${category}/pending`} />;
               return <Redirect to={`/tickets/${category}`} />;
             }}
           />
           <Route
             exact
             path="/tickets/:category/:status"
-            component={props => <TicketsPage {...props} tickets={this.state.tickets} />}
+            component={props => (
+              <TicketsPage {...props} tickets={this.state.tickets} />
+            )}
           />
           <Route
             path="/new-ticket"
@@ -130,8 +144,8 @@ export default class App extends Component {
             path="/ticket/:uid"
             component={({
               match: {
-                params: { uid },
-              },
+                params: { uid }
+              }
             }) => (
               <OpenedTicketPage
                 {...this.getTicketByUid(parseInt(uid, 10))}
@@ -148,7 +162,7 @@ export default class App extends Component {
               <SearchPage
                 {...this.state.search}
                 searchResults={this.searchResults}
-                tickets={this.state.tickets['all-tickets'].pending}
+                tickets={this.state.tickets["all-tickets"].pending}
                 pending={this.allPendingTicketsCount()}
                 closed={this.addClosedTicketsCount()}
               />

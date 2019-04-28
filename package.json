@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test tape  test/server.test.js | tap-spec",
-    "testdb": "NODE_ENV=test tape test/dbtest.js | tap-spec"
+    "testdb": "NODE_ENV=test tape test/dbtest.js | tap-spec",
+    "start": "node ./server/index.js",
+    "dev": "nodemon ./server/socket.js",
+    "client": "npm start --prefix client",
+    "server": "concurrently \"npm run dev\" \"npm run client\" "
   },
   "repository": {
     "type": "git",

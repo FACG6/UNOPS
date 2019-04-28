@@ -1,7 +1,6 @@
-import React, { Component } from "react";
-import EmailCopy from "./../EmailCopy";
-import PropTypes from "prop-types";
-import "./style.css";
+import React, { Component } from 'react';
+import EmailCopy from '../EmailCopy';
+import './style.css';
 
 export default class Reply extends Component {
   state = {
@@ -9,25 +8,25 @@ export default class Reply extends Component {
     bcc: [],
     addCc: false,
     addBcc: false,
-    reply: ""
+    reply: '',
   };
-  toggleAdd = target => {
-    target = target === "cc" ? "addCc" : "addBcc";
+
+  toggleAdd = (target) => {
+    target = target === 'cc' ? 'addCc' : 'addBcc';
     this.setState({ [target]: !this.state[target] });
   };
+
   addNew = (event, target) => {
-    if (event.charCode == 13) {
+    if (event.charCode === 13) {
       if (!event.target.value) this.toggleAdd(target);
-      else
-        this.setState(
-          { [target]: [...this.state[target], event.target.value] },
-          () => this.toggleAdd(target)
-        );
+      else this.setState({ [target]: [...this.state[target], event.target.value] }, () => this.toggleAdd(target));
     }
   };
 
   render() {
-    const { cc, bcc, addCc, addBcc } = this.state;
+    const {
+      cc, bcc, addCc, addBcc,
+    } = this.state;
     return (
       <section className="reply-section">
         <div className="reply-section__text">Reply:</div>

@@ -1,36 +1,35 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import MainSidebar from "../../parts/MainSidebar";
-import TicketsSidebar from "../../parts/TicketsSidebar";
-import Navbar from "../../parts/Navbar";
-import WrappedTicket from "../../parts/WrappedTicket";
-import "./style.css";
+import React, { Component } from 'react';
+import MainSidebar from '../../parts/MainSidebar';
+import TicketsSidebar from '../../parts/TicketsSidebar';
+import Navbar from '../../parts/Navbar';
+import WrappedTicket from '../../parts/WrappedTicket';
+import './style.css';
 
 export default class extends Component {
   state = {
     tickets: this.props.tickets || {
-      allTickets: {
+      'all-tickets': {
         pending: [],
-        closed: []
+        closed: [],
       },
-      myTickets: {
+      'my-tickets': {
         pending: [],
-        closed: []
+        closed: [],
       },
       drafts: [],
-      trash: []
+      trash: [],
     },
-    currentCategory: this.props.match.params.category || "all-tickets",
-    currentStatus: this.props.match.params.status || "pending",
+    currentCategory: this.props.match.params.category || 'all-tickets',
+    currentStatus: this.props.match.params.status || 'pending',
     allChecked: false,
-    markAs: null
+    markAs: null,
   };
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       tickets: nextProps.tickets,
       currentCategory: nextProps.match.params.category,
-      currentStatus: nextProps.match.params.status
+      currentStatus: nextProps.match.params.status,
     });
   }
 
@@ -39,28 +38,27 @@ export default class extends Component {
   };
 
   render() {
+    let pendingTicketsCount;
+    let closedTicketsCount;
+    let allTicketsCount;
+    let myTicketsCount;
+    let ticketsToRender;
     const {
-      currentCategory,
-      currentStatus,
-      allChecked,
-      markAs,
-      tickets
+      currentCategory, currentStatus, allChecked, markAs, tickets,
     } = this.state;
 
-    if (!(currentCategory === "trash" || currentCategory === "drafts")) {
-      var pendingTicketsCount = tickets[currentCategory].pending.length,
-        closedTicketsCount = tickets[currentCategory].closed.length,
-        allTicketsCount =
-          tickets.all.pending.length + tickets.all.closed.length,
-        myTicketsCount = tickets.my.pending.length + tickets.my.closed.length,
-        ticketsToRender = tickets[currentCategory][currentStatus];
+    if (!(currentCategory === 'trash' || currentCategory === 'drafts')) {
+      pendingTicketsCount = tickets[currentCategory].pending.length;
+      closedTicketsCount = tickets[currentCategory].closed.length;
+      allTicketsCount = tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
+      myTicketsCount = tickets['my-tickets'].pending.length + tickets['my-tickets'].closed.length;
+      ticketsToRender = tickets[currentCategory][currentStatus];
     } else {
-      var pendingTicketsCount = null,
-        closedTicketsCount = null,
-        allTicketsCount =
-          tickets.all.pending.length + tickets.all.closed.length,
-        myTicketsCount = tickets.my.pending.length + tickets.my.closed.length,
-        ticketsToRender = tickets[currentCategory][currentStatus];
+      pendingTicketsCount = null;
+      closedTicketsCount = null;
+      allTicketsCount = tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
+      myTicketsCount = tickets['my-tickets'].pending.length + tickets['my-tickets'].closed.length;
+      ticketsToRender = tickets[currentCategory][currentStatus];
     }
 
     return (
@@ -73,7 +71,7 @@ export default class extends Component {
           trash={tickets.trash.length}
           drafts={tickets.drafts.length}
         />
-        {!pendingTicketsCount ? (
+        {pendingTicketsCount ? (
           <Navbar
             selected={currentStatus}
             currentCategory={currentCategory}
@@ -89,10 +87,7 @@ export default class extends Component {
         )}
         <main className="tickets-page">
           <div className="tickets-page__header">
-            <span
-              className="tickets-page__select-all"
-              onClick={this.toggleAllChecked}
-            >
+            <span className="tickets-page__select-all" onClick={this.toggleAllChecked}>
               Select all
             </span>
             <select name="markAs" id="markAs" className="tickets-page__mark-as">

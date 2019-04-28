@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import ReplyCard from "../ReplyCard";
-import "./style.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import ReplyCard from '../ReplyCard';
+import './style.css';
 
 export default function Replies({ tickets }) {
   return (
@@ -15,5 +15,5 @@ export default function Replies({ tickets }) {
 }
 
 Replies.propTypes = {
-  tickets: PropTypes.instanceOf(Array).isRequired
+  tickets: PropTypes.instanceOf(Array).isRequired,
 };

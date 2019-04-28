@@ -14,8 +14,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(join(__dirname, '..', 'client', 'build')));
 
-app.use('/api/v1', router);
-
 app.get('*', (req, res) => {
   res.sendFile(join(__dirname, '..', 'client', 'build', 'index.html'));
 });

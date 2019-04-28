@@ -14,6 +14,16 @@ const events = (socket, io) => {
     tls: true,
   });
 
+  const verifyEvent = (cb) => {
+    verify(
+      cookie.parse(socket.request.headers.cookie).jwt,
+      process.env.PRIVATE_KEY,
+      (err, decoded) => {
+        cb(err, decoded);
+      },
+    );
+  };
+
   const mails = (callback) => {
     imap.once('ready', () => {
       imap.openBox('INBOX', true, (err, box) => {
@@ -27,104 +37,93 @@ const events = (socket, io) => {
             stream.pipe(parser);
           });
         });
-        f.once('error', (err) => {
-          console.log('fetch error');
+        f.once('error', (Err) => {
+          io.to(socket.id).emit('error', { error: Err });
         });
       });
     });
   };
 
   socket.on('getmails', () => {
-    verify(
-      cookie.parse(socket.request.headers.cookie).jwt,
-      process.env.PRIVATE_KEY,
-      (err, decoded) => {
-        if (decoded) {
-          // need a database query here
-          // io.to(socket.id).emit('mails', 'database query for tickets fetching');
-          mails((mailObject) => {
-            io.to(socket.id).emit('mails');
-          });
-        } else console.log('not verified');
-      },
-    );
+    verifyEvent((err, decoded) => {
+      if (decoded) {
+        // need a database query here
+        // io.to(socket.id).emit('mails', 'database query for tickets fetching');
+        mails((mailObject) => {
+          io.to(socket.id).emit('mails', mailObject);
+        });
+      } else io.to(socket.id).emit('error', { error: 'not verified' });
+    });
   });
 
   socket.on('update status', (data) => {
-    verify(
-      cookie.parse(socket.request.headers.cookie).jwt,
-      process.env.PRIVATE_KEY,
-      (err, decoded) => {
-        if (decoded) {
-          imap.setKeywords(data.uid, [`${data.status}`]);
-          io.to(socket.id).emit('status changed successfully');
-        }
-      },
-    );
+    verifyEvent((err, decoded) => {
+      if (decoded) {
+        imap.setKeywords(data.uid, [`${data.status}`]);
+        io.to(socket.id).emit('status changed successfully');
+      } else io.to(socket.id).emit('error', { error: 'not verified' });
+    });
   });
 
   socket.on('new ticket', (data) => {
-    verify(
-      cookie.parse(socket.request.headers.cookie).jwt,
-      process.env.PRIVATE_KEY,
-      (err, decoded) => {
-        if (decoded) {
-          // database query
-          io.to(socket.id).emit('ticket added successfully');
-        }
-      },
-    );
+    verifyEvent((err, decoded) => {
+      if (decoded) {
+        // need a database query here to add the new ticket to the database
+        io.to(socket.id).emit('ticket added successfully');
+      } else io.to(socket.id).emit('error', { error: 'not verified' });
+    });
+  });
+
+  socket.on('send a new message', (data) => {
+    verifyEvent((err, decoded) => {
+      if (decoded) {
+        // need a database query here to add the new ticket to the database
+        io.to(socket.id).emit('ticket added successfully');
+      } else io.to(socket.id).emit('error', { error: 'not verified' });
+    });
   });
 
   socket.on('search', (data) => {
-    verify(
-      cookie.parse(socket.request.headers.cookie).jwt,
-      process.env.PRIVATE_KEY,
-      (err, decoded) => {
-        if (decoded) {
-          if (data.user) {
-            // database query
-            io.to(socket.id).emit('search tickets', 'query res');
-          } else {
-            // need a database query
-            // example:   io.to(socket.id).emit('mails', 'database  query'); and then =>
-            const parser = new MailParser();
-            imap.search([`${data.status}`], (err, results) => {
-              if (err) throw err;
-              const f = imap.fetch(results, { bodies: '' });
-              f.on('message', (msg, seqno) => {
-                msg.on('body', (stream, info) => {
-                  parser.on('end', (x) => {
-                    io.to(socket.id).emit(JSON.stringify(x));
-                  });
-                  stream.pipe(parser);
+    verifyEvent((err, decoded) => {
+      if (decoded) {
+        if (data.user) {
+          // need a database query here to fetch users tickets
+          io.to(socket.id).emit('search tickets', 'query res');
+        } else {
+          // need a database query here to fetch users tickets
+          // example:   io.to(socket.id).emit('mails', 'database  query'); and then =>
+          const parser = new MailParser();
+          imap.search([`${data.status}`], (err, results) => {
+            if (err) throw err;
+            const f = imap.fetch(results, { bodies: '' });
+            f.on('message', (msg, seqno) => {
+              msg.on('body', (stream, info) => {
+                parser.on('end', (x) => {
+                  io.to(socket.id).emit(JSON.stringify(x));
                 });
-              });
-              f.once('error', (err) => {
-                console.log(`Fetch error: ${err}`);
-              });
-              f.once('end', () => {
-                console.log('Done fetching all messages!');
-                imap.end();
+                stream.pipe(parser);
               });
             });
-          }
+            f.once('error', (err) => {
+              io.to(socket.id).emit(`Fetch error: ${err}`);
+            });
+            f.once('end', () => {
+              console.log('Done fetching all messages!');
+              imap.end();
+            });
+          });
         }
-      },
-    );
+      } else io.to(socket.id).emit('error', { error: 'not verified' });
+    });
   });
 
   socket.on('reports', (data) => {
-    verify(
-      cookie.parse(socket.request.headers.cookie).jwt,
-      process.env.PRIVATE_KEY,
-      (err, decoded) => {
-        if (decoded) {
-          // need a database query here..
-          io.to(socket.id).emit('status changed successfully', data);
-        }
-      },
-    );
+    verifyEvent((err, decoded) => {
+      if (decoded) {
+        // need a database query here to fetch the statistics..
+        io.to(socket.id).emit('status changed successfully', data);
+      } else io.to(socket.id).emit('error', { error: 'not verified' });
+    });
   });
 
   imap.on('mail', (mails) => {
@@ -144,7 +143,7 @@ const events = (socket, io) => {
   });
 
   imap.once('error', (err) => {
-    console.log(err);
+    io.to(socket.id).emit('error', { error: err });
   });
 
   imap.once('end', () => {

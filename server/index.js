@@ -1,7 +1,7 @@
 const socket = require('socket.io');
 const Imap = require('imap');
 const app = require('./app.js');
-const events = require('./controller/socket');
+const events = require('./controllers/socket');
 require('dotenv').config();
 
 const { IMAP_USER: user, IMAP_USER_PASS: password } = process.env;

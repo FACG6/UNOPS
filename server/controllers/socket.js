@@ -6,8 +6,8 @@ require('dotenv').config();
 
 const events = (socket, io) => {
   const imap = new Imap({
-    user: 'a2nies2012@gmail.com',
-    password: 'wsnrgmnfopeihjti',
+    user: process.env.IMAP_USER,
+    password: process.env.IMAP_USER_PASS,
     host: 'imap.gmail.com',
     port: 993,
     tls: true,

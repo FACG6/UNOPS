@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test tape  test/server.test.js | tap-spec",
+    "testdb": "NODE_ENV=test tape test/dbtest.js | tap-spec",
+    "start": "node ./server/index.js",
+    "client": "npm start --prefix client",
      "dev" :"NODE_ENV=development node server/index.js",
      "server": "NODE_ENV=production concurrently \"npm run dev\" \"npm run client\" "
     
@@ -31,6 +34,8 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "chart.js": "^2.8.0",
+    "concurrently": "^4.1.0",
+    "cookie": "^0.3.1",
     "cookie-parser": "^1.4.4",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
@@ -38,9 +43,11 @@
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
     "mailparser": "^2.6.0",
+    "mailparser-mit": "^1.0.0",
     "nodemailer": "^6.1.0",
     "pg": "^7.9.0",
-    "react-froala-wysiwyg": "^2.9.5-1"
+    "react-froala-wysiwyg": "^2.9.5-1",
+    "socket.io": "^2.2.0"
   },
   "directories": {
     "test": "test"

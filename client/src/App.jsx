@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router, Route, Switch, Redirect,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Login from './components/pages/Login';
 import TicketsPage from './components/pages/TicketsPage';
 import NewTicketPage from './components/pages/NewTicketPage';
@@ -9,6 +7,8 @@ import ticketsSample from './components/model';
 import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
+import socketIOClient from 'socket.io-client';
+const socket = socketIOClient('http://localhost:7425');
 
 export default class App extends Component {
   state = {
@@ -33,10 +33,23 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    this.setState(ticketsSample);
+    socket.emit('getmails');
+    socket.on('mails', data => {
+      this.setState({
+        tickets: [...this.state.tickets, JSON.parse(data)],
+      });
+    });
+    socket.on('notification', () => {
+      console.log('notification');
+      socket.emit('get new mail')
+    });
+    socket.on('new mail', (newMail) => {
+      console.log('new mail', newMail);
+      
+    });
   }
 
-  getTicketByUid = (uid) => {
+  getTicketByUid = uid => {
     const { tickets } = this.state;
     for (const key in tickets) {
       if (tickets[key] instanceof Array) {
@@ -99,7 +112,8 @@ export default class App extends Component {
                 params: { category },
               },
             }) => {
-              if (category === 'all-tickets' || category === 'my-ticekts') return <Redirect to={`/tickets/${category}/pending`} />;
+              if (category === 'all-tickets' || category === 'my-ticekts')
+                return <Redirect to={`/tickets/${category}/pending`} />;
               return <Redirect to={`/tickets/${category}`} />;
             }}
           />

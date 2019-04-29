@@ -11,17 +11,11 @@ CREATE TABLE users
     password VARCHAR NOT NULL
 );
 
-CREATE TABLE tickets_status
-(
-    uid SERIAL PRIMARY KEY,
-    status VARCHAR NOT NULL
-);
-
 CREATE TABLE tickets
 (
     uid INTEGER PRIMARY KEY,
-    from_tickets VARCHAR NOT NULL,
-    to_tickets VARCHAR NOT NULL,
+    sent_by VARCHAR NOT NULL,
+    delivered_to VARCHAR NOT NULL,
     date_time TIMESTAMP NOT NULL,
     body VARCHAR NOT NULL,
     status VARCHAR NOT NULL,

@@ -20,11 +20,11 @@ const [user, password] = auth.split(':');
 const options = {
   host,
   port,
-  database: pathname.split('/')[1],
-  max: MAX_DB_CONNECTION || 2,
   user,
   password,
+  database: pathname.split('/')[1],
+  max: MAX_DB_CONNECTION || 2,
   ssl: hostname !== 'localhost',
 };
-
-module.exports = new Pool(options);
+const pool = new Pool(options);
+module.exports = pool;

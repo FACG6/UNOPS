@@ -3,7 +3,6 @@ const cookie = require('cookie');
 const Imap = require('imap');
 const { MailParser } = require('mailparser-mit');
 require('dotenv').config();
-require('dotenv').config();
 
 const events = (socket, io) => {
   const imap = new Imap({
@@ -14,15 +13,16 @@ const events = (socket, io) => {
     tls: true,
   });
 
-  const verifyEvent = (cb) => {
+  const verifyEvent = () => new Promise((resolve, reject) => {
     verify(
       cookie.parse(socket.request.headers.cookie).jwt,
       process.env.PRIVATE_KEY,
       (err, decoded) => {
-        cb(err, decoded);
+        if (err) reject(err);
+        else resolve(decoded);
       },
     );
-  };
+  });
 
   const mails = (callback) => {
     imap.once('ready', () => {
@@ -45,24 +45,27 @@ const events = (socket, io) => {
   };
 
   socket.on('getmails', () => {
-    verifyEvent((err, decoded) => {
-      if (decoded) {
-        // need a database query here
-        // io.to(socket.id).emit('mails', 'database query for tickets fetching');
-        mails((mailObject) => {
-          io.to(socket.id).emit('mails', mailObject);
-        });
-      } else io.to(socket.id).emit('error', { error: 'not verified' });
-    });
+    verifyEvent()
+      .then((res) => {
+        if (res) {
+          // need a database query here
+          // io.to(socket.id).emit('mails', 'database query for tickets fetching');
+          mails((mailObject) => {
+            console.log(55555588888888);
+            io.to(socket.id).emit('mails', mailObject);
+          });
+        } else io.to(socket.id).emit('error', { error: 'not verified' });
+      })
+      .catch(err => io.to(socket.id).emit('error', { error: `${err}` }));
   });
 
   socket.on('update status', (data) => {
-    verifyEvent((err, decoded) => {
-      if (decoded) {
+    verifyEvent().then((res) => {
+      if (res) {
         imap.setKeywords(data.uid, [`${data.status}`]);
         io.to(socket.id).emit('status changed successfully');
       } else io.to(socket.id).emit('error', { error: 'not verified' });
-    });
+    }).catch(err => io.to(socket.id).emit('error', { error: `${err}` }));
   });
 
   socket.on('new ticket', (data) => {

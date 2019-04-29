@@ -36,7 +36,13 @@ export default class App extends Component {
     },
     searchResults: null
   };
-
+    get = () => {
+      fetch("/fb", {
+        method: "GET",
+        credentials: "same-origin"
+      })
+      console.log(4531312313)
+    }
   componentDidMount() {
     socket.on("mails", data => {
       this.setState({
@@ -98,6 +104,7 @@ export default class App extends Component {
   trashCount = () => this.state.tickets.trash.length;
 
   render() {
+    this.get();
     return (
       <Router>
         <Switch>

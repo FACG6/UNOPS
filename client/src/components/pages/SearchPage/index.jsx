@@ -7,7 +7,13 @@ import WrappedTicket from '../../parts/WrappedTicket';
 import './style.css';
 
 export default function SearchPage({
-  searchResults, tickets, searchAction, pending, closed,
+  searchResults,
+  tickets,
+  updateSearch,
+  pending,
+  closed,
+  searchValues,
+  searchAction,
 }) {
   if (searchResults) {
     return (
@@ -16,10 +22,10 @@ export default function SearchPage({
           <div className="search-page__nav-header">Your Search Results</div>
         </Navbar>
         <MainSidebar selected="search" />
-        <SearchSidebar />
+        <SearchSidebar searchAction={searchAction} />
         <main className="search-page__tickets-section">
           {searchResults.map(ticket => (
-            <WrappedTicket {...ticket} />
+            <WrappedTicket key={ticket.uid} {...ticket} />
           ))}
         </main>
       </>
@@ -29,10 +35,14 @@ export default function SearchPage({
     <>
       <Navbar selected="pending" pending={pending} closed={closed} currentCategory="all-tickets" />
       <MainSidebar selected="search" />
-      <SearchSidebar />
+      <SearchSidebar
+        searchAction={searchAction}
+        updateSearch={updateSearch}
+        searchValues={searchValues}
+      />
       <main className="search-page__tickets-section">
         {tickets.map(ticket => (
-          <WrappedTicket {...ticket} />
+          <WrappedTicket key={ticket.uid} {...ticket} />
         ))}
       </main>
     </>
@@ -42,7 +52,7 @@ export default function SearchPage({
 SearchPage.propTypes = {
   searchResults: PropTypes.instanceOf(Array),
   tickets: PropTypes.instanceOf(Array),
-  searchAction: PropTypes.instanceOf(Function).isRequired,
+  updateSearch: PropTypes.instanceOf(Function).isRequired,
   pending: PropTypes.number,
   closed: PropTypes.number,
 };

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router, Route, Switch, Redirect,
 } from 'react-router-dom';
+// import socketIOClient from 'socket.io-client';
 import Login from './components/pages/Login';
 import TicketsPage from './components/pages/TicketsPage';
 import NewTicketPage from './components/pages/NewTicketPage';
@@ -9,6 +10,8 @@ import ticketsSample from './components/model';
 import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
+
+// const socket = socketIOClient('http://localhost:7425');
 
 export default class App extends Component {
   state = {
@@ -34,7 +37,22 @@ export default class App extends Component {
 
   componentDidMount() {
     this.setState(ticketsSample);
+    // socket.emit('getmails');
+    // socket.on('mails', mails => this.setState({ tickets: mails }));
   }
+
+  searchAction = () => {
+    // socket.emit('search', this.state.search);
+    // socket.on('search', searchResults => this.setState(searchResults));
+  };
+
+  updateSearch = (target, value) => {
+    this.setState((prevState) => {
+      const newSearch = { ...prevState.search };
+      newSearch[target] = value;
+      return { search: newSearch };
+    });
+  };
 
   getTicketByUid = (uid) => {
     const { tickets } = this.state;
@@ -89,12 +107,12 @@ export default class App extends Component {
       <Router>
         <Switch>
           <Route path="/login" component={Login} />
-          <Route exact path="/" component={() => <Redirect to="/tickets" />} />
+          <Route exact path="/" render={() => <Redirect to="/tickets" />} />
           <Route exact path="/tickets" component={() => <Redirect to="/tickets/all-tickets" />} />
           <Route
             exact
             path="/tickets/:category"
-            component={({
+            render={({
               match: {
                 params: { category },
               },
@@ -106,11 +124,11 @@ export default class App extends Component {
           <Route
             exact
             path="/tickets/:category/:status"
-            component={props => <TicketsPage {...props} tickets={this.state.tickets} />}
+            render={props => <TicketsPage {...props} tickets={this.state.tickets} />}
           />
           <Route
             path="/new-ticket"
-            component={() => (
+            render={() => (
               <NewTicketPage
                 allTickets={this.allTicketsCount()}
                 myTickets={this.myTicketsCount()}
@@ -121,7 +139,7 @@ export default class App extends Component {
           />
           <Route
             path="/ticket/:uid"
-            component={({
+            render={({
               match: {
                 params: { uid },
               },
@@ -137,10 +155,13 @@ export default class App extends Component {
           />
           <Route
             path="/search"
-            component={() => (
+            render={() => (
               <SearchPage
+                searchAction={this.searchAction}
+                updateSearch={this.updateSearch}
+                searchValues={this.state.search}
                 {...this.state.search}
-                searchResults={this.searchResults}
+                searchResults={this.state.searchResults}
                 tickets={this.state.tickets['all-tickets'].pending}
                 pending={this.allPendingTicketsCount()}
                 closed={this.addClosedTicketsCount()}

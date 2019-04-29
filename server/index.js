@@ -1,11 +1,11 @@
 const socket = require('socket.io');
 const Imap = require('imap');
 const app = require('./app.js');
-const events = require('./controller/socket');
+const events = require('./controllers/socket');
 require('dotenv').config();
 
 const { IMAP_USER: user, IMAP_USER_PASS: password } = process.env;
-const server = app.listen(app.get('port'), app.get('host') || 'localhost', () => console.log(`Server is up on http://${app.get('host')}:${app.get('port')}`),);
+const server = app.listen(app.get('port'), app.get('host') || 'localhost', () => console.log(`Server is up on http://${app.get('host')}:${app.get('port')}`));
 const io = socket(server);
 
 io.on('connection', (socket) => {
@@ -26,7 +26,7 @@ imap.on('ready', () => {
   imap.openBox('INBOX', false, (mailBoxError, mailbox) => {
     if (mailBoxError) throw mailBoxError;
     const f = imap.seq.fetch(`1:${mailbox.messages.total}`, { struct: true });
-    f.on('message', msg => msg.on('attributes', ({ uid }) => imap.setKeywords(uid, ['pending'])),);
+    f.on('message', msg => msg.on('attributes', ({ uid }) => imap.setKeywords(uid, ['pending'])));
     f.once('error', (fetchError) => {
       throw fetchError;
     });

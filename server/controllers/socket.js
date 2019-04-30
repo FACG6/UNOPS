@@ -2,7 +2,7 @@ const mails = require('./Imap-connection');
 const verifyEvent = require('../authentication/verifyCookie');
 
 const events = (socket, io) => {
-  mails(false, true, false, false, socket, (mail) => {
+  mails(false, true, false, false, socket, io, (mail) => {
     io.to(socket.id).emit('notification');
     socket.on('get new mail', () => {
       verifyEvent(socket)
@@ -14,13 +14,13 @@ const events = (socket, io) => {
     });
   });
 
-  socket.on('getmails', () => {
+  socket.on('getmails', (rangeObj) => {
     verifyEvent(socket)
       .then((res) => {
         if (res) {
           // need a database query here
           // io.to(socket.id).emit('mails', 'database query for tickets fetching');
-          mails(true, false, false, false, socket, (mailObject) => {
+          mails(rangeObj, false, false, false, socket, io, (mailObject) => {
             io.to(socket.id).emit('mails', mailObject);
           });
         } else io.to(socket.id).emit('error', { error: 'not verified' });
@@ -28,10 +28,10 @@ const events = (socket, io) => {
       .catch(err => io.to(socket.id).emit('error', { error: `${err}` }));
   });
 
-  socket.on('update status', (data) => {
+  socket.on('update status', (statusObj) => {
     verifyEvent(socket).then((res) => {
       if (res) {
-        mails(false, false, data.status, false, socket);
+        mails(false, false, statusObj, false, socket, io);
         io.to(socket.id).emit('status changed successfully');
       } else io.to(socket.id).emit('error', { error: 'not verified' });
     }).catch(err => io.to(socket.id).emit('error', { error: `${err}` }));
@@ -67,7 +67,7 @@ const events = (socket, io) => {
           } else {
           // need a database query here to fetch users tickets
           // example:   io.to(socket.id).emit('mails', 'database  query'); and then =>
-            mails(false, false, false, data.searchKeyword, socket, (search) => {
+            mails(false, false, false, data.searchKeyword, socket, io, (search) => {
               io.to(socket.id).emit(search);
             });
           }

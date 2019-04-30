@@ -3,6 +3,7 @@ Socket.io connection api:
 1-to fetch the emails for the first time you need to perform an event like (eg. 
         socket.on('request getmails', ()=> { 
         socket.emit('getmails', {range: (for example:) '1:5'});})
+ and then use this to receive the emails: socket.on('mails', data => { do something here..}).
         
 2-to search for messages by keywords:
         socket.emit('search', {keyword:'pending'});

@@ -33,9 +33,18 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    this.setState(ticketsSample);
-    socket.emit('getmails');
-    socket.on('mails', mails => this.setState({ tickets: mails }));
+    socket.emit('getmails', { range: '1:5' });
+    socket.on('mails', mails => {
+      const mail = JSON.parse(mails);
+      mail.from = mail.from[0].address;
+      mail.body = mail.html;
+      console.log('mail', mail);
+      this.setState(prevState => {
+        const newState = { ...prevState };
+        newState.tickets['all-tickets'].pending.push(mail);
+        return newState;
+      });
+    });
   }
 
   searchAction = () => {

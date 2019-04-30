@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router, Route, Switch, Redirect,
-} from 'react-router-dom';
-// import socketIOClient from 'socket.io-client';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import socketIOClient from 'socket.io-client';
 import Login from './components/pages/Login';
 import TicketsPage from './components/pages/TicketsPage';
 import NewTicketPage from './components/pages/NewTicketPage';
@@ -10,8 +8,7 @@ import ticketsSample from './components/model';
 import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
-
-// const socket = socketIOClient('http://localhost:7425');
+const socket = socketIOClient('http://localhost:7425');
 
 export default class App extends Component {
   state = {
@@ -37,24 +34,24 @@ export default class App extends Component {
 
   componentDidMount() {
     this.setState(ticketsSample);
-    // socket.emit('getmails');
-    // socket.on('mails', mails => this.setState({ tickets: mails }));
+    socket.emit('getmails');
+    socket.on('mails', mails => this.setState({ tickets: mails }));
   }
 
   searchAction = () => {
-    // socket.emit('search', this.state.search);
-    // socket.on('search', searchResults => this.setState(searchResults));
+    socket.emit('search', this.state.search);
+    socket.on('search', searchResults => this.setState(searchResults));
   };
 
   updateSearch = (target, value) => {
-    this.setState((prevState) => {
+    this.setState(prevState => {
       const newSearch = { ...prevState.search };
       newSearch[target] = value;
       return { search: newSearch };
     });
   };
 
-  getTicketByUid = (uid) => {
+  getTicketByUid = uid => {
     const { tickets } = this.state;
     for (const key in tickets) {
       if (tickets[key] instanceof Array) {
@@ -117,7 +114,8 @@ export default class App extends Component {
                 params: { category },
               },
             }) => {
-              if (category === 'all-tickets' || category === 'my-ticekts') return <Redirect to={`/tickets/${category}/pending`} />;
+              if (category === 'all-tickets' || category === 'my-ticekts')
+                return <Redirect to={`/tickets/${category}/pending`} />;
               return <Redirect to={`/tickets/${category}`} />;
             }}
           />

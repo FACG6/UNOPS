@@ -54,8 +54,8 @@ export default class extends Component {
       myTicketsCount = tickets['my-tickets'].pending.length + tickets['my-tickets'].closed.length;
       ticketsToRender = tickets[currentCategory][currentStatus];
     } else {
-      pendingTicketsCount = null;
-      closedTicketsCount = null;
+      pendingTicketsCount = 'null';
+      closedTicketsCount = 'null';
       allTicketsCount = tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
       myTicketsCount = tickets['my-tickets'].pending.length + tickets['my-tickets'].closed.length;
       ticketsToRender = tickets[currentCategory][currentStatus];
@@ -71,7 +71,7 @@ export default class extends Component {
           trash={tickets.trash.length}
           drafts={tickets.drafts.length}
         />
-        {pendingTicketsCount ? (
+        {pendingTicketsCount !== 'null' ? (
           <Navbar
             selected={currentStatus}
             currentCategory={currentCategory}

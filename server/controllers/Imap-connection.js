@@ -11,17 +11,18 @@ const imap = new Imap({
 });
 
 const mails = (
-  triggerGetMails,
+  triggerGetMailsObj,
   triggerOnNewMail,
-  triggerUpdateStatus,
+  triggerUpdateStatusObj,
   triggerSearchKeyword,
   socket,
+  io,
   getMailsCallback,
 ) => {
   imap.once('ready', () => {
-    if (triggerGetMails) {
-      imap.openBox('INBOX', true, (err, box) => {
-        const f = imap.fetch('1:5', { bodies: '' });
+    if (triggerGetMailsObj) {
+      imap.openBox('INBOX', false, (err, box) => {
+        const f = imap.seq.fetch(triggerGetMailsObj.range, { bodies: '' });
         f.on('message', (msg, seqno) => {
           const parser = new MailParser();
           msg.on('body', (stream, info) => {
@@ -58,10 +59,10 @@ const mails = (
         });
       });
     }
-    if (triggerUpdateStatus) {
+    if (triggerUpdateStatusObj) {
       imap.openBox('INBOX', true, (err, box) => {
         if (err) throw err;
-        imap.setKeywords(563, [`${triggerUpdateStatus}`]);
+        imap.setKeywords(triggerUpdateStatusObj.uid, [`${triggerUpdateStatusObj.status}`], er => io.to(socket.id).emit('error', { error: er }));
       });
     }
     if (triggerSearchKeyword) {

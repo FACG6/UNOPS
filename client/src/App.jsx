@@ -37,35 +37,33 @@ export default class App extends Component {
     socket.on('request getmails', ()=> { 
       socket.emit('getmails', {range:'1:5'});
     })
-      setTimeout(() => {
-      socket.emit('update status', {uid:1002, status:'pending'})
-    //     socket.emit('search', {keyword:'pending'});
-    //     console.log('did mount')
-    //     socket.on('search result', (result) => {
-    //       console.log('search result',result)
-    //     })     
-      }, 4000);
-      setTimeout(() => {
-              socket.emit('search', {keyword:'pending'});
-    //     console.log('did mount')
-        socket.on('search result', (result) => {
-          // console.log('search result',result)
-        })
-  }, 3000);
     socket.on('mails', data => {
-      // console.log(data)
-      // this.setState({
-        // tickets: [...this.state.tickets, JSON.parse(data)],
-      // });
+      console.log(data)
     });
-    socket.on('notification', () => {
-      console.log('notification');
-      socket.emit('get new mail')
-    });
-    socket.on('new mail', (newMail) => {
-      console.log('new mail', newMail);
+      // setTimeout(() => {
+  //     socket.emit('update status', {uid:1002, status:'pending'}) 
+  //     }, 4000);
+  //     setTimeout(() => {
+  //             socket.emit('search', {keyword:'pending'});
+  //   //     console.log('did mount')
+  //       socket.on('search result', (result) => {
+  //         // console.log('search result',result)
+  //       })
+  // }, 3000);
+  //   socket.on('notification', () => {
+  //     console.log('notification');
+  //     socket.emit('get new mail')
+  //   });
+  //   socket.on('new mail', (newMail) => {
+  //     console.log('new mail', newMail);
       
-    });
+  //   });
+  }
+  componentWillUnmount() {
+    socket.off("mails");
+    socket.off("update status");
+    socket.off("notification");
+    socket.off("new mail");
   }
 
   getTicketByUid = uid => {

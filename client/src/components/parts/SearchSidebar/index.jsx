@@ -1,16 +1,23 @@
 import React from 'react';
 import './style.css';
 
-export default function SearchSidebar() {
+export default function SearchSidebar({
+  updateSearch,
+  searchValues: { query, user, status },
+  searchAction,
+}) {
   return (
     <aside className="search-sidebar">
       <form className="search-sidebar__form">
         <div className="search-sidebar__searchbar-div">
           <input
+            key="search_input"
             type="text"
             id="searchbar"
             className="search-sidebar__searchbar"
             placeholder="Search for tickets"
+            onChange={({ target: { value } }) => updateSearch('query', value)}
+            value={query}
           />
           <div className="search-sidebar__search-icon-div">
             <i className="fas fa-search search-sidebar__search-icon" />
@@ -18,7 +25,13 @@ export default function SearchSidebar() {
         </div>
         <div className="search-sidebar__label">
           <span className="search-sidebar__label-text">User :</span>
-          <select name="users" id="users" className="search-sidebar__select">
+          <select
+            value={user}
+            name="users"
+            id="users"
+            className="search-sidebar__select"
+            onChange={({ target: { value } }) => updateSearch('user', value === 'all' ? '' : value)}
+          >
             <option value="all" defaultValue>
               All
             </option>
@@ -30,7 +43,14 @@ export default function SearchSidebar() {
         </div>
         <div className="search-sidebar__label">
           <span className="search-sidebar__label-text">Status :</span>
-          <select name="users" id="users" className="search-sidebar__select">
+          <select
+            value={status}
+            name="users"
+            id="users"
+            className="search-sidebar__select"
+            onChange={({ target: { value } }) => updateSearch('status', value === 'all' ? '' : value)
+            }
+          >
             <option value="all" defaultValue>
               All
             </option>
@@ -38,7 +58,17 @@ export default function SearchSidebar() {
             <option value="closed">Closed</option>
           </select>
         </div>
-        <div className="search-sidebar__submit">Search</div>
+        <div
+          role="button"
+          tabIndex={0}
+          className="search-sidebar__submit"
+          onClick={searchAction}
+          onKeyPress={({ charCode }) => {
+            if (charCode === 13) searchAction();
+          }}
+        >
+          Search
+        </div>
       </form>
     </aside>
   );

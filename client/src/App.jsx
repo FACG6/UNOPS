@@ -31,6 +31,19 @@ export default class App extends Component {
     },
     searchResults: null,
   };
+//update status function to be used in 'update-status component.
+  updateStatus = () => {
+    //need to use two variables here, uid and status.. 
+      socket.emit('update status', {uid:1002, status:'pending'}) 
+      }
+ //search fuction to be used in search component
+      search = () => {
+    socket.emit('search', {keyword:'pending'});
+    socket.on('search result', (result) => {
+     // console.log('search result',result)
+       })
+     }
+
 
   componentDidMount() {
     socket.on('error', data => console.log(data));
@@ -52,24 +65,23 @@ export default class App extends Component {
       }
       console.log(this.state.tickets['all-tickets']);
     });
-      // setTimeout(() => {
-  //     socket.emit('update status', {uid:1002, status:'pending'}) 
-  //     }, 4000);
-  //     setTimeout(() => {
-  //             socket.emit('search', {keyword:'pending'});
-  //   //     console.log('did mount')
-  //       socket.on('search result', (result) => {
-  //         // console.log('search result',result)
-  //       })
-  // }, 3000);
-  //   socket.on('notification', () => {
-  //     console.log('notification');
-  //     socket.emit('get new mail')
-  //   });
-  //   socket.on('new mail', (newMail) => {
-  //     console.log('new mail', newMail);
-      
-  //   });
+    socket.on('notification', () => {
+      socket.emit('get new mail')
+    });
+    socket.on('new mail', (newMail) => {
+      let mail = JSON.parse(data).mailobj;
+      let mailAttribs = JSON.parse(data).attribs;
+      if(mailAttribs.flags[0]== 'resolved'){
+      let tickets = {...this.state.tickets};
+      /// it depends here on how you would like to render the emails, I mean which to use, push or unshift..
+        tickets['all-tickets'].resolved.pending.push(mail);
+        this.setState({tickets});
+      }else{
+       let  tickets = {...this.state.tickets};
+       tickets['all-tickets'].pending.push(mail);
+        this.setState({tickets});
+      }
+    });
   }
   componentWillUnmount() {
     socket.off("mails");

@@ -33,11 +33,30 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    socket.emit('getmails');
+    socket.on('error', data => console.log(data));
+    socket.on('request getmails', ()=> { 
+      socket.emit('getmails', {range:'1:5'});
+    })
+      setTimeout(() => {
+      socket.emit('update status', {uid:1002, status:'pending'})
+    //     socket.emit('search', {keyword:'pending'});
+    //     console.log('did mount')
+    //     socket.on('search result', (result) => {
+    //       console.log('search result',result)
+    //     })     
+      }, 4000);
+      setTimeout(() => {
+              socket.emit('search', {keyword:'pending'});
+    //     console.log('did mount')
+        socket.on('search result', (result) => {
+          // console.log('search result',result)
+        })
+  }, 3000);
     socket.on('mails', data => {
-      this.setState({
-        tickets: [...this.state.tickets, JSON.parse(data)],
-      });
+      // console.log(data)
+      // this.setState({
+        // tickets: [...this.state.tickets, JSON.parse(data)],
+      // });
     });
     socket.on('notification', () => {
       console.log('notification');

@@ -46,9 +46,9 @@ export default class App extends Component {
 
 
   componentDidMount() {
-    socket.on('error', data => console.log(data));
+    socket.on('error', error => console.log(error));
     socket.on('request getmails', ()=> { 
-       socket.emit('getmails', {Since: '02-May-2012',Before: '05-June-2013' });
+       socket.emit('getmails', {Since: '02-May-2012',Before: '05-June-2010' });
     })
 
     socket.on('mails', data => {

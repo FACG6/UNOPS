@@ -49,7 +49,7 @@ const mails = (
             f.once('end', () => {
             });
           } catch (e) {
-            io.to(socket.id).emit('error', e);
+            io.to(socket.id).emit('error', 'get mails error, ((date)) , nothing to fitch');
           }
         });
       };

@@ -1,6 +1,5 @@
 const Imap = require('imap');
 const { MailParser } = require('mailparser-mit');
-const { inspect } = require('util');
 const events = require('../controllers/socket');
 require('dotenv').config();
 
@@ -19,34 +18,40 @@ const mails = (
 
   imap.once('ready', () => {
     imap.openBox('INBOX', false, (err, box) => {
-      const triggerGetMailsObj = (range, cb) => {
-        async function x() {
-          const f = imap.seq.fetch(range, { bodies: '' });
-          let attribs = {}; let
-            mailobj = {};
-          f.on('message', (msg, seqno) => {
-            msg.once('attributes', (attrs) => {
-              attribs = attrs;
-            });
-            const parser = new MailParser();
-            msg.on('body', (stream, info) => {
-              stream.pipe(parser);
-              parser.on('end', (mailObject) => {
-                mailobj = mailObject;
+      const triggerGetMailsObj = (timeRange, cb) => {
+        imap.search([['SINCE', `${timeRange.Since}`], ['BEFORE', timeRange.Before]], (er, results) => {
+          if (er) io.to(socket.id).emit('error', err);
+          try {
+            const f = imap.fetch(results, { bodies: '' });
+            let attribs = {};
+            let mailobj = {};
+            f.on('message', (msg, seqno) => {
+              msg.once('attributes', (attrs) => {
+                attribs = attrs;
               });
-              const data = { attribs, mailobj };
-              if (attribs.date || mailobj.html) {
-                cb(JSON.stringify(data));
-              } else { io.to(socket.id).emit('error', 'no messages were retrieved'); }
+              const parser = new MailParser();
+              msg.on('body', (stream, info) => {
+                stream.pipe(parser);
+                parser.on('end', (mailObject) => {
+                  if (!mailObject.headers['in-reply-to']) {
+                    mailobj = mailObject;
+                  }
+                });
+                const data = { attribs, mailobj };
+                if (attribs.date && mailobj.html) {
+                  cb(JSON.stringify(data));
+                } else { io.to(socket.id).emit('error', 'no messages were retrieved'); }
+              });
             });
-          });
-          f.once('error', (Err) => {
-            io.to(socket.id).emit('error', `get mails ${Err}`);
-          });
-          f.once('end', () => {
-          });
-        }
-        x();
+            f.once('error', (Err) => {
+              io.to(socket.id).emit('error', `get mails ${Err}`);
+            });
+            f.once('end', () => {
+            });
+          } catch (e) {
+            io.to(socket.id).emit('error', e);
+          }
+        });
       };
       const triggerOnNewMail = (cb) => {
         imap.on('mail', (Mails) => {

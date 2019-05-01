@@ -48,10 +48,12 @@ export default class App extends Component {
   componentDidMount() {
     socket.on('error', data => console.log(data));
     socket.on('request getmails', ()=> { 
-       socket.emit('getmails', {range:'1:8'});
+       socket.emit('getmails', {Since: '02-May-2012',Before: '05-June-2013' });
     })
 
     socket.on('mails', data => {
+      console.log('mailobj',JSON.parse(data).mailobj)
+      console.log('attribs',JSON.parse(data).attribs)
       let mail = JSON.parse(data).mailobj;
       let mailAttribs = JSON.parse(data).attribs;
       if(mailAttribs.flags[0]== 'resolved'){
@@ -68,20 +70,20 @@ export default class App extends Component {
     socket.on('notification', () => {
       socket.emit('get new mail')
     });
-    socket.on('new mail', (newMail) => {
-      let mail = JSON.parse(data).mailobj;
-      let mailAttribs = JSON.parse(data).attribs;
-      if(mailAttribs.flags[0]== 'resolved'){
-      let tickets = {...this.state.tickets};
-      /// it depends here on how you would like to render the emails, I mean which to use, push or unshift..
-        tickets['all-tickets'].resolved.pending.push(mail);
-        this.setState({tickets});
-      }else{
-       let  tickets = {...this.state.tickets};
-       tickets['all-tickets'].pending.push(mail);
-        this.setState({tickets});
-      }
-    });
+    // socket.on('new mail', (newMail) => {
+    //   let mail = JSON.parse(newMail).mailobj;
+    //   let mailAttribs = JSON.parse(newMail).attribs;
+    //   if(mailAttribs.flags[0]== 'resolved'){
+    //   let tickets = {...this.state.tickets};
+    //   /// it depends here on how you would like to render the emails, I mean which to use, push or unshift..
+    //     tickets['all-tickets'].resolved.pending.push(newMail);
+    //     this.setState({tickets});
+    //   }else{
+    //    let  tickets = {...this.state.tickets};
+    //    tickets['all-tickets'].pending.push(newMail);
+    //     this.setState({tickets});
+    //   }
+    // });
   }
   componentWillUnmount() {
     socket.off("mails");

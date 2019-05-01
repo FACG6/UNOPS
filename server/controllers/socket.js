@@ -9,13 +9,13 @@ function events(
   triggerSearchKeyword,
 ) {
   socket.emit('request getmails');
-  socket.on('getmails', (range) => {
+  socket.on('getmails', (timeRange) => {
     verifyEvent(socket)
       .then((res) => {
         if (res) {
           // need a database query here
           // ex: io.to(socket.id).emit('mails', 'database query for tickets fetching');
-          triggerGetMailsObj(range.range, (mailObject) => {
+          triggerGetMailsObj(timeRange, (mailObject) => {
             io.to(socket.id).emit('mails', mailObject);
           });
         } else io.to(socket.id).emit('error', { error: 'not verified' });

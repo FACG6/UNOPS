@@ -1,5 +1,6 @@
 const Imap = require('imap');
 const { MailParser } = require('mailparser-mit');
+const { inspect } = require('util');
 const events = require('../controllers/socket');
 require('dotenv').config();
 
@@ -19,21 +20,33 @@ const mails = (
   imap.once('ready', () => {
     imap.openBox('INBOX', false, (err, box) => {
       const triggerGetMailsObj = (range, cb) => {
-        const f = imap.seq.fetch(range, { bodies: '' });
-        f.on('message', (msg, seqno) => {
-          const parser = new MailParser();
-          msg.on('body', (stream, info) => {
-            parser.on('end', (mailObject) => {
-              cb(JSON.stringify(mailObject));
+        async function x() {
+          const f = imap.seq.fetch(range, { bodies: '' });
+          let attribs = {}; let
+            mailobj = {};
+          f.on('message', (msg, seqno) => {
+            msg.once('attributes', (attrs) => {
+              attribs = attrs;
             });
-            stream.pipe(parser);
+            const parser = new MailParser();
+            msg.on('body', (stream, info) => {
+              stream.pipe(parser);
+              parser.on('end', (mailObject) => {
+                mailobj = mailObject;
+              });
+              const data = { attribs, mailobj };
+              if (attribs.date || mailobj.html) {
+                cb(JSON.stringify(data));
+              } else { io.to(socket.id).emit('error', 'no messages were retrieved'); }
+            });
           });
-        });
-        f.once('error', (Err) => {
-          io.to(socket.id).emit('error', `get mails ${Err}`);
-        });
-        f.once('end', () => {
-        });
+          f.once('error', (Err) => {
+            io.to(socket.id).emit('error', `get mails ${Err}`);
+          });
+          f.once('end', () => {
+          });
+        }
+        x();
       };
       const triggerOnNewMail = (cb) => {
         imap.on('mail', (Mails) => {

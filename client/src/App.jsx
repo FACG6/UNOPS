@@ -35,10 +35,22 @@ export default class App extends Component {
   componentDidMount() {
     socket.on('error', data => console.log(data));
     socket.on('request getmails', ()=> { 
-      socket.emit('getmails', {range:'1:5'});
+       socket.emit('getmails', {range:'1:8'});
     })
+
     socket.on('mails', data => {
-      console.log(data)
+      let mail = JSON.parse(data).mailobj;
+      let mailAttribs = JSON.parse(data).attribs;
+      if(mailAttribs.flags[0]== 'resolved'){
+      let tickets = {...this.state.tickets};
+        tickets['all-tickets'].resolved.pending.push(mail);
+        this.setState({tickets});
+      }else{
+       let  tickets = {...this.state.tickets};
+       tickets['all-tickets'].pending.push(mail);
+        this.setState({tickets});
+      }
+      console.log(this.state.tickets['all-tickets']);
     });
       // setTimeout(() => {
   //     socket.emit('update status', {uid:1002, status:'pending'}) 
@@ -66,119 +78,119 @@ export default class App extends Component {
     socket.off("new mail");
   }
 
-  getTicketByUid = uid => {
-    const { tickets } = this.state;
-    for (const key in tickets) {
-      if (tickets[key] instanceof Array) {
-        if (tickets[key].find(ticket => ticket.uid === uid)) {
-          return {
-            ticket: tickets[key].find(ticket => ticket.uid === uid),
-            category: `${key}`,
-          };
-        }
-        continue;
-      } else {
-        for (const statusKey in tickets[key]) {
-          if (tickets[key][statusKey].find(ticket => ticket.uid === uid)) {
-            return {
-              ticket: tickets[key][statusKey].find(ticket => ticket.uid === uid),
-              category: `${key}`,
-            };
-          }
-          continue;
-        }
-      }
-    }
-    return undefined;
-  };
+  // getTicketByUid = uid => {
+  //   const { tickets } = this.state;
+  //   for (const key in tickets) {
+  //     if (tickets[key] instanceof Array) {
+  //       if (tickets[key].find(ticket => ticket.uid === uid)) {
+  //         return {
+  //           ticket: tickets[key].find(ticket => ticket.uid === uid),
+  //           category: `${key}`,
+  //         };
+  //       }
+  //       continue;
+  //     } else {
+  //       for (const statusKey in tickets[key]) {
+  //         if (tickets[key][statusKey].find(ticket => ticket.uid === uid)) {
+  //           return {
+  //             ticket: tickets[key][statusKey].find(ticket => ticket.uid === uid),
+  //             category: `${key}`,
+  //           };
+  //         }
+  //         continue;
+  //       }
+  //     }
+  //   }
+  //   return undefined;
+  // };
 
-  allTicketsCount = () => {
-    const allTickets = this.state.tickets['all-tickets'];
-    return allTickets.pending.length + allTickets.closed.length;
-  };
+  // allTicketsCount = () => {
+  //   const allTickets = this.state.tickets['all-tickets'];
+  //   return allTickets.pending.length + allTickets.closed.length;
+  // };
 
-  myTicketsCount = () => {
-    const myTickets = this.state.tickets['my-tickets'];
-    return myTickets.pending.length + myTickets.closed.length;
-  };
+  // myTicketsCount = () => {
+  //   const myTickets = this.state.tickets['my-tickets'];
+  //   return myTickets.pending.length + myTickets.closed.length;
+  // };
 
-  allPendingTicketsCount = () => this.state.tickets['all-tickets'].pending.length;
+  // allPendingTicketsCount = () => this.state.tickets['all-tickets'].pending.length;
 
-  myPendingTicketsCount = () => this.state.tickets['my-tickets'].pending.length;
+  // myPendingTicketsCount = () => this.state.tickets['my-tickets'].pending.length;
 
-  addClosedTicketsCount = () => this.state.tickets['all-tickets'].closed.length;
+  // addClosedTicketsCount = () => this.state.tickets['all-tickets'].closed.length;
 
-  myClosedTicketsCount = () => this.state.tickets['my-tickets'].closed.length;
+  // myClosedTicketsCount = () => this.state.tickets['my-tickets'].closed.length;
 
-  draftsCount = () => this.state.tickets.drafts.length;
+  // draftsCount = () => this.state.tickets.drafts.length;
 
-  trashCount = () => this.state.tickets.trash.length;
+  // trashCount = () => this.state.tickets.trash.length;
 
   render() {
     return (
       <Router>
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Route exact path="/" component={() => <Redirect to="/tickets" />} />
-          <Route exact path="/tickets" component={() => <Redirect to="/tickets/all-tickets" />} />
-          <Route
-            exact
-            path="/tickets/:category"
-            component={({
-              match: {
-                params: { category },
-              },
-            }) => {
-              if (category === 'all-tickets' || category === 'my-ticekts')
-                return <Redirect to={`/tickets/${category}/pending`} />;
-              return <Redirect to={`/tickets/${category}`} />;
-            }}
-          />
-          <Route
-            exact
-            path="/tickets/:category/:status"
-            component={props => <TicketsPage {...props} tickets={this.state.tickets} />}
-          />
-          <Route
-            path="/new-ticket"
-            component={() => (
-              <NewTicketPage
-                allTickets={this.allTicketsCount()}
-                myTickets={this.myTicketsCount()}
-                drafts={this.draftsCount()}
-                trash={this.trashCount()}
-              />
-            )}
-          />
-          <Route
-            path="/ticket/:uid"
-            component={({
-              match: {
-                params: { uid },
-              },
-            }) => (
-              <OpenedTicketPage
-                {...this.getTicketByUid(parseInt(uid, 10))}
-                allTickets={this.allTicketsCount()}
-                myTickets={this.myTicketsCount()}
-                drafts={this.draftsCount()}
-                trash={this.trashCount()}
-              />
-            )}
-          />
-          <Route
-            path="/search"
-            component={() => (
-              <SearchPage
-                {...this.state.search}
-                searchResults={this.searchResults}
-                tickets={this.state.tickets['all-tickets'].pending}
-                pending={this.allPendingTicketsCount()}
-                closed={this.addClosedTicketsCount()}
-              />
-            )}
-          />
-        </Switch>
+    {/* //     <Switch> */}
+    {/* //       <Route path="/login" component={Login} /> */}
+    //       <Route exact path="/" component={() => <Redirect to="/tickets" />} />
+    {/* //       <Route exact path="/tickets" component={() => <Redirect to="/tickets/all-tickets" />} /> */}
+    {/* //       <Route */}
+    {/* //         exact */}
+    {/* //         path="/tickets/:category" */}
+    {/* //         component={({ */}
+    {/* //           match: { */}
+    {/* //             params: { category }, */}
+    {/* //           }, */}
+    {/* //         }) => { */}
+    {/* //           if (category === 'all-tickets' || category === 'my-ticekts') */}
+    {/* //             return <Redirect to={`/tickets/${category}/pending`} />; */}
+    {/* //           return <Redirect to={`/tickets/${category}`} />; */}
+    {/* //         }} */}
+    {/* //       /> */}
+    {/* //       <Route */}
+    {/* //         exact */}
+    {/* //         path="/tickets/:category/:status" */}
+    {/* //         component={props => <TicketsPage {...props} tickets={this.state.tickets} />} */}
+    {/* //       /> */}
+    {/* //       <Route */}
+    {/* //         path="/new-ticket" */}
+    {/* //         component={() => ( */}
+    {/* //           <NewTicketPage */}
+    {/* //             allTickets={this.allTicketsCount()} */}
+    {/* //             myTickets={this.myTicketsCount()} */}
+    {/* //             drafts={this.draftsCount()} */}
+    {/* //             trash={this.trashCount()} */}
+    {/* //           /> */}
+    {/* //         )} */}
+    {/* //       /> */}
+    {/* //       <Route */}
+    {/* //         path="/ticket/:uid" */}
+    {/* //         component={({ */}
+    {/* //           match: { */}
+    {/* //             params: { uid }, */}
+    {/* //           }, */}
+    {/* //         }) => ( */}
+    {/* //           <OpenedTicketPage */}
+    {/* //             {...this.getTicketByUid(parseInt(uid, 10))}
+    //             allTickets={this.allTicketsCount()}
+    //             myTickets={this.myTicketsCount()}
+    //             drafts={this.draftsCount()}
+    //             trash={this.trashCount()}
+    //           />
+    //         )}
+    //       />
+    //       <Route */}
+    {/* //         path="/search"
+    //         component={() => ( */}
+    {/* //           <SearchPage
+    //             {...this.state.search}
+    //             searchResults={this.searchResults}
+    //             tickets={this.state.tickets['all-tickets'].pending}
+    //             pending={this.allPendingTicketsCount()}
+    //             closed={this.addClosedTicketsCount()}
+    //           />
+    //         )}
+    //       />
+    //     </Switch> */}
       </Router>
     );
   }

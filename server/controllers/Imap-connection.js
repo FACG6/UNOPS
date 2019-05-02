@@ -24,7 +24,6 @@ const mails = (socket, io) => {
               let attribs = {};
               let mailobj = {};
               f.on('message', (msg, seqno) => {
-                // console.log(1);
                 msg.once('attributes', (attrs) => {
                   attribs = attrs;
                 });
@@ -38,25 +37,19 @@ const mails = (socket, io) => {
                     }
                   });
                   stream.pipe(parser);
-                  // console.log(1);
-                  // if (attribs.date && mailobj.html) {
-                  // } else {
-                  //   io.to(socket.id).emit('error', 'no messages were retrieved');
-                  // }
                 });
               });
-              f.once('error', (Err) => {
-                io.to(socket.id).emit('error', `get mails ${Err}`);
+              f.once('error', (getMailsErr) => {
+                io.to(socket.id).emit('error', `get mails ${getMailsErr}`);
               });
-              f.once('end', () => {});
             } catch (e) {
-              io.to(socket.id).emit('error', `get mails error, ((date)) , nothing to fetch,\n${e}`);
+              io.to(socket.id).emit('error', 'get mails error, ((date)) , nothing to fitch');
             }
           },
         );
       };
       const triggerOnNewMail = (cb) => {
-        imap.on('mail', (Mails) => {
+        imap.on('mail', () => {
           const parser = new MailParser();
           const f = imap.seq.fetch('*', {
             bodies: '',
@@ -65,11 +58,11 @@ const mails = (socket, io) => {
 
           let attribs = {};
           let mailobj = {};
-          f.on('message', (msg, seqno) => {
+          f.on('message', (msg) => {
             msg.once('attributes', (attrs) => {
               attribs = attrs;
             });
-            msg.on('body', (stream, info) => {
+            msg.on('body', (stream) => {
               stream.pipe(parser);
               parser.on('end', (parsedMail) => {
                 if (!parsedMail.headers['in-reply-to']) {
@@ -80,8 +73,8 @@ const mails = (socket, io) => {
               });
             });
           });
-          f.once('error', (Err) => {
-            io.to(socket.id).emit('error', `on new mail, ${Err}`);
+          f.once('error', (imapErr) => {
+            io.to(socket.id).emit('error', `on new mail, ${imapErr}`);
           });
           f.once('end', () => {});
         });
@@ -101,8 +94,8 @@ const mails = (socket, io) => {
           }
           if (results.length > 0) {
             const f = imap.fetch(results, { bodies: '' });
-            f.on('message', (msg, seqno) => {
-              msg.on('body', (stream, info) => {
+            f.on('message', (msg) => {
+              msg.on('body', (stream) => {
                 parser.on('end', (searchResult) => {
                   cb(JSON.stringify(searchResult));
                 });

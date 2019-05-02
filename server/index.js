@@ -1,7 +1,7 @@
 const socket = require('socket.io');
 const Imap = require('imap');
+const mails = require('./controllers/Imap-connection');
 const app = require('./app.js');
-const events = require('./controllers/socket');
 require('dotenv').config();
 
 const { IMAP_USER: user, IMAP_USER_PASS: password } = process.env;
@@ -9,7 +9,7 @@ const server = app.listen(app.get('port'), app.get('host') || 'localhost', () =>
 
 const io = socket(server);
 io.on('connection', (socket) => {
-  events(socket, io);
+  mails(socket, io);
   io.on('disconnect', () => socket.close());
 });
 const imap = new Imap({

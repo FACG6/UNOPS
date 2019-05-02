@@ -31,34 +31,66 @@ export default class App extends Component {
     },
     searchResults: null,
   };
+  // update status function to be used in 'update-status component.
+  updateStatus = () => {
+    // need to use two variables here, uid and status..
+    socket.emit('update status', { uid: 1002, status: 'pending' });
+  };
+  // search fuction to be used in search component
+  search = () => {
+    socket.emit('search', { keyword: 'pending' });
+    socket.on('search result', result => {
+      console.log('search result', result);
+    });
+  };
 
   componentDidMount() {
-    socket.emit('getmails', { range: '1:5' });
-    socket.on('mails', mails => {
-      const mail = JSON.parse(mails);
-      mail.from = mail.from[0].address;
-      mail.body = mail.html;
-      console.log('mail', mail);
-      this.setState(prevState => {
-        const newState = { ...prevState };
-        newState.tickets['all-tickets'].pending.push(mail);
-        return newState;
-      });
+    fetch('/ahmed');
+    socket.on('error', error => console.log(error));
+    socket.on('request getmails', () => {
+      socket.emit('getmails', { Since: '02-May-2019', Before: '05-June-2017' });
+    });
+
+    socket.on('mails', data => {
+      console.log('mailobj', JSON.parse(data).mailobj);
+      console.log('attribs', JSON.parse(data).attribs);
+      let mail = JSON.parse(data).mailobj;
+      let mailAttribs = JSON.parse(data).attribs;
+      if (mailAttribs.flags[0] == 'resolved') {
+        let tickets = { ...this.state.tickets };
+        tickets['all-tickets'].resolved.pending.push(mail);
+        this.setState({ tickets });
+      } else {
+        let tickets = { ...this.state.tickets };
+        tickets['all-tickets'].pending.push(mail);
+        this.setState({ tickets });
+      }
+      console.log(this.state.tickets['all-tickets']);
+    });
+    socket.on('notification', () => {
+      socket.emit('get new mail');
+    });
+    socket.on('new mail', newMail => {
+      let mail = JSON.parse(newMail).mailobj;
+      let mailAttribs = JSON.parse(newMail).attribs;
+      if (mailAttribs.flags[0] == 'resolved') {
+        let tickets = { ...this.state.tickets };
+        //  it depends here on how you would like to render the emails, I mean which to use, push or unshift..
+        tickets['all-tickets'].resolved.pending.push(newMail);
+        this.setState({ tickets });
+      } else {
+        let tickets = { ...this.state.tickets };
+        tickets['all-tickets'].pending.push(newMail);
+        this.setState({ tickets });
+      }
     });
   }
-
-  searchAction = () => {
-    socket.emit('search', this.state.search);
-    socket.on('search', searchResults => this.setState(searchResults));
-  };
-
-  updateSearch = (target, value) => {
-    this.setState(prevState => {
-      const newSearch = { ...prevState.search };
-      newSearch[target] = value;
-      return { search: newSearch };
-    });
-  };
+  componentWillUnmount() {
+    socket.off('mails');
+    socket.off('update status');
+    socket.off('notification');
+    socket.off('new mail');
+  }
 
   getTicketByUid = uid => {
     const { tickets } = this.state;
@@ -113,12 +145,12 @@ export default class App extends Component {
       <Router>
         <Switch>
           <Route path="/login" component={Login} />
-          <Route exact path="/" render={() => <Redirect to="/tickets" />} />
+          <Route exact path="/" component={() => <Redirect to="/tickets" />} />
           <Route exact path="/tickets" component={() => <Redirect to="/tickets/all-tickets" />} />
           <Route
             exact
             path="/tickets/:category"
-            render={({
+            component={({
               match: {
                 params: { category },
               },
@@ -131,11 +163,11 @@ export default class App extends Component {
           <Route
             exact
             path="/tickets/:category/:status"
-            render={props => <TicketsPage {...props} tickets={this.state.tickets} />}
+            component={props => <TicketsPage {...props} tickets={this.state.tickets} />}
           />
           <Route
             path="/new-ticket"
-            render={() => (
+            component={() => (
               <NewTicketPage
                 allTickets={this.allTicketsCount()}
                 myTickets={this.myTicketsCount()}
@@ -146,7 +178,7 @@ export default class App extends Component {
           />
           <Route
             path="/ticket/:uid"
-            render={({
+            component={({
               match: {
                 params: { uid },
               },
@@ -162,13 +194,10 @@ export default class App extends Component {
           />
           <Route
             path="/search"
-            render={() => (
+            component={() => (
               <SearchPage
-                searchAction={this.searchAction}
-                updateSearch={this.updateSearch}
-                searchValues={this.state.search}
                 {...this.state.search}
-                searchResults={this.state.searchResults}
+                searchResults={this.searchResults}
                 tickets={this.state.tickets['all-tickets'].pending}
                 pending={this.allPendingTicketsCount()}
                 closed={this.addClosedTicketsCount()}

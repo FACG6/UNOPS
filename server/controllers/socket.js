@@ -1,6 +1,7 @@
 const verifyEvent = require('../authentication/verifyCookie');
 const nodemailer = require('./nodemailer');
 const addNewReply = require('../database/quiries/addreply');
+const addTicket = require('../database/quiries/addTicket');
 
 function events(
   socket,
@@ -90,7 +91,7 @@ function events(
   });
   socket.on('sendMail', (data) => {
     nodemailer(data).catch(error => io.to(socket.id).emit('error', error));
-    addNewReply(data).catch(error => io.to(socket.id).emit('error', error));
+    addTicket(data).catch(error => io.to(socket.id).emit('error', error));
   });
   triggerOnNewMail((mail) => {
     io.to(socket.id).emit('notification');

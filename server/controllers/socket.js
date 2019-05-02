@@ -1,3 +1,4 @@
+const getTickets = require('../database/quiries/getTickets');
 const verifyEvent = require('../authentication/verifyCookie');
 
 function events(
@@ -13,8 +14,9 @@ function events(
     verifyEvent(socket)
       .then((res) => {
         if (res) {
-          // need a database query here
-          // ex: io.to(socket.id).emit('mails', 'database query for tickets fetching');
+          getTickets().then((result) => {
+            io.to(socket.id).emit('userTickets', result);
+          }).catch(error => io.to(socket.id).emit('error', error));
           triggerGetMailsObj(timeRange, (mailObject) => {
             io.to(socket.id).emit('mails', mailObject);
           });

@@ -61,6 +61,10 @@ export default class App extends Component {
       });
     });
 
+    socket.on('userTickets', data => {
+      
+    });
+    
     socket.on('mails', data => {
       const mail = JSON.parse(data).mailobj;
       const mailAttr = JSON.parse(data).attribs;

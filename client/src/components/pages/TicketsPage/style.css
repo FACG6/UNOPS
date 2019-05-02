@@ -34,3 +34,14 @@
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
 }
+
+.tickets-page__loading {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}

@@ -36,7 +36,7 @@ export default function OpenedTicket({
           </span>
         </div>
       </div>
-      <div className="opened-ticket__body">{body}</div>
+      <div className="opened-ticket__body" dangerouslySetInnerHTML={{ __html: body }} />
     </section>
   );
 }

@@ -24,23 +24,25 @@ const mails = (socket, io) => {
               let attribs = {};
               let mailobj = {};
               f.on('message', (msg, seqno) => {
+                // console.log(1);
                 msg.once('attributes', (attrs) => {
                   attribs = attrs;
                 });
                 const parser = new MailParser();
                 msg.on('body', (stream, info) => {
-                  stream.pipe(parser);
                   parser.on('end', (mailObject) => {
                     if (!mailObject.headers['in-reply-to']) {
                       mailobj = mailObject;
+                      const data = { attribs, mailobj };
+                      cb(JSON.stringify(data));
                     }
                   });
-                  const data = { attribs, mailobj };
-                  if (attribs.date && mailobj.html) {
-                    cb(JSON.stringify(data));
-                  } else {
-                    io.to(socket.id).emit('error', 'no messages were retrieved');
-                  }
+                  stream.pipe(parser);
+                  // console.log(1);
+                  // if (attribs.date && mailobj.html) {
+                  // } else {
+                  //   io.to(socket.id).emit('error', 'no messages were retrieved');
+                  // }
                 });
               });
               f.once('error', (Err) => {
@@ -60,11 +62,21 @@ const mails = (socket, io) => {
             bodies: '',
             struct: true,
           });
+
+          let attribs = {};
+          let mailobj = {};
           f.on('message', (msg, seqno) => {
+            msg.once('attributes', (attrs) => {
+              attribs = attrs;
+            });
             msg.on('body', (stream, info) => {
               stream.pipe(parser);
               parser.on('end', (parsedMail) => {
-                cb(JSON.stringify(parsedMail));
+                if (!parsedMail.headers['in-reply-to']) {
+                  mailobj = parsedMail;
+                  const data = { attribs, mailobj };
+                  cb(JSON.stringify(data));
+                }
               });
             });
           });

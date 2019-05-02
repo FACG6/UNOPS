@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactLoading from 'react-loading';
 import MainSidebar from '../../parts/MainSidebar';
 import TicketsSidebar from '../../parts/TicketsSidebar';
 import Navbar from '../../parts/Navbar';
@@ -43,25 +44,25 @@ export default class extends Component {
     let allTicketsCount;
     let myTicketsCount;
     let ticketsToRender;
-    const {
-      currentCategory, currentStatus, allChecked, markAs, tickets,
-    } = this.state;
+    const { currentCategory, currentStatus, allChecked, markAs, tickets } = this.state;
 
     if (!(currentCategory === 'trash' || currentCategory === 'drafts')) {
       pendingTicketsCount = tickets[currentCategory].pending.length;
       closedTicketsCount = tickets[currentCategory].closed.length;
-      allTicketsCount = tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
+      allTicketsCount =
+        tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
       myTicketsCount = tickets['my-tickets'].pending.length + tickets['my-tickets'].closed.length;
       ticketsToRender = tickets[currentCategory][currentStatus];
     } else {
       pendingTicketsCount = 'null';
       closedTicketsCount = 'null';
-      allTicketsCount = tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
+      allTicketsCount =
+        tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
       myTicketsCount = tickets['my-tickets'].pending.length + tickets['my-tickets'].closed.length;
       ticketsToRender = tickets[currentCategory][currentStatus];
     }
 
-    return (
+    return ticketsToRender.length ? (
       <>
         <MainSidebar selected="tickets" />
         <TicketsSidebar
@@ -103,6 +104,10 @@ export default class extends Component {
           ))}
         </main>
       </>
+    ) : (
+      <div className="tickets-page__loading">
+        <ReactLoading type="spin" color="#437489" width="200px" height="200px" />
+      </div>
     );
   }
 }

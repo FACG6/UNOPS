@@ -43,8 +43,8 @@ const mails = (
                 } else { io.to(socket.id).emit('error', 'no messages were retrieved'); }
               });
             });
-            f.once('error', (Err) => {
-              io.to(socket.id).emit('error', `get mails ${Err}`);
+            f.once('error', (getMailsErr) => {
+              io.to(socket.id).emit('error', `get mails ${getMailsErr}`);
             });
             f.once('end', () => {
             });
@@ -68,8 +68,8 @@ const mails = (
               });
             });
           });
-          f.once('error', (Err) => {
-            io.to(socket.id).emit('error', `on new mail, ${Err}`);
+          f.once('error', (imapErr) => {
+            io.to(socket.id).emit('error', `on new mail, ${imapErr}`);
           });
           f.once('end', () => {
           });

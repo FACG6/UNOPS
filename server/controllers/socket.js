@@ -1,5 +1,8 @@
 const getTickets = require('../database/quiries/getTickets');
 const verifyEvent = require('../authentication/verifyCookie');
+const nodemailer = require('./nodemailer');
+const addNewReply = require('../database/quiries/addreply');
+const addTicket = require('../database/quiries/addTicket');
 
 function events(
   socket,
@@ -87,6 +90,10 @@ function events(
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
       .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
+  });
+  socket.on('sendMail', (data) => {
+    nodemailer(data).catch(error => io.to(socket.id).emit('error', error));
+    addTicket(data).catch(error => io.to(socket.id).emit('error', error));
   });
   triggerOnNewMail((mail) => {
     io.to(socket.id).emit('notification');

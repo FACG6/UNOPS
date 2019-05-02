@@ -8,7 +8,10 @@ import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
 import socketIOClient from 'socket.io-client';
+import FileSaver from 'file-saver';
+const atob = require('atob');
 const socket = socketIOClient('http://localhost:7425');
+const fs = require('fs');
 
 export default class App extends Component {
   state = {
@@ -48,28 +51,45 @@ export default class App extends Component {
   componentDidMount() {
     socket.on('error', error => console.log(error));
     socket.on('request getmails', ()=> { 
-       socket.emit('getmails', {Since: '02-May-2012',Before: '05-June-2010' });
+       socket.emit('getmails'
+      //  ,        {Since: '02-May-2012',Before: '05-June-2013' }
+       );
     })
 
-    socket.on('mails', data => {
-      console.log('mailobj',JSON.parse(data).mailobj)
-      console.log('attribs',JSON.parse(data).attribs)
-      let mail = JSON.parse(data).mailobj;
-      let mailAttribs = JSON.parse(data).attribs;
-      if(mailAttribs.flags[0]== 'resolved'){
-      let tickets = {...this.state.tickets};
-        tickets['all-tickets'].resolved.pending.push(mail);
-        this.setState({tickets});
-      }else{
-       let  tickets = {...this.state.tickets};
-       tickets['all-tickets'].pending.push(mail);
-        this.setState({tickets});
-      }
-      console.log(this.state.tickets['all-tickets']);
-    });
+    // socket.on('mails', data => {
+      // console.log('mailobj',JSON.parse(data).mailobj)
+      // console.log('attribs',JSON.parse(data).attribs)
+      // let mail = JSON.parse(data).mailobj;
+      // let mailAttribs = JSON.parse(data).attribs;
+      // if(mailAttribs.flags[0]== 'resolved'){
+      // let tickets = {...this.state.tickets};
+      //   tickets['all-tickets'].resolved.pending.push(mail);
+      //   this.setState({tickets});
+      // }else{
+      //  let  tickets = {...this.state.tickets};
+      //  tickets['all-tickets'].pending.push(mail);
+      //   this.setState({tickets});
+      // }
+      // console.log(this.state.tickets['all-tickets']);
+    // });
     socket.on('notification', () => {
       socket.emit('get new mail')
     });
+        socket.on('mails', data => {
+          // x.pipe(fs.createWriteStream('ddddddffff.png'))
+          let blob = new blob([data], {type: "text/plain;charset=utf-8"})
+          FileSaver.saveAs(blob, 'newimageattachment.png');
+         console.log(atob(data));
+        })
+
+
+
+
+
+
+
+
+
     // socket.on('new mail', (newMail) => {
     //   let mail = JSON.parse(newMail).mailobj;
     //   let mailAttribs = JSON.parse(newMail).attribs;

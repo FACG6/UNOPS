@@ -46,6 +46,7 @@
     "nodemailer": "^6.1.0",
     "pg": "^7.9.0",
     "react-froala-wysiwyg": "^2.9.5-1",
+    "react-loading": "^2.0.3",
     "socket.io": "^2.2.0"
   },
   "directories": {

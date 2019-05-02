@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './style.css';
 
 export default function WrappedTicket({
-  from, subject, body, date, allChecked, uid,
+  from, subject, text, date, allChecked, uid,
 }) {
   return (
     <section className="wrapped-ticket">
@@ -20,7 +20,7 @@ export default function WrappedTicket({
         </span>
 
         <span className="wrapped-ticket__description">
-          {body.length > 59 ? `${body.substring(0, 59)}...` : body}
+          {text.length > 59 ? `${text.substring(0, 59)}...` : text}
         </span>
         <span className="wrapped-ticket__date wrapped-ticket__text">{date}</span>
       </Link>
@@ -31,7 +31,7 @@ export default function WrappedTicket({
 WrappedTicket.propTypes = {
   from: PropTypes.string.isRequired,
   subject: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   uid: PropTypes.string.isRequired,
   allChecked: PropTypes.bool,

@@ -109,6 +109,13 @@ const mails = (socket, io) => {
           }
         });
       };
+
+
+      const triggerGetReplies = (msgData, cb) => {
+
+      };
+
+
       events(
         socket,
         io,

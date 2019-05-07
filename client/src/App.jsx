@@ -233,7 +233,7 @@ export default class App extends Component {
             render={props => {
               const { category, status } = props.match.params;
               if (category === 'all-tickets' || category === 'my-ticekts')
-                if (status === 'pending' || status === 'dlosed')
+                if (status === 'pending' || status === 'closed')
                   return <TicketsPage {...props} tickets={this.state.tickets} />;
               return <Redirect to="/404" />;
             }}

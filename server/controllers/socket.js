@@ -1,4 +1,4 @@
-const verifyEvent = require('../authentication/verifyCookie');
+const { verifyEvent } = require('../authentication/verifyCookie');
 
 function events(
   socket,

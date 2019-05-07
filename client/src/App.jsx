@@ -205,6 +205,10 @@ export default class App extends Component {
   draftsCount = () => this.state.tickets.drafts.length;
 
   trashCount = () => this.state.tickets.trash.length;
+  
+  sendReply =(message)=>{
+    socket.emit('sendMail',message)
+  }
 
   render() {
     const { pending, closed } = this.state.tickets['all-tickets'];

@@ -8,7 +8,7 @@
     "testdb": "NODE_ENV=test tape test/dbtest.js | tap-spec",
     "client": "npm start --prefix client",
     "build": "npm run build --prefix client",
-    "start": "node ./server/index.js",
+    "start": "NODE_ENV=production node ./server/index.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "dev": "nodemon node server/index.js",
     "server": "NODE_ENV=production concurrently \"npm run dev\" \"npm run client\" "

@@ -23,8 +23,5 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(join(__dirname, '..', 'client', 'build')));
 
 app.use(router);
-app.get('*', (req, res) => {
-  res.sendFile(join(__dirname, '..', 'client', 'build', 'index.html'));
-});
 
 module.exports = app;

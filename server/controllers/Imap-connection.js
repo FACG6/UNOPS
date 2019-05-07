@@ -1,15 +1,9 @@
 const Imap = require('imap');
 const { MailParser } = require('mailparser-mit');
-const base64 = require('base64-stream');
-const atob = require('atob');
 const events = require('../controllers/socket');
 require('dotenv').config();
 
-
-const mails = (
-  socket,
-  io,
-) => {
+const mails = (socket, io) => {
   const imap = new Imap({
     user: process.env.IMAP_USER,
     password: process.env.IMAP_USER_PASS,
@@ -20,144 +14,102 @@ const mails = (
 
   imap.once('ready', () => {
     imap.openBox('INBOX', false, (err, box) => {
-      const triggerGetMailsObj = (range, cb) => {
-        const f = imap.seq.fetch('*', { bodies: '2', struct: true });
-        let attribs = {};
-        f.on('message', (msg, seqno) => {
-          msg.once('attributes', (attrs) => {
-            attribs = attrs;
-            console.log(attribs.struct);
-          });
-          const parser = new MailParser();
-          msg.on('body', (stream, info) => {
-            let buffer = '';
-            stream.on('data', (chunk) => {
-              buffer += chunk;
-            });
-            stream.once('end', () => {
-              console.log(buffer);
-              cb(buffer);
-            });
-          });
-        });
-        f.once('error', (downloadErr) => {
-          io.to(socket.id).emit('error', `get mails ${downloadErr}`);
-        });
-        f.once('end', () => {
-        });
-      };
-
-      const triggerDownloadAttach = (cb) => {
-        const toUpper = element => (element && element.toUpperCase ? element.toUpperCase() : element);
-        const findAttachmentParts = (struct, attachments) => {
-          attachments = attachments || [];
-          for (let i = 0; i < struct.length; i++) {
-            if (Array.isArray(struct[i])) {
-              findAttachmentParts(struct[i], attachments);
-            } else if (struct[i].disposition && ['INLINE', 'ATTACHMENT'].indexOf(toUpper(struct[i].disposition.type)) > -1) {
-              attachments.push(struct[i]);
-            }
-          }
-          return attachments;
-        };
-        imap.once('ready', () => {
-          imap.openBox('INBOX', true, (err, box) => {
-            if (err) throw err;
-            const f = imap.fetch(messageUid, {
-              bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)'],
-              struct: true,
-            });
-            f.on('message', (msg, seqno) => {
-              msg.once('attributes', (attrs) => {
-                const attachments = findAttachmentParts(attrs.struct);
-                for (let i = 0; i < attachments.length; i++) {
-                  const attachment = attachments[i];
-                  const f2 = imap.fetch(attrs.uid, {
-                    bodies: [attachment.partID],
-                    struct: true,
+      const triggerGetMailsObj = (timeRange, cb) => {
+        imap.search(
+          [['SINCE', `${timeRange.Since}`], ['BEFORE', timeRange.Before]],
+          (er, results) => {
+            if (er) io.to(socket.id).emit('error', err);
+            try {
+              const f = imap.fetch(results, { bodies: '' });
+              let attribs = {};
+              let mailobj = {};
+              f.on('message', (msg, seqno) => {
+                const parser = new MailParser();
+                msg.on('body', async (stream, info) => {
+                  attribs = await new Promise(resolve => msg.once('attributes', (attrs) => {
+                    resolve(attrs);
+                  }));
+                  parser.on('end', (mailObject) => {
+                    if (!mailObject.headers['in-reply-to']) {
+                      mailobj = mailObject;
+                      const data = { attribs, mailobj };
+                      cb(JSON.stringify(data));
+                    }
                   });
-                  const filename = attachment.params.name;
-                  const { encoding } = attachment;
-                  f2.on('message', (msg, seqNumber) => {
-                    msg.on('body', (stream, info) => {
-                      let buffer = '';
-                      stream.on('data', (chunk) => {
-                        buffer += chunk;
-                      });
-                      stream.once('end', () => {
-                        cb(encoding, filename, extention, buffer);
-                      });
-                    });
-                  });
-                }
+                  stream.pipe(parser);
+                });
               });
-            });
-            f.once('error', (fetchAttachmentErr) => {
-              io.to(socket.id).emit('error', `imap update status ${fetchAttachmentErr}`);
-            });
-          });
-        });
+              f.once('error', (getMailsErr) => {
+                io.to(socket.id).emit('error', `get mails ${getMailsErr}`);
+              });
+            } catch (e) {
+              io.to(socket.id).emit('error', 'get mails error, ((date)) , nothing to fitch');
+            }
+          },
+        );
       };
-
-
       const triggerOnNewMail = (cb) => {
-        imap.on('mail', (Mails) => {
-          const parser = new MailParser();
+        imap.on('mail', () => {
           const f = imap.seq.fetch('*', {
             bodies: '',
             struct: true,
           });
-          f.on('message', (msg, seqno) => {
-            msg.on('body', (stream, info) => {
-              stream.pipe(parser);
-              parser.on('end', (parsedMail) => {
-                cb(JSON.stringify(parsedMail));
+          let attribs = {};
+          let mailobj = {};
+          f.on('message', (msg) => {
+            const parser = new MailParser();
+            msg.once('attributes', (attrs) => {
+              attribs = attrs;
+            });
+            msg.on('body', async (stream) => {
+              attribs = await new Promise(resolve => msg.once('attributes', (attrs) => {
+                resolve(attrs);
+              }));
+              parser.on('end', (mailObject) => {
+                if (!mailObject.headers['in-reply-to']) {
+                  mailobj = mailObject;
+                  const data = { attribs, mailobj };
+                  cb(JSON.stringify(data));
+                }
               });
+              stream.pipe(parser);
             });
           });
-          f.once('error', (Err) => {
-            io.to(socket.id).emit('error', `on new mail, ${Err}`);
+          f.once('error', (imapErr) => {
+            io.to(socket.id).emit('error', `on new mail, ${imapErr}`);
           });
-          f.once('end', () => {
-          });
+          f.once('end', () => {});
         });
       };
 
       const triggerUpdateStatusObj = (trigUpdateStatusObj) => {
         if (err) io.to(socket.id).emit('error', err);
-        imap.setKeywords(
-          trigUpdateStatusObj.uid,
-          [`${trigUpdateStatusObj.status}`],
-          er => io.to(socket.id).emit('error', `imap update status ${er}`),
-        );
+        imap.setKeywords(trigUpdateStatusObj.uid, [`${trigUpdateStatusObj.status}`], er => io.to(socket.id).emit('error', `imap update status ${er}`));
       };
 
       const triggerSearchKeyword = (trigSearchKeyword, cb) => {
         const parser = new MailParser();
         io.to(socket.id).emit('error', err);
-        imap.search([['KEYWORD', `${trigSearchKeyword}`]],
-          (eror, results) => {
-            if (eror) { io.to(socket.id).emit('error', `search, ${eror}`); }
-            if (results.length > 0) {
-              const f = imap.fetch(
-                results,
-                { bodies: '' },
-              );
-              f.on('message', (msg, seqno) => {
-                msg.on('body', (stream, info) => {
-                  parser.on('end', (searchResult) => {
-                    cb(JSON.stringify(searchResult));
-                  });
-                  stream.pipe(parser);
+        imap.search([['KEYWORD', `${trigSearchKeyword}`]], (eror, results) => {
+          if (eror) {
+            io.to(socket.id).emit('error', `search, ${eror}`);
+          }
+          if (results.length > 0) {
+            const f = imap.fetch(results, { bodies: '' });
+            f.on('message', (msg) => {
+              msg.on('body', (stream) => {
+                parser.on('end', (searchResult) => {
+                  cb(JSON.stringify(searchResult));
                 });
+                stream.pipe(parser);
               });
-              f.once('error', (er) => {
-                io.to(socket.id).emit('error', `search, ${er}`);
-              });
-              f.once('end', () => {
-              });
-            }
-          });
+            });
+            f.once('error', (er) => {
+              io.to(socket.id).emit('error', `search, ${er}`);
+            });
+            f.once('end', () => {});
+          }
+        });
       };
       events(
         socket,
@@ -166,7 +118,6 @@ const mails = (
         triggerOnNewMail,
         triggerUpdateStatusObj,
         triggerSearchKeyword,
-        triggerDownloadAttach,
       );
     });
   });

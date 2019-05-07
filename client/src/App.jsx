@@ -10,7 +10,7 @@ import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
 import { encode } from 'base64-arraybuffer';
-const socket = socketIOClient('http://localhost:7425');
+const socket = socketIOClient('https://unops.herokuapp.com/');
 
 export default class App extends Component {
   state = {
@@ -205,10 +205,10 @@ export default class App extends Component {
   draftsCount = () => this.state.tickets.drafts.length;
 
   trashCount = () => this.state.tickets.trash.length;
-  
-  sendReply =(message)=>{
-    socket.emit('sendMail',message)
-  }
+
+  sendReply = message => {
+    socket.emit('sendMail', message);
+  };
 
   render() {
     const { pending, closed } = this.state.tickets['all-tickets'];

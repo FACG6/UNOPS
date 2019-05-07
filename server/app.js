@@ -14,7 +14,6 @@ app.use((req, res, next) => {
 });
 
 app.set('port', process.env.PORT || 7425);
-app.set('host', process.env.hostname || 'localhost');
 app.disable('x-powered-by');
 app.use(cookieParser());
 app.use(express.json());

@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import swal from 'sweetalert2';
+import ReactLoading from 'react-loading';
 import Login from './components/pages/Login';
 import TicketsPage from './components/pages/TicketsPage';
 import NewTicketPage from './components/pages/NewTicketPage';
 import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
-const socket = socketIOClient('http://localhost:7425');
+import { encode } from 'base64-arraybuffer';
+const socket = socketIOClient('https://unops.herokuapp.com/');
 
 export default class App extends Component {
   state = {
@@ -60,8 +62,43 @@ export default class App extends Component {
       });
     });
 
+    socket.on('userTickets', data => {
+      const mail = JSON.parse(data).mailobj;
+
+      if (mail.attachments)
+        mail.attachments.forEach((attachment, index) => {
+          const arr = new Uint8Array(attachment.content.data);
+          mail.attachments[index].content.data = encode(arr);
+        });
+
+      const mailAttr = JSON.parse(data).attribs;
+      mail.body = mail.html;
+      mail.from = mail.from[0].address;
+      mail.uid = mailAttr.uid;
+      mail.date = new Date(mail.date).toLocaleDateString();
+      const resolved = mailAttr.flags.includes('resolved');
+      if (resolved)
+        this.setState(prevState => {
+          const newState = { ...prevState };
+          newState.tickets['all-tickets'].closed.unshift(mail);
+          return newState;
+        });
+      else
+        this.setState(prevState => {
+          const newState = { ...prevState };
+          newState.tickets['all-tickets'].pending.unshift(mail);
+          return newState;
+        });
+    });
     socket.on('mails', data => {
       const mail = JSON.parse(data).mailobj;
+
+      if (mail.attachments)
+        mail.attachments.forEach((attachment, index) => {
+          const arr = new Uint8Array(attachment.content.data);
+          mail.attachments[index].content.data = encode(arr);
+        });
+
       const mailAttr = JSON.parse(data).attribs;
       mail.body = mail.html;
       mail.from = mail.from[0].address;
@@ -169,8 +206,13 @@ export default class App extends Component {
 
   trashCount = () => this.state.tickets.trash.length;
 
+  sendReply = message => {
+    socket.emit('sendMail', message);
+  };
+
   render() {
-    return (
+    const { pending, closed } = this.state.tickets['all-tickets'];
+    return pending.length || closed.length ? (
       <Router>
         <Switch>
           <Route path="/login" component={Login} />
@@ -195,7 +237,7 @@ export default class App extends Component {
             render={props => {
               const { category, status } = props.match.params;
               if (category === 'all-tickets' || category === 'my-ticekts')
-                if (status === 'pending' || status === 'dlosed')
+                if (status === 'pending' || status === 'closed')
                   return <TicketsPage {...props} tickets={this.state.tickets} />;
               return <Redirect to="/404" />;
             }}
@@ -247,6 +289,10 @@ export default class App extends Component {
           />
         </Switch>
       </Router>
+    ) : (
+      <div className="tickets-page__loading">
+        <ReactLoading type="spin" color="#437489" width="200px" height="200px" />
+      </div>
     );
   }
 }

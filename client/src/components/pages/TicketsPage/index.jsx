@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactLoading from 'react-loading';
 import MainSidebar from '../../parts/MainSidebar';
 import TicketsSidebar from '../../parts/TicketsSidebar';
 import Navbar from '../../parts/Navbar';
@@ -62,7 +61,7 @@ export default class extends Component {
       ticketsToRender = tickets[currentCategory][currentStatus];
     }
 
-    return ticketsToRender.length ? (
+    return (
       <>
         <MainSidebar selected="tickets" />
         <TicketsSidebar
@@ -104,10 +103,6 @@ export default class extends Component {
           ))}
         </main>
       </>
-    ) : (
-      <div className="tickets-page__loading">
-        <ReactLoading type="spin" color="#437489" width="200px" height="200px" />
-      </div>
     );
   }
 }

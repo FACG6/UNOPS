@@ -43,20 +43,20 @@ export default class extends Component {
     let allTicketsCount;
     let myTicketsCount;
     let ticketsToRender;
-    const {
-      currentCategory, currentStatus, allChecked, markAs, tickets,
-    } = this.state;
+    const { currentCategory, currentStatus, allChecked, markAs, tickets } = this.state;
 
     if (!(currentCategory === 'trash' || currentCategory === 'drafts')) {
       pendingTicketsCount = tickets[currentCategory].pending.length;
       closedTicketsCount = tickets[currentCategory].closed.length;
-      allTicketsCount = tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
+      allTicketsCount =
+        tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
       myTicketsCount = tickets['my-tickets'].pending.length + tickets['my-tickets'].closed.length;
       ticketsToRender = tickets[currentCategory][currentStatus];
     } else {
       pendingTicketsCount = 'null';
       closedTicketsCount = 'null';
-      allTicketsCount = tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
+      allTicketsCount =
+        tickets['all-tickets'].pending.length + tickets['all-tickets'].closed.length;
       myTicketsCount = tickets['my-tickets'].pending.length + tickets['my-tickets'].closed.length;
       ticketsToRender = tickets[currentCategory][currentStatus];
     }

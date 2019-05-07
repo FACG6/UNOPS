@@ -71,3 +71,40 @@
     margin-top: 40px;
     text-align: justify;
 }
+
+.opened-ticket__attachment-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: underline;
+    margin-top: 30px;
+    margin-right: 40px;
+}
+
+.opened-ticket__attachment-icon {
+    font-size: 3rem;
+    margin-bottom: 5px;
+}
+
+.opened-ticket__attachments-div {
+    display: flex;
+}
+
+.opened-ticket__attachment-link--pdf {
+    color: rgb(158, 0, 0);
+}
+
+.opened-ticket__attachment-link--word {
+    color: var(--main-color, blue);
+}
+
+.opened-ticket__attachment-link--excel {
+    color: rgb(0, 87, 0);
+}
+
+.opened-ticket__attachment-link--img {
+    color: rgb(63, 51, 0);
+}
+
+.opened-ticket__attachment-link--text {
+    color: var(--second-color, #333);
+}

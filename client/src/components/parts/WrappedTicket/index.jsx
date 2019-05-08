@@ -13,7 +13,6 @@ export default function WrappedTicket({
   isChecked,
   toggleCheck,
 }) {
-  console.log('texttttttt', text);
   return (
     <section className="wrapped-ticket">
       {isChecked || allChecked ? (
@@ -38,7 +37,7 @@ export default function WrappedTicket({
         </span>
 
         <span className="wrapped-ticket__description">
-          {text.length > 59 ? `${text.substring(0, 59)}...` : text}
+          {text && text.length > 59 ? `${text.substring(0, 59)}...` : text || ''}
         </span>
         <span className="wrapped-ticket__date wrapped-ticket__text">{date}</span>
       </Link>

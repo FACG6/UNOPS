@@ -1,3 +1,5 @@
+
+
 const verifyEvent = require('../authentication/verifyCookie');
 const nodemailer = require('./nodemailer');
 const addNewReply = require('../database/quiries/addreply');
@@ -10,6 +12,8 @@ function events(
   triggerOnNewMail,
   triggerUpdateStatusObj,
   triggerSearchKeyword,
+  conversation,
+  sendReply,
 ) {
   socket.emit('request getmails');
   socket.on('getmails', (timeRange) => {
@@ -23,7 +27,10 @@ function events(
           });
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
-      .catch(err => io.to(socket.id).emit('error', { error: `verification, ${err}` }));
+      .catch((err) => {
+        console.log(err);
+        io.to(socket.id).emit('error', { error: `verification, ${err}` });
+      });
   });
 
   socket.on('update status', (statusObj) => {
@@ -103,6 +110,16 @@ function events(
     });
   });
 
+  socket.on('get replies', (msgId) => {
+    conversation(msgId, (reply) => {
+      io.to(socket.id).emit('replies', reply);
+    });
+  });
+  socket.on('send reply', (message) => {
+    sendReply(message, (reply) => {
+      nodemailer(reply);
+    });
+  });
   console.log('made socket connection', socket.id);
 }
 module.exports = events;

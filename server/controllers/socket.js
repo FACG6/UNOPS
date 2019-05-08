@@ -1,5 +1,5 @@
+const { verifyEvent } = require('../authentication/verifyCookie');
 const getTickets = require('../database/queries/getTickets');
-const verifyEvent = require('../authentication/verifyCookie');
 const nodemailer = require('./nodemailer');
 const addNewReply = require('../database/queries/addreply');
 const addTicket = require('../database/queries/addTicket');
@@ -124,6 +124,7 @@ function events(
       })
       .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
   });
+
   socket.on('send reply', (message) => {
     verifyEvent(socket)
       .then((res) => {

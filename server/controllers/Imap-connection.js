@@ -1,7 +1,7 @@
-
 const Imap = require('imap');
 const { MailParser } = require('mailparser-mit');
 const events = require('../controllers/socket');
+const getReplies = require('../database/queries/getReplies');
 require('dotenv').config();
 
 const mails = (socket, io) => {
@@ -35,8 +35,6 @@ const mails = (socket, io) => {
                     const data = { attribs, mailobj };
                     if (!mailObject.headers['in-reply-to']) {
                       mailobj = mailObject;
-                      const data = { attribs, mailobj };
-                      console.log(data.attribs);
                       cb(JSON.stringify(data));
                     } else {
                       replies.push(data);
@@ -118,30 +116,18 @@ const mails = (socket, io) => {
         });
       };
       const conversation = (msgId, cb) => {
+        const allReplies = [];
         replies.map((reply) => {
           if (reply.mailobj.inReplyTo[0] === msgId) {
-            cb(reply);
+            allReplies.push(reply);
           }
         });
+        getReplies(msgId).then((result) => {
+          result.forEach(res => allReplies.push(res));
+        });
+        cb(allReplies);
       };
-      const sendReply = (message, cb) => {
-        const uides = [];
-        replies.map((reply) => {
-          if (reply.mailobj.inReplyTo[0] === message.inReplyTo) {
-            uides.push(reply.attribs.uid);
-          }
-        });
-        const maxuid = Math.max.apply(null, uides);
-        let reference = [];
-        replies.map((rep) => {
-          if (rep.attribs.uid === maxuid) {
-            reference = rep.references;
-            reference.unshift(rep.messageId);
-          }
-        });
-        message.references = reference;
-        cb(message);
-      };
+
       events(
         socket,
         io,
@@ -150,7 +136,6 @@ const mails = (socket, io) => {
         triggerUpdateStatusObj,
         triggerSearchKeyword,
         conversation,
-        sendReply,
       );
     });
   });

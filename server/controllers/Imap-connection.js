@@ -65,7 +65,7 @@ const mails = (socket, io) => {
             struct: true,
           });
           let attribs = {};
-          const mailobj = {};
+          let mailobj = {};
           f.on('message', (msg) => {
             const parser = new MailParser();
             msg.once('attributes', (attrs) => {
@@ -76,6 +76,7 @@ const mails = (socket, io) => {
                 resolve(attrs);
               }));
               parser.on('end', (mailObject) => {
+                mailobj = mailObject;
                 const data = { attribs, mailobj };
                 if (!mailObject.headers['in-reply-to']) {
                   cb(JSON.stringify(data));
@@ -93,9 +94,20 @@ const mails = (socket, io) => {
         });
       };
 
-      const triggerUpdateStatusObj = (trigUpdateStatusObj) => {
-        if (err) io.to(socket.id).emit('error', err);
-        imap.setKeywords(trigUpdateStatusObj.uid, [`${trigUpdateStatusObj.status}`], er => io.to(socket.id).emit('error', `imap update status ${er}`));
+      const triggerUpdateStatusObj = (markAsObj) => {
+        console.log(markAsObj);
+        if (markAsObj.markAs === 'pending') {
+          imap.delKeywords(markAsObj.uids, 'resolved', (er) => {
+            if (er) io.to(socket.id).emit('error', `imap update status ${er}`);
+          });
+        } else {
+          imap.delKeywords(markAsObj.uids, 'pending', (er) => {
+            if (er) io.to(socket.id).emit('error', `imap update status ${er}`);
+          });
+        }
+        imap.setKeywords(markAsObj.uids, `${markAsObj.markAs}`, (er) => {
+          if (er) io.to(socket.id).emit('error', `imap update status ${er}`);
+        });
       };
 
       const triggerSearchKeyword = (trigSearchKeyword, cb) => {

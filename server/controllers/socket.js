@@ -37,7 +37,7 @@ function events(
       .then((res) => {
         if (res) {
           triggerUpdateStatusObj(statusObj);
-          io.to(socket.id).emit('status changed successfully');
+          io.to(socket.id).emit('update status done');
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
       .catch(err => io.to(socket.id).emit('error', { error: `socket update status ${err}` }));

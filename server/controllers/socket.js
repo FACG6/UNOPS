@@ -1,5 +1,3 @@
-
-
 const verifyEvent = require('../authentication/verifyCookie');
 const nodemailer = require('./nodemailer');
 const addNewReply = require('../database/queries/addreply');

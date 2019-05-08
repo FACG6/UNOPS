@@ -82,6 +82,7 @@ export default class App extends Component {
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].closed.unshift(mail);
+          newState.tickets['my-tickets'].closed.unshift(mail);
           newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
@@ -89,6 +90,7 @@ export default class App extends Component {
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].pending.unshift(mail);
+          newState.tickets['my-tickets'].pending.unshift(mail);
           newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
@@ -236,7 +238,7 @@ export default class App extends Component {
                 params: { category },
               },
             }) => {
-              if (category === 'all-tickets' || category === 'my-ticekts')
+              if (category === 'all-tickets' || category === 'my-tickets')
                 return <Redirect to={`/tickets/${category}/pending`} />;
               return <Redirect to="/404" />;
             }}
@@ -246,7 +248,7 @@ export default class App extends Component {
             path="/tickets/:category/:status"
             render={props => {
               const { category, status } = props.match.params;
-              if (category === 'all-tickets' || category === 'my-ticekts')
+              if (category === 'all-tickets' || category === 'my-tickets')
                 if (status === 'pending' || status === 'closed')
                   return (
                     <TicketsPage

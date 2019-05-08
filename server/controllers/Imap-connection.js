@@ -53,7 +53,7 @@ const mails = (socket, io) => {
                 io.to(socket.id).emit('error', `get mails ${getMailsErr}`);
               });
             } catch (e) {
-              io.to(socket.id).emit('error', 'get mails error, ((date)) , nothing to fitch');
+              io.to(socket.id).emit('error', 'get mails error, ((date)), nothing to fetch');
             }
           },
         );
@@ -130,7 +130,7 @@ const mails = (socket, io) => {
             f.once('error', (er) => {
               io.to(socket.id).emit('error', `search, ${er}`);
             });
-            f.once('end', () => { });
+            f.once('end', () => {});
           }
         });
       };

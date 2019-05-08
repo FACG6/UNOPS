@@ -1,6 +1,7 @@
 const Imap = require('imap');
 const { MailParser } = require('mailparser-mit');
 const events = require('../controllers/socket');
+const getReplies = require('../database/queries/getReplies');
 require('dotenv').config();
 
 const mails = (socket, io) => {
@@ -21,27 +22,32 @@ const mails = (socket, io) => {
             if (er) io.to(socket.id).emit('error', err);
             try {
               const f = imap.fetch(results, { bodies: '' });
+              let data = {};
               let attribs = {};
               let mailobj = {};
-              f.on('message', (msg, seqno) => {
-                const parser = new MailParser();
-                msg.on('body', async (stream, info) => {
-                  attribs = await new Promise(resolve => msg.once('attributes', (attrs) => {
-                    resolve(attrs);
-                  }));
-                  parser.on('end', (mailObject) => {
-                    mailobj = mailObject;
-                    const data = { attribs, mailobj };
-                    if (!mailObject.headers['in-reply-to']) {
-                      mailobj = mailObject;
-                      const data = { attribs, mailobj };
-                      cb(JSON.stringify(data));
-                    } else {
-                      replies.push(data);
-                    }
-                  });
-                  stream.pipe(parser);
+              const attrs = [];
+              let i = 0;
+              f.on('message', async (msg, seqno) => {
+                msg.once('attributes', (attr) => {
+                  attrs.push(attr);
                 });
+                if (attrs[i]) {
+                  msg.on('body', async (stream, info) => {
+                    const parser = new MailParser();
+                    parser.on('end', (mailObject) => {
+                      mailobj = mailObject;
+                      attribs = attrs[i];
+                      data = { attribs, mailobj };
+                      i++;
+                      if (!mailObject.headers['in-reply-to']) {
+                        cb(JSON.stringify(data));
+                      } else {
+                        replies.push(data);
+                      }
+                    });
+                    stream.pipe(parser);
+                  });
+                }
               });
               f.once('error', (getMailsErr) => {
                 io.to(socket.id).emit('error', `get mails ${getMailsErr}`);
@@ -59,7 +65,7 @@ const mails = (socket, io) => {
             struct: true,
           });
           let attribs = {};
-          let mailobj = {};
+          const mailobj = {};
           f.on('message', (msg) => {
             const parser = new MailParser();
             msg.once('attributes', (attrs) => {
@@ -70,10 +76,11 @@ const mails = (socket, io) => {
                 resolve(attrs);
               }));
               parser.on('end', (mailObject) => {
+                const data = { attribs, mailobj };
                 if (!mailObject.headers['in-reply-to']) {
-                  mailobj = mailObject;
-                  const data = { attribs, mailobj };
                   cb(JSON.stringify(data));
+                } else {
+                  replies.push(data);
                 }
               });
               stream.pipe(parser);
@@ -116,30 +123,18 @@ const mails = (socket, io) => {
         });
       };
       const conversation = (msgId, cb) => {
+        const allReplies = [];
         replies.map((reply) => {
           if (reply.mailobj.inReplyTo[0] === msgId) {
-            cb(reply);
+            allReplies.push(reply);
           }
         });
+        getReplies(msgId).then((result) => {
+          result.forEach(res => allReplies.push(res));
+        });
+        cb(allReplies);
       };
-      const sendReply = (message, cb) => {
-        const uides = [];
-        replies.map((reply) => {
-          if (reply.mailobj.inReplyTo[0] === message.inReplyTo) {
-            uides.push(reply.attribs.uid);
-          }
-        });
-        const maxuid = Math.max.apply(null, uides);
-        let reference = [];
-        replies.map((rep) => {
-          if (rep.attribs.uid === maxuid) {
-            reference = rep.references;
-            reference.unshift(rep.messageId);
-          }
-        });
-        message.references = reference;
-        cb(message);
-      };
+
       events(
         socket,
         io,
@@ -148,7 +143,6 @@ const mails = (socket, io) => {
         triggerUpdateStatusObj,
         triggerSearchKeyword,
         conversation,
-        sendReply,
       );
     });
   });

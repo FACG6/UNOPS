@@ -1,7 +1,7 @@
 const verifyEvent = require('../authentication/verifyCookie');
 const nodemailer = require('./nodemailer');
-const addNewReply = require('../database/quiries/addreply');
-const addTicket = require('../database/quiries/addTicket');
+const addNewReply = require('../database/queries/addreply');
+const addTicket = require('../database/queries/addTicket');
 
 function events(
   socket,
@@ -11,7 +11,6 @@ function events(
   triggerUpdateStatusObj,
   triggerSearchKeyword,
   conversation,
-  sendReply,
 ) {
   socket.emit('request getmails');
   socket.on('getmails', (timeRange) => {
@@ -109,14 +108,25 @@ function events(
   });
 
   socket.on('get replies', (msgId) => {
-    conversation(msgId, (reply) => {
-      io.to(socket.id).emit('replies', reply);
-    });
+    verifyEvent(socket)
+      .then((res) => {
+        if (res) {
+          conversation(msgId, (reply) => {
+            io.to(socket.id).emit('replies', reply);
+          });
+        } else io.to(socket.id).emit('error', { error: 'not verified' });
+      })
+      .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
   });
   socket.on('send reply', (message) => {
-    sendReply(message, (reply) => {
-      nodemailer(reply);
-    });
+    verifyEvent(socket)
+      .then((res) => {
+        if (res) {
+          nodemailer(message);
+          addNewReply(message);
+        } else io.to(socket.id).emit('error', { error: 'not verified' });
+      })
+      .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
   });
   console.log('made socket connection', socket.id);
 }

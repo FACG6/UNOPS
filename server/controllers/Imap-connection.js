@@ -35,7 +35,6 @@ const mails = (socket, io) => {
                     const data = { attribs, mailobj };
                     if (!mailObject.headers['in-reply-to']) {
                       mailobj = mailObject;
-                      const data = { attribs, mailobj };
                       cb(JSON.stringify(data));
                     } else {
                       replies.push(data);
@@ -124,7 +123,7 @@ const mails = (socket, io) => {
           }
         });
         getReplies(msgId).then((result) => {
-          result.map(res => allReplies.push(res));
+          result.forEach(res => allReplies.push(res));
         });
         cb(allReplies);
       };

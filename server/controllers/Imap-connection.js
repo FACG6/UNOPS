@@ -50,37 +50,37 @@ const mails = (socket, io) => {
         );
       };
       const triggerOnNewMail = (cb) => {
-        imap.on('mail', () => {
-          const f = imap.seq.fetch('*', {
-            bodies: '',
-            struct: true,
-          });
-          let attribs = {};
-          let mailobj = {};
-          f.on('message', (msg) => {
-            const parser = new MailParser();
-            msg.once('attributes', (attrs) => {
-              attribs = attrs;
-            });
-            msg.on('body', async (stream) => {
-              attribs = await new Promise(resolve => msg.once('attributes', (attrs) => {
-                resolve(attrs);
-              }));
-              parser.on('end', (mailObject) => {
-                if (!mailObject.headers['in-reply-to']) {
-                  mailobj = mailObject;
-                  const data = { attribs, mailobj };
-                  cb(JSON.stringify(data));
-                }
-              });
-              stream.pipe(parser);
-            });
-          });
-          f.once('error', (imapErr) => {
-            io.to(socket.id).emit('error', `on new mail, ${imapErr}`);
-          });
-          f.once('end', () => {});
-        });
+        // imap.on('mail', () => {
+        //   const f = imap.seq.fetch('*', {
+        //     bodies: '',
+        //     struct: true,
+        //   });
+        //   let attribs = {};
+        //   let mailobj = {};
+        //   f.on('message', (msg) => {
+        //     const parser = new MailParser();
+        //     msg.once('attributes', (attrs) => {
+        //       attribs = attrs;
+        //     });
+        //     msg.on('body', async (stream) => {
+        //       attribs = await new Promise(resolve => msg.once('attributes', (attrs) => {
+        //         resolve(attrs);
+        //       }));
+        //       parser.on('end', (mailObject) => {
+        //         if (!mailObject.headers['in-reply-to']) {
+        //           mailobj = mailObject;
+        //           const data = { attribs, mailobj };
+        //           cb(JSON.stringify(data));
+        //         }
+        //       });
+        //       stream.pipe(parser);
+        //     });
+        //   });
+        //   f.once('error', (imapErr) => {
+        //     io.to(socket.id).emit('error', `on new mail, ${imapErr}`);
+        //   });
+        //   f.once('end', () => {});
+        // });
       };
 
       const triggerUpdateStatusObj = (trigUpdateStatusObj) => {

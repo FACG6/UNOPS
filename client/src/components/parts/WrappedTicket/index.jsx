@@ -6,6 +6,7 @@ import './style.css';
 export default function WrappedTicket({
   from, subject, text, date, allChecked, uid,
 }) {
+  console.log('texttttttt', text);
   return (
     <section className="wrapped-ticket">
       {allChecked ? (

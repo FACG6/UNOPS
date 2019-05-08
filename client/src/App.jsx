@@ -10,7 +10,7 @@ import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
 import { encode } from 'base64-arraybuffer';
-const socket = socketIOClient('https://unops.herokuapp.com/');
+const socket = socketIOClient('http://localhost:7425/');
 
 export default class App extends Component {
   state = {

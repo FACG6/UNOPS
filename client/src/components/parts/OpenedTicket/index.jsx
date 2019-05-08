@@ -5,7 +5,7 @@ import socketIOClient from 'socket.io-client';
 import './style.css';
 import Replies from '../Replies';
 import Reply from '../Reply';
-const socket = socketIOClient('http://localhost:7425');
+const socket = socketIOClient('https://unops.herokuapp.com/');
 
 const classes = {
   pdf: { icon: 'far fa-file-pdf', general: 'opened-ticket__attachment-link--pdf' },

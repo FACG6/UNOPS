@@ -22,26 +22,32 @@ const mails = (socket, io) => {
             if (er) io.to(socket.id).emit('error', err);
             try {
               const f = imap.fetch(results, { bodies: '' });
+              let data = {};
               let attribs = {};
               let mailobj = {};
-              f.on('message', (msg, seqno) => {
-                const parser = new MailParser();
-                msg.on('body', async (stream, info) => {
-                  attribs = await new Promise(resolve => msg.once('attributes', (attrs) => {
-                    resolve(attrs);
-                  }));
-                  parser.on('end', (mailObject) => {
-                    mailobj = mailObject;
-                    const data = { attribs, mailobj };
-                    if (!mailObject.headers['in-reply-to']) {
-                      mailobj = mailObject;
-                      cb(JSON.stringify(data));
-                    } else {
-                      replies.push(data);
-                    }
-                  });
-                  stream.pipe(parser);
+              const attrs = [];
+              let i = 0;
+              f.on('message', async (msg, seqno) => {
+                msg.once('attributes', (attr) => {
+                  attrs.push(attr);
                 });
+                if (attrs[i]) {
+                  msg.on('body', async (stream, info) => {
+                    const parser = new MailParser();
+                    parser.on('end', (mailObject) => {
+                      mailobj = mailObject;
+                      attribs = attrs[i];
+                      data = { attribs, mailobj };
+                      i++;
+                      if (!mailObject.headers['in-reply-to']) {
+                        cb(JSON.stringify(data));
+                      } else {
+                        replies.push(data);
+                      }
+                    });
+                    stream.pipe(parser);
+                  });
+                }
               });
               f.once('error', (getMailsErr) => {
                 io.to(socket.id).emit('error', `get mails ${getMailsErr}`);

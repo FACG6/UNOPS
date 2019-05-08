@@ -16,10 +16,13 @@ app.use((req, res, next) => {
 
 app.set('port', process.env.PORT || 7425);
 app.disable('x-powered-by');
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 app.use(compression());
+
 app.use(express.static(join(__dirname, '..', 'client', 'build')));
 
 app.use('/api/v1', router);

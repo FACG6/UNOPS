@@ -97,8 +97,6 @@ export default class App extends Component {
     });
     socket.on('mails', data => {
       const mail = JSON.parse(data).mailobj;
-      console.log(JSON.parse(data));
-
       if (mail.attachments)
         mail.attachments.forEach((attachment, index) => {
           const arr = new Uint8Array(attachment.content.data);
@@ -139,7 +137,7 @@ export default class App extends Component {
     });
     socket.on('new mail', newMail => {
       const mail = JSON.parse(newMail).mailobj;
-      console.log(mail)
+      console.log(mail);
       const mailAttr = JSON.parse(newMail).attribs;
       mail.body = mail.html;
       mail.from = mail.from[0].address;

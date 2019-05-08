@@ -10,7 +10,7 @@ import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
 import { encode } from 'base64-arraybuffer';
-const socket = socketIOClient('http://localhost:7425/');
+const socket = socketIOClient('http://localhost:7425');
 
 export default class App extends Component {
   state = {
@@ -32,11 +32,12 @@ export default class App extends Component {
       status: '',
     },
     searchResults: null,
+    ticketsUids: [],
   };
   // update status function to be used in 'update-status component.
-  updateStatus = () => {
-    // need to use two variables here, uid and status..
-    socket.emit('update status', { uid: 1002, status: 'pending' });
+  updateStatus = (uids, markAs) => {
+    socket.emit('update status', { uids, markAs });
+    socket.on('update status done', () => window.location.reload());
   };
   // search fuction to be used in search component
   search = () => {
@@ -47,11 +48,11 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    const from = new Date(Date.now() + 1000 * 60 * 60 * 24);
-    const before = from.toDateString().split(' ');
+    const from = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
+    const since = from.toDateString().split(' ');
 
-    const to = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
-    const since = to.toDateString().split(' ');
+    const to = new Date(Date.now() + 1000 * 60 * 60 * 24);
+    const before = to.toDateString().split(' ');
 
     fetch('/ahmed');
     socket.on('error', error => console.log(error));
@@ -81,12 +82,14 @@ export default class App extends Component {
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].closed.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
       else
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].pending.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
     });
@@ -110,12 +113,14 @@ export default class App extends Component {
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].closed.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
       else
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].pending.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
     });
@@ -142,16 +147,19 @@ export default class App extends Component {
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].closed.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
       else
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].pending.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
     });
   }
+
   componentWillUnmount() {
     socket.off('mails');
     socket.off('update status');
@@ -239,7 +247,15 @@ export default class App extends Component {
               const { category, status } = props.match.params;
               if (category === 'all-tickets' || category === 'my-ticekts')
                 if (status === 'pending' || status === 'closed')
-                  return <TicketsPage {...props} tickets={this.state.tickets} />;
+                  return (
+                    <TicketsPage
+                      key="Tickets_Page"
+                      {...props}
+                      tickets={this.state.tickets}
+                      ticketsUids={this.state.ticketsUids}
+                      updateStatus={this.updateStatus}
+                    />
+                  );
               return <Redirect to="/404" />;
             }}
           />

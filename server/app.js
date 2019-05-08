@@ -1,11 +1,12 @@
 const express = require('express');
 const { join } = require('path');
 const cookieParser = require('cookie-parser');
-const router = require('./controllers/index');
+const compression = require('compression');
 
 const app = express();
 
 const { sign } = require('jsonwebtoken');
+const router = require('./controllers/index');
 
 const jwt = sign('socket', 'f$nd%565f4#dgf#');
 app.use((req, res, next) => {
@@ -18,7 +19,7 @@ app.disable('x-powered-by');
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(compression());
 app.use(express.static(join(__dirname, '..', 'client', 'build')));
 
 app.use(router);

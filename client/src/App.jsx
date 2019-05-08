@@ -97,6 +97,7 @@ export default class App extends Component {
     });
     socket.on('mails', data => {
       const mail = JSON.parse(data).mailobj;
+      console.log(JSON.parse(data));
 
       if (mail.attachments)
         mail.attachments.forEach((attachment, index) => {

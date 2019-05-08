@@ -25,15 +25,18 @@ const mails = (socket, io) => {
               let attribs = {};
               let mailobj = {};
               f.on('message', (msg, seqno) => {
-                msg.once('attributes', (attrs) => {
-                  attribs = attrs;
-                });
                 const parser = new MailParser();
-                msg.on('body', (stream, info) => {
+                msg.on('body', async (stream, info) => {
+                  attribs = await new Promise(resolve => msg.once('attributes', (attrs) => {
+                    resolve(attrs);
+                  }));
                   parser.on('end', (mailObject) => {
                     mailobj = mailObject;
                     const data = { attribs, mailobj };
                     if (!mailObject.headers['in-reply-to']) {
+                      mailobj = mailObject;
+                      const data = { attribs, mailobj };
+                      console.log(data.attribs);
                       cb(JSON.stringify(data));
                     } else {
                       replies.push(data);
@@ -53,35 +56,35 @@ const mails = (socket, io) => {
       };
       const triggerOnNewMail = (cb) => {
         imap.on('mail', () => {
-          const parser = new MailParser();
           const f = imap.seq.fetch('*', {
             bodies: '',
             struct: true,
           });
-
           let attribs = {};
           let mailobj = {};
           f.on('message', (msg) => {
+            const parser = new MailParser();
             msg.once('attributes', (attrs) => {
               attribs = attrs;
             });
-            msg.on('body', (stream) => {
-              stream.pipe(parser);
-              parser.on('end', (parsedMail) => {
-                mailobj = parsedMail;
-                const data = { attribs, mailobj };
-                if (!parsedMail.headers['in-reply-to']) {
+            msg.on('body', async (stream) => {
+              attribs = await new Promise(resolve => msg.once('attributes', (attrs) => {
+                resolve(attrs);
+              }));
+              parser.on('end', (mailObject) => {
+                if (!mailObject.headers['in-reply-to']) {
+                  mailobj = mailObject;
+                  const data = { attribs, mailobj };
                   cb(JSON.stringify(data));
-                } else {
-                  replies.push(data);
                 }
               });
+              stream.pipe(parser);
             });
           });
           f.once('error', (imapErr) => {
             io.to(socket.id).emit('error', `on new mail, ${imapErr}`);
           });
-          f.once('end', () => { });
+          f.once('end', () => {});
         });
       };
 

@@ -77,7 +77,7 @@ export default class App extends Component {
       mail.from = mail.from[0].address;
       mail.uid = mailAttr.uid;
       mail.date = new Date(mail.date).toLocaleDateString();
-      const resolved = mailAttr.flags.includes('resolved');
+      const resolved = mailAttr.flags.includes('closed');
       if (resolved)
         this.setState(prevState => {
           const newState = { ...prevState };
@@ -108,7 +108,7 @@ export default class App extends Component {
       mail.from = mail.from[0].address;
       mail.uid = mailAttr.uid;
       mail.date = new Date(mail.date).toLocaleDateString();
-      const resolved = mailAttr.flags.includes('resolved');
+      const resolved = mailAttr.flags.includes('closed');
       if (resolved)
         this.setState(prevState => {
           const newState = { ...prevState };
@@ -137,12 +137,13 @@ export default class App extends Component {
     });
     socket.on('new mail', newMail => {
       const mail = JSON.parse(newMail).mailobj;
+      console.log(mail)
       const mailAttr = JSON.parse(newMail).attribs;
       mail.body = mail.html;
       mail.from = mail.from[0].address;
       mail.uid = mailAttr.uid;
       mail.date = new Date(mail.date).toLocaleDateString();
-      const resolved = mailAttr.flags.includes('resolved');
+      const resolved = mailAttr.flags.includes('closed');
       if (resolved)
         this.setState(prevState => {
           const newState = { ...prevState };

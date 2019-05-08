@@ -64,11 +64,6 @@ export default class App extends Component {
     });
 
     socket.on('userTickets', data => {
-<<<<<<< HEAD
-      
-    });
-    
-=======
       const mail = JSON.parse(data).mailobj;
 
       if (mail.attachments)
@@ -98,7 +93,6 @@ export default class App extends Component {
           return newState;
         });
     });
->>>>>>> 82f1d31badbd7a2b5539df6efb92f4c68874bcb3
     socket.on('mails', data => {
       const mail = JSON.parse(data).mailobj;
       console.log(JSON.parse(data));

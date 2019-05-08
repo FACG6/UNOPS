@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Logo from '../Logo';
 import './style.css';
+import Replies from '../Replies';
+import Reply from '../Reply';
 
 const classes = {
   pdf: { icon: 'far fa-file-pdf', general: 'opened-ticket__attachment-link--pdf' },
@@ -38,7 +40,7 @@ export default function OpenedTicket({
           {cc ? (
             <span className="opened-ticket__cc opened-ticket__details-text">
               <span className="opened-ticket__details-text--strong">CC:</span>
-              {cc}
+              {cc.map(e => `${e.address  }, `)}
             </span>
           ) : (
             <></>
@@ -72,6 +74,8 @@ export default function OpenedTicket({
       ) : (
         <></>
       )}
+      <Replies tickets={[]} />
+      <Reply />
     </section>
   );
 }

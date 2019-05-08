@@ -65,7 +65,7 @@ const mails = (socket, io) => {
             struct: true,
           });
           let attribs = {};
-          let mailobj = {};
+          const mailobj = {};
           f.on('message', (msg) => {
             const parser = new MailParser();
             msg.once('attributes', (attrs) => {
@@ -76,10 +76,11 @@ const mails = (socket, io) => {
                 resolve(attrs);
               }));
               parser.on('end', (mailObject) => {
+                const data = { attribs, mailobj };
                 if (!mailObject.headers['in-reply-to']) {
-                  mailobj = mailObject;
-                  const data = { attribs, mailobj };
                   cb(JSON.stringify(data));
+                } else {
+                  replies.push(data);
                 }
               });
               stream.pipe(parser);

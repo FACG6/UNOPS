@@ -7,10 +7,9 @@ CREATE TABLE users
 (
     id SERIAL PRIMARY KEY,
     email VARCHAR NOT NULL UNIQUE,
-    name VARCHAR NOT NULL ,
-    password VARCHAR NOT NULL
+   user_name VARCHAR NOT NULL ,
+    user_password VARCHAR NOT NULL
 );
-
 CREATE TABLE tickets
 (
     id SERIAl PRIMARY KEY,
@@ -35,7 +34,6 @@ CREATE TABLE replies
     statusticket TEXT NOT NULL,
     subjectticket TEXT NOT NULL,
     userid INTEGER REFERENCES users(id),
-    inReplyTo TEXT NOT NUll,
-    reply BOOLEAN NOT NULL
+    inReplyTo TEXT NOT NUll
 );
 COMMIT;

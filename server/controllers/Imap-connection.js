@@ -36,7 +36,8 @@ const mails = (socket, io) => {
                     if (!mailObject.headers['in-reply-to']) {
                       cb(JSON.stringify(data));
                     } else {
-                      replies.push(data);
+                      // replies.mail = data;
+                      // console.log(replies.mail);
                     }
                   });
                   stream.pipe(parser);
@@ -73,7 +74,7 @@ const mails = (socket, io) => {
                 if (!parsedMail.headers['in-reply-to']) {
                   cb(JSON.stringify(data));
                 } else {
-                  replies.push(data);
+                  replies.mail = data;
                 }
               });
             });

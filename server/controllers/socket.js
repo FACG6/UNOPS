@@ -2,8 +2,8 @@
 
 const verifyEvent = require('../authentication/verifyCookie');
 const nodemailer = require('./nodemailer');
-const addNewReply = require('../database/quiries/addreply');
-const addTicket = require('../database/quiries/addTicket');
+// const addNewReply = require('../database/quiries/addreply');
+const addTicket = require('../database/queries/addTicket');
 
 function events(
   socket,

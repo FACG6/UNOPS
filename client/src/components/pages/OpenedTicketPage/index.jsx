@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import OpenedTicket from '../../parts/OpenedTicket';
 import MainSidebar from '../../parts/MainSidebar';
 import TicketsSidebar from '../../parts/TicketsSidebar';
-import Replies from '../../parts/Replies';
-import Reply from '../../parts/Reply';
 import './style.css';
 
 export default function OpenedTicketPage({
@@ -43,8 +41,6 @@ export default function OpenedTicketPage({
       />
       <main className="opened-ticket-page">
         <OpenedTicket {...ticket} />
-        <Replies tickets={[]} />
-        <Reply />
       </main>
     </>
   );

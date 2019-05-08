@@ -36,7 +36,6 @@ const mails = (socket, io) => {
                     if (!mailObject.headers['in-reply-to']) {
                       mailobj = mailObject;
                       const data = { attribs, mailobj };
-                      console.log(data.attribs);
                       cb(JSON.stringify(data));
                     } else {
                       replies.push(data);

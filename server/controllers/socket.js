@@ -1,4 +1,5 @@
 const { verifyEvent } = require('../authentication/verifyCookie');
+const getTickets = require('../database/queries/getTickets');
 const nodemailer = require('./nodemailer');
 const addNewReply = require('../database/queries/addreply');
 const addTicket = require('../database/queries/addTicket');
@@ -17,8 +18,11 @@ function events(
     verifyEvent(socket)
       .then((res) => {
         if (res) {
-          // need a database query here
-          // ex: io.to(socket.id).emit('mails', 'database query for tickets fetching');
+          getTickets()
+            .then((result) => {
+              io.to(socket.id).emit('userTickets', result);
+            })
+            .catch(error => io.to(socket.id).emit('error', error));
           triggerGetMailsObj(timeRange, (mailObject) => {
             io.to(socket.id).emit('mails', mailObject);
           });
@@ -69,11 +73,13 @@ function events(
       .then((res) => {
         if (res) {
           if (data.user) {
-            // need a database query here to fetch users tickets
-            io.to(socket.id).emit('search tickets', 'query res');
+            getTickets().then((result) => {
+              io.to(socket.id).emit('userTickets', result);
+            });
           } else {
-            // need a database query here to fetch users tickets
-            // example:   io.to(socket.id).emit('mails', 'database  query'); and then =>
+            getTickets().then((result) => {
+              io.to(socket.id).emit('userTickets', result);
+            });
             triggerSearchKeyword(data.keyword, (result) => {
               io.to(socket.id).emit('search result', result);
             });

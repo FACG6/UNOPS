@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Logo from '../Logo';
 import socketIOClient from 'socket.io-client';
 import './style.css';
+import Replies from '../Replies';
+import Reply from '../Reply';
 const socket = socketIOClient('http://localhost:7425');
 
 const classes = {
@@ -31,7 +33,8 @@ export default class OpenedTicket extends Component {
   }
 
   render() {
-    const { subject, status, from, cc, body, date, attachments } = this.props;
+    const { subject, status, from, cc, body, date, attachments } = this.props,
+      { replies } = this.state;
     return (
       <section className="opened-ticket">
         <div className="opened-ticket__header">
@@ -44,22 +47,24 @@ export default class OpenedTicket extends Component {
             <Logo className="opened-ticket__logo" />
           </div>
           <div className="opened-ticket__details-emails-div">
-            <span className="opened-ticket__from opened-ticket__details-text">
-              <span className="opened-ticket__details-text--strong">From:</span>
-              {from}
-            </span>
-            {cc ? (
-              <span className="opened-ticket__cc opened-ticket__details-text">
-                <span className="opened-ticket__details-text--strong">CC:</span>
-                {cc}
+            <div className="opened-ticket__details-emails-div">
+              <span className="opened-ticket__from opened-ticket__details-text">
+                <span className="opened-ticket__details-text--strong">From:</span>
+                {from}
               </span>
-            ) : (
-              <></>
-            )}
-            <span className="opened-ticket__date opened-ticket__details-text">
-              <span className="opened-ticket__details-text--strong">Date:</span>
-              {date}
-            </span>
+              {cc ? (
+                <span className="opened-ticket__cc opened-ticket__details-text">
+                  <span className="opened-ticket__details-text--strong">CC:</span>
+                  {cc.map(e => `${e.address}, `)}
+                </span>
+              ) : (
+                <></>
+              )}
+              <span className="opened-ticket__date opened-ticket__details-text">
+                <span className="opened-ticket__details-text--strong">Date:</span>
+                {date}
+              </span>
+            </div>
           </div>
         </div>
         <div className="opened-ticket__body" dangerouslySetInnerHTML={{ __html: body }} />
@@ -85,6 +90,8 @@ export default class OpenedTicket extends Component {
         ) : (
           <></>
         )}
+        {replies.length ? <Replies tickets={replies} /> : <></>}
+        <Reply />
       </section>
     );
   }

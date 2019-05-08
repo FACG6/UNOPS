@@ -144,6 +144,7 @@ const mails = (socket, io) => {
         getReplies(msgId).then((result) => {
           result.forEach(res => allReplies.push(res));
         });
+        console.log(allReplies);
         cb(allReplies);
       };
 

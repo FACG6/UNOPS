@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import swal from 'sweetalert2';
+import ReactLoading from 'react-loading';
 import Login from './components/pages/Login';
 import TicketsPage from './components/pages/TicketsPage';
 import NewTicketPage from './components/pages/NewTicketPage';
-import ticketsSample from './components/model';
 import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
+import { encode } from 'base64-arraybuffer';
 const socket = socketIOClient('http://localhost:7425');
 
 export default class App extends Component {
@@ -31,11 +32,12 @@ export default class App extends Component {
       status: '',
     },
     searchResults: null,
+    ticketsUids: [],
   };
   // update status function to be used in 'update-status component.
-  updateStatus = () => {
-    // need to use two variables here, uid and status..
-    socket.emit('update status', { uid: 1002, status: 'pending' });
+  updateStatus = (uids, markAs) => {
+    socket.emit('update status', { uids, markAs });
+    socket.on('update status done', () => window.location.reload());
   };
   // search fuction to be used in search component
   search = () => {
@@ -46,11 +48,11 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    const from = new Date(Date.now() + 1000 * 60 * 60 * 24);
-    const before = from.toDateString().split(' ');
+    const from = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
+    const since = from.toDateString().split(' ');
 
-    const to = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
-    const since = to.toDateString().split(' ');
+    const to = new Date(Date.now() + 1000 * 60 * 60 * 24);
+    const before = to.toDateString().split(' ');
 
     fetch('/ahmed');
     socket.on('error', error => console.log(error));
@@ -62,27 +64,69 @@ export default class App extends Component {
     });
 
     socket.on('userTickets', data => {
+<<<<<<< HEAD
       
     });
     
-    socket.on('mails', data => {
+=======
       const mail = JSON.parse(data).mailobj;
+
+      if (mail.attachments)
+        mail.attachments.forEach((attachment, index) => {
+          const arr = new Uint8Array(attachment.content.data);
+          mail.attachments[index].content.data = encode(arr);
+        });
+
       const mailAttr = JSON.parse(data).attribs;
       mail.body = mail.html;
       mail.from = mail.from[0].address;
       mail.uid = mailAttr.uid;
       mail.date = new Date(mail.date).toLocaleDateString();
-      const resolved = mailAttr.flags.includes('resolved');
+      const resolved = mailAttr.flags.includes('closed');
       if (resolved)
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].closed.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
       else
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].pending.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
+          return newState;
+        });
+    });
+>>>>>>> 82f1d31badbd7a2b5539df6efb92f4c68874bcb3
+    socket.on('mails', data => {
+      const mail = JSON.parse(data).mailobj;
+      console.log(JSON.parse(data));
+
+      if (mail.attachments)
+        mail.attachments.forEach((attachment, index) => {
+          const arr = new Uint8Array(attachment.content.data);
+          mail.attachments[index].content.data = encode(arr);
+        });
+
+      const mailAttr = JSON.parse(data).attribs;
+      mail.body = mail.html;
+      mail.from = mail.from[0].address;
+      mail.uid = mailAttr.uid;
+      mail.date = new Date(mail.date).toLocaleDateString();
+      const resolved = mailAttr.flags.includes('closed');
+      if (resolved)
+        this.setState(prevState => {
+          const newState = { ...prevState };
+          newState.tickets['all-tickets'].closed.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
+          return newState;
+        });
+      else
+        this.setState(prevState => {
+          const newState = { ...prevState };
+          newState.tickets['all-tickets'].pending.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
     });
@@ -99,26 +143,30 @@ export default class App extends Component {
     });
     socket.on('new mail', newMail => {
       const mail = JSON.parse(newMail).mailobj;
+      console.log(mail)
       const mailAttr = JSON.parse(newMail).attribs;
       mail.body = mail.html;
       mail.from = mail.from[0].address;
       mail.uid = mailAttr.uid;
       mail.date = new Date(mail.date).toLocaleDateString();
-      const resolved = mailAttr.flags.includes('resolved');
+      const resolved = mailAttr.flags.includes('closed');
       if (resolved)
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].closed.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
       else
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].pending.unshift(mail);
+          newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
     });
   }
+
   componentWillUnmount() {
     socket.off('mails');
     socket.off('update status');
@@ -173,13 +221,14 @@ export default class App extends Component {
   draftsCount = () => this.state.tickets.drafts.length;
 
   trashCount = () => this.state.tickets.trash.length;
-  
-  sendReply =(message)=>{
-    socket.emit('sendMail',message)
-  }
+
+  sendReply = message => {
+    socket.emit('sendMail', message);
+  };
 
   render() {
-    return (
+    const { pending, closed } = this.state.tickets['all-tickets'];
+    return pending.length || closed.length ? (
       <Router>
         <Switch>
           <Route path="/login" component={Login} />
@@ -204,8 +253,16 @@ export default class App extends Component {
             render={props => {
               const { category, status } = props.match.params;
               if (category === 'all-tickets' || category === 'my-ticekts')
-                if (status === 'pending' || status === 'dlosed')
-                  return <TicketsPage {...props} tickets={this.state.tickets} />;
+                if (status === 'pending' || status === 'closed')
+                  return (
+                    <TicketsPage
+                      key="Tickets_Page"
+                      {...props}
+                      tickets={this.state.tickets}
+                      ticketsUids={this.state.ticketsUids}
+                      updateStatus={this.updateStatus}
+                    />
+                  );
               return <Redirect to="/404" />;
             }}
           />
@@ -256,6 +313,10 @@ export default class App extends Component {
           />
         </Switch>
       </Router>
+    ) : (
+      <div className="tickets-page__loading">
+        <ReactLoading type="spin" color="#437489" width="200px" height="200px" />
+      </div>
     );
   }
 }

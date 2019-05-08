@@ -1,8 +1,10 @@
 const express = require('express');
-const login = require('./login');
+const { join } = require('path');
 
 const router = express.Router();
 
-router.post('/login', login.post);
+router.get('*', (req, res) => {
+  res.sendFile(join(__dirname, '..', '..', 'client', 'build', 'index.html'));
+});
 
 module.exports = router;

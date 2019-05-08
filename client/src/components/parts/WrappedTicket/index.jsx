@@ -4,14 +4,31 @@ import PropTypes from 'prop-types';
 import './style.css';
 
 export default function WrappedTicket({
-  from, subject, text, date, allChecked, uid,
+  from,
+  subject,
+  text,
+  date,
+  allChecked,
+  uid,
+  isChecked,
+  toggleCheck,
 }) {
   return (
     <section className="wrapped-ticket">
-      {allChecked ? (
-        <input type="checkbox" className="wrapped-ticket__checkbox" checked />
+      {isChecked || allChecked ? (
+        <input
+          type="checkbox"
+          className="wrapped-ticket__checkbox"
+          checked
+          onClick={() => toggleCheck(uid)}
+        />
       ) : (
-        <input type="checkbox" className="wrapped-ticket__checkbox" />
+        <input
+          type="checkbox"
+          className="wrapped-ticket__checkbox"
+          onClick={() => toggleCheck(uid)}
+          value="checked"
+        />
       )}
       <Link to={`/ticket/${uid}`}>
         <span className="wrapped-ticket__from wrapped-ticket__text">{from}</span>
@@ -20,7 +37,7 @@ export default function WrappedTicket({
         </span>
 
         <span className="wrapped-ticket__description">
-          {text.length > 59 ? `${text.substring(0, 59)}...` : text}
+          {text && text.length > 59 ? `${text.substring(0, 59)}...` : text || ''}
         </span>
         <span className="wrapped-ticket__date wrapped-ticket__text">{date}</span>
       </Link>

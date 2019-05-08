@@ -1,8 +1,8 @@
-const getTickets = require('../database/quiries/getTickets');
+const getTickets = require('../database/queries/getTickets');
 const verifyEvent = require('../authentication/verifyCookie');
 const nodemailer = require('./nodemailer');
-const addNewReply = require('../database/quiries/addreply');
-const addTicket = require('../database/quiries/addTicket');
+const addNewReply = require('../database/queries/addreply');
+const addTicket = require('../database/queries/addTicket');
 
 function events(
   socket,
@@ -11,6 +11,7 @@ function events(
   triggerOnNewMail,
   triggerUpdateStatusObj,
   triggerSearchKeyword,
+  conversation,
 ) {
   socket.emit('request getmails');
   socket.on('getmails', (timeRange) => {
@@ -25,7 +26,10 @@ function events(
           });
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
-      .catch(err => io.to(socket.id).emit('error', { error: `verification, ${err}` }));
+      .catch((err) => {
+        console.log(err);
+        io.to(socket.id).emit('error', { error: `verification, ${err}` });
+      });
   });
 
   socket.on('update status', (statusObj) => {
@@ -33,7 +37,7 @@ function events(
       .then((res) => {
         if (res) {
           triggerUpdateStatusObj(statusObj);
-          io.to(socket.id).emit('status changed successfully');
+          io.to(socket.id).emit('update status done');
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
       .catch(err => io.to(socket.id).emit('error', { error: `socket update status ${err}` }));
@@ -107,6 +111,27 @@ function events(
     });
   });
 
+  socket.on('get replies', (msgId) => {
+    verifyEvent(socket)
+      .then((res) => {
+        if (res) {
+          conversation(msgId, (reply) => {
+            io.to(socket.id).emit('replies', reply);
+          });
+        } else io.to(socket.id).emit('error', { error: 'not verified' });
+      })
+      .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
+  });
+  socket.on('send reply', (message) => {
+    verifyEvent(socket)
+      .then((res) => {
+        if (res) {
+          nodemailer(message);
+          addNewReply(message);
+        } else io.to(socket.id).emit('error', { error: 'not verified' });
+      })
+      .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
+  });
   console.log('made socket connection', socket.id);
 }
 module.exports = events;

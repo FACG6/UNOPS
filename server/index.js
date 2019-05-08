@@ -5,7 +5,7 @@ const app = require('./app.js');
 require('dotenv').config();
 
 const { IMAP_USER: user, IMAP_USER_PASS: password } = process.env;
-const server = app.listen(app.get('port'), app.get('host') || 'localhost', () => console.log(`Server is up on http://${app.get('host')}:${app.get('port')}`));
+const server = app.listen(app.get('port'), () => console.log(`Server is up on http://${app.get('host')}:${app.get('port')}`));
 
 const io = socket(server);
 io.on('connection', (socket) => {

@@ -12,4 +12,16 @@ const verifyEvent = socket => new Promise((resolve, reject) => {
   );
 });
 
-module.exports = verifyEvent;
+const verifyAuthority = (req, res, next) => {
+  verify(
+    req.cookies.jwt,
+    process.env.PRIVATE_KEY,
+    (err, decoded) => {
+      if (err) res.status(500).send('Internal server error.');
+      else req.cookies.jwt = decoded;
+      next();
+    },
+  );
+};
+
+module.exports = { verifyEvent, verifyAuthority };

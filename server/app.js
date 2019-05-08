@@ -22,6 +22,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(compression());
 app.use(express.static(join(__dirname, '..', 'client', 'build')));
 
-app.use(router);
+app.use('/api/v1', router);
+
+app.use('*', (req, res) => {
+  res.sendFile(join(__dirname, '..', 'client', 'build', 'index.html'));
+});
 
 module.exports = app;

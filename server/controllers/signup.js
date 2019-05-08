@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const joi = require('joi');
 const scheme = require('../validationScheme/scheme');
-const addUser = require('../database/quiries/addUser');
+const addUser = require('../database/queries/addUser');
 
 exports.post = async (req, res) => {
   try {

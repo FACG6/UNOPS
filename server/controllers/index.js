@@ -10,7 +10,7 @@ const router = express.Router();
 router.post('/login', login.post);
 
 router.get('*', (req, res) => {
-  res.sendFile(join(__dirname, '..', '..', 'client', 'build', 'createUser.html'));
+  res.sendFile(join(__dirname, '..', '..', 'client', 'build', 'index.html'));
 });
 
 router.post('/create-user', verifyAuthority, signup.post);

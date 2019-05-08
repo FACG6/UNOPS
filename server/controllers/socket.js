@@ -1,4 +1,9 @@
-const { verifyEvent } = require('../authentication/verifyCookie');
+
+
+const verifyEvent = require('../authentication/verifyCookie');
+const nodemailer = require('./nodemailer');
+const addNewReply = require('../database/queries/addreply');
+const addTicket = require('../database/queries/addTicket');
 
 function events(
   socket,
@@ -7,6 +12,7 @@ function events(
   triggerOnNewMail,
   triggerUpdateStatusObj,
   triggerSearchKeyword,
+  conversation,
 ) {
   socket.emit('request getmails');
   socket.on('getmails', (timeRange) => {
@@ -20,7 +26,10 @@ function events(
           });
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
-      .catch(err => io.to(socket.id).emit('error', { error: `verification, ${err}` }));
+      .catch((err) => {
+        console.log(err);
+        io.to(socket.id).emit('error', { error: `verification, ${err}` });
+      });
   });
 
   socket.on('update status', (statusObj) => {
@@ -28,7 +37,7 @@ function events(
       .then((res) => {
         if (res) {
           triggerUpdateStatusObj(statusObj);
-          io.to(socket.id).emit('status changed successfully');
+          io.to(socket.id).emit('update status done');
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
       .catch(err => io.to(socket.id).emit('error', { error: `socket update status ${err}` }));
@@ -38,7 +47,7 @@ function events(
     verifyEvent(socket)
       .then((res) => {
         if (res) {
-          // need a database query here to add the new ticket to the database
+          addTicket(data).catch(error => io.to(socket.id).emit('error', error));
           io.to(socket.id).emit('ticket added successfully');
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
@@ -49,8 +58,8 @@ function events(
     verifyEvent(socket)
       .then((res) => {
         if (res) {
-          // need a database query here to add the new ticket to the database
-          // need a nodemailer function to send messages
+          nodemailer(data).catch(error => io.to(socket.id).emit('error', error));
+          addTicket(data).catch(error => io.to(socket.id).emit('error', error));
           io.to(socket.id).emit('ticket added successfully');
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
@@ -86,6 +95,7 @@ function events(
       })
       .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
   });
+
   triggerOnNewMail((mail) => {
     io.to(socket.id).emit('notification');
     socket.on('get new mail', () => {
@@ -99,6 +109,27 @@ function events(
     });
   });
 
+  socket.on('get replies', (msgId) => {
+    verifyEvent(socket)
+      .then((res) => {
+        if (res) {
+          conversation(msgId, (reply) => {
+            io.to(socket.id).emit('replies', reply);
+          });
+        } else io.to(socket.id).emit('error', { error: 'not verified' });
+      })
+      .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
+  });
+  socket.on('send reply', (message) => {
+    verifyEvent(socket)
+      .then((res) => {
+        if (res) {
+          nodemailer(message);
+          addNewReply(message);
+        } else io.to(socket.id).emit('error', { error: 'not verified' });
+      })
+      .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
+  });
   console.log('made socket connection', socket.id);
 }
 module.exports = events;

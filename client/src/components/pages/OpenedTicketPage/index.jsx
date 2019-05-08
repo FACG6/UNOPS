@@ -31,9 +31,6 @@ export default function OpenedTicketPage({
       </>
     );
   }
-  const {
-    from, subject, date, body, cc,
-  } = ticket;
   return (
     <>
       <MainSidebar selected="tickets" />
@@ -45,7 +42,7 @@ export default function OpenedTicketPage({
         selected={category}
       />
       <main className="opened-ticket-page">
-        <OpenedTicket from={from} subject={subject} date={date} body={body} cc={cc} />
+        <OpenedTicket {...ticket} />
         <Replies tickets={[]} />
         <Reply />
       </main>

@@ -1,26 +1,39 @@
 BEGIN;
 
-    DROP TABLE IF EXISTS users, tickets_status, tickets
+    DROP TABLE IF EXISTS users, tickets ,replies
     CASCADE;
 
 CREATE TABLE users
 (
     id SERIAL PRIMARY KEY,
     email VARCHAR NOT NULL UNIQUE,
-    name VARCHAR NOT NULL ,
-    password VARCHAR NOT NULL
+   user_name VARCHAR NOT NULL ,
+    user_password VARCHAR NOT NULL
 );
-
 CREATE TABLE tickets
 (
-    uid INTEGER PRIMARY KEY,
-    sent_by VARCHAR NOT NULL,
-    delivered_to VARCHAR NOT NULL,
-    date_time TIMESTAMP NOT NULL,
-    body VARCHAR NOT NULL,
-    status VARCHAR NOT NULL,
-    subject VARCHAR NOT NULL,
-    user_id INTEGER REFERENCES users(id)
+    id SERIAl PRIMARY KEY,
+    sentby TEXT,
+    deliveredto TEXT NOT NULL,
+    bcc TEXT,
+    dattime TIMESTAMP,
+    body TEXT NOT NULL,
+    statusticket TEXT NOT NULL,
+    subjectticket TEXT NOT NULL,
+    userid INTEGER REFERENCES users(id)
 );
 
+CREATE TABLE replies
+(
+    id SERIAl PRIMARY KEY,
+    sentby TEXT,
+    deliveredto TEXT NOT NULL,
+    bcc TEXT,
+    dattime TIMESTAMP,
+    body TEXT NOT NULL,
+    statusticket TEXT NOT NULL,
+    subjectticket TEXT NOT NULL,
+    userid INTEGER REFERENCES users(id),
+    inReplyTo TEXT NOT NUll
+);
 COMMIT;

@@ -1,6 +1,7 @@
 const Imap = require('imap');
 const { MailParser } = require('mailparser-mit');
 const events = require('../controllers/socket');
+const getReplies = require('../database/queries/getReplies');
 require('dotenv').config();
 
 const mails = (socket, io) => {
@@ -11,7 +12,7 @@ const mails = (socket, io) => {
     port: 993,
     tls: true,
   });
-
+  const replies = [];
   imap.once('ready', () => {
     imap.openBox('INBOX', false, (err, box) => {
       const triggerGetMailsObj = (timeRange, cb) => {
@@ -21,23 +22,32 @@ const mails = (socket, io) => {
             if (er) io.to(socket.id).emit('error', err);
             try {
               const f = imap.fetch(results, { bodies: '' });
+              let data = {};
               let attribs = {};
               let mailobj = {};
-              f.on('message', (msg, seqno) => {
-                msg.once('attributes', (attrs) => {
-                  attribs = attrs;
+              const attrs = [];
+              let i = 0;
+              f.on('message', async (msg, seqno) => {
+                msg.once('attributes', (attr) => {
+                  attrs.push(attr);
                 });
-                const parser = new MailParser();
-                msg.on('body', (stream, info) => {
-                  parser.on('end', (mailObject) => {
-                    if (!mailObject.headers['in-reply-to']) {
+                if (attrs[i]) {
+                  msg.on('body', async (stream, info) => {
+                    const parser = new MailParser();
+                    parser.on('end', (mailObject) => {
                       mailobj = mailObject;
-                      const data = { attribs, mailobj };
-                      cb(JSON.stringify(data));
-                    }
+                      attribs = attrs[i];
+                      data = { attribs, mailobj };
+                      i++;
+                      if (!mailObject.headers['in-reply-to']) {
+                        cb(JSON.stringify(data));
+                      } else {
+                        replies.push(data);
+                      }
+                    });
+                    stream.pipe(parser);
                   });
-                  stream.pipe(parser);
-                });
+                }
               });
               f.once('error', (getMailsErr) => {
                 io.to(socket.id).emit('error', `get mails ${getMailsErr}`);
@@ -50,27 +60,31 @@ const mails = (socket, io) => {
       };
       const triggerOnNewMail = (cb) => {
         imap.on('mail', () => {
-          const parser = new MailParser();
           const f = imap.seq.fetch('*', {
             bodies: '',
             struct: true,
           });
-
           let attribs = {};
           let mailobj = {};
           f.on('message', (msg) => {
+            const parser = new MailParser();
             msg.once('attributes', (attrs) => {
               attribs = attrs;
             });
-            msg.on('body', (stream) => {
-              stream.pipe(parser);
-              parser.on('end', (parsedMail) => {
-                if (!parsedMail.headers['in-reply-to']) {
-                  mailobj = parsedMail;
-                  const data = { attribs, mailobj };
+            msg.on('body', async (stream) => {
+              attribs = await new Promise(resolve => msg.once('attributes', (attrs) => {
+                resolve(attrs);
+              }));
+              parser.on('end', (mailObject) => {
+                mailobj = mailObject;
+                const data = { attribs, mailobj };
+                if (!mailObject.headers['in-reply-to']) {
                   cb(JSON.stringify(data));
+                } else {
+                  replies.push(data);
                 }
               });
+              stream.pipe(parser);
             });
           });
           f.once('error', (imapErr) => {
@@ -80,9 +94,20 @@ const mails = (socket, io) => {
         });
       };
 
-      const triggerUpdateStatusObj = (trigUpdateStatusObj) => {
-        if (err) io.to(socket.id).emit('error', err);
-        imap.setKeywords(trigUpdateStatusObj.uid, [`${trigUpdateStatusObj.status}`], er => io.to(socket.id).emit('error', `imap update status ${er}`));
+      const triggerUpdateStatusObj = (markAsObj) => {
+        console.log(markAsObj);
+        if (markAsObj.markAs === 'pending') {
+          imap.delKeywords(markAsObj.uids, 'resolved', (er) => {
+            if (er) io.to(socket.id).emit('error', `imap update status ${er}`);
+          });
+        } else {
+          imap.delKeywords(markAsObj.uids, 'pending', (er) => {
+            if (er) io.to(socket.id).emit('error', `imap update status ${er}`);
+          });
+        }
+        imap.setKeywords(markAsObj.uids, `${markAsObj.markAs}`, (er) => {
+          if (er) io.to(socket.id).emit('error', `imap update status ${er}`);
+        });
       };
 
       const triggerSearchKeyword = (trigSearchKeyword, cb) => {
@@ -105,10 +130,23 @@ const mails = (socket, io) => {
             f.once('error', (er) => {
               io.to(socket.id).emit('error', `search, ${er}`);
             });
-            f.once('end', () => {});
+            f.once('end', () => { });
           }
         });
       };
+      const conversation = (msgId, cb) => {
+        const allReplies = [];
+        replies.map((reply) => {
+          if (reply.mailobj.inReplyTo[0] === msgId) {
+            allReplies.push(reply);
+          }
+        });
+        getReplies(msgId).then((result) => {
+          result.forEach(res => allReplies.push(res));
+        });
+        cb(allReplies);
+      };
+
       events(
         socket,
         io,
@@ -116,6 +154,7 @@ const mails = (socket, io) => {
         triggerOnNewMail,
         triggerUpdateStatusObj,
         triggerSearchKeyword,
+        conversation,
       );
     });
   });

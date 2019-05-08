@@ -47,7 +47,7 @@ const mails = (socket, io) => {
                 io.to(socket.id).emit('error', `get mails ${getMailsErr}`);
               });
             } catch (e) {
-              io.to(socket.id).emit('error', 'get mails error, ((date)) , nothing to fitch');
+              io.to(socket.id).emit('error', 'get mails error, ((date)), nothing to fetch');
             }
           },
         );

@@ -1,4 +1,3 @@
-
 const Imap = require('imap');
 const { MailParser } = require('mailparser-mit');
 const events = require('../controllers/socket');
@@ -36,7 +35,6 @@ const mails = (socket, io) => {
                     if (!mailObject.headers['in-reply-to']) {
                       mailobj = mailObject;
                       const data = { attribs, mailobj };
-                      console.log(data.attribs);
                       cb(JSON.stringify(data));
                     } else {
                       replies.push(data);
@@ -113,7 +111,7 @@ const mails = (socket, io) => {
             f.once('error', (er) => {
               io.to(socket.id).emit('error', `search, ${er}`);
             });
-            f.once('end', () => { });
+            f.once('end', () => {});
           }
         });
       };

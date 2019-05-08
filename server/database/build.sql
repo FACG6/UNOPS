@@ -36,7 +36,6 @@ CREATE TABLE replies
     subjectticket TEXT NOT NULL,
     userid INTEGER REFERENCES users(id),
     inReplyTo TEXT NOT NUll,
-    reference TEXT NOT NULL,
     reply BOOLEAN NOT NULL
 );
 COMMIT;

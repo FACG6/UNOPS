@@ -5,7 +5,7 @@ import Navbar from '../../parts/Navbar';
 import WrappedTicket from '../../parts/WrappedTicket';
 import './style.css';
 
-export default class extends Component {
+export default class TicketsPage extends Component {
   state = {
     tickets: this.props.tickets || {
       'all-tickets': {
@@ -23,6 +23,7 @@ export default class extends Component {
     currentStatus: this.props.match.params.status || 'pending',
     allChecked: false,
     markAs: null,
+    checkedTickets: [],
   };
 
   componentWillReceiveProps(nextProps) {
@@ -34,7 +35,20 @@ export default class extends Component {
   }
 
   toggleAllChecked = () => {
-    this.setState({ allChecked: !this.state.allChecked });
+    const { allChecked } = this.state;
+    if (allChecked) this.setState({ allChecked: !this.state.allChecked, checkedTickets: [] });
+    else
+      this.setState({ allChecked: !this.state.allChecked, checkedTickets: this.props.ticketsUids });
+  };
+
+  toggleCheck = uid => {
+    const { checkedTickets } = this.state;
+    const i = checkedTickets.indexOf(uid);
+    if (i > -1) {
+      const newCheckedTickets = [...checkedTickets];
+      newCheckedTickets.splice(i, 1);
+      this.setState({ checkedTickets: newCheckedTickets });
+    } else this.setState({ checkedTickets: [...checkedTickets, uid] });
   };
 
   render() {
@@ -43,7 +57,14 @@ export default class extends Component {
     let allTicketsCount;
     let myTicketsCount;
     let ticketsToRender;
-    const { currentCategory, currentStatus, allChecked, markAs, tickets } = this.state;
+    const {
+      currentCategory,
+      currentStatus,
+      allChecked,
+      markAs,
+      tickets,
+      checkedTickets,
+    } = this.state;
 
     if (!(currentCategory === 'trash' || currentCategory === 'drafts')) {
       pendingTicketsCount = tickets[currentCategory].pending.length;
@@ -90,8 +111,16 @@ export default class extends Component {
             <span className="tickets-page__select-all" onClick={this.toggleAllChecked}>
               Select all
             </span>
-            <select name="markAs" id="markAs" className="tickets-page__mark-as">
-              <option value="null" selected disabled hidden>
+            <select
+              value="default"
+              name="markAs"
+              id="markAs"
+              className="tickets-page__mark-as"
+              onChange={({ target: { value } }) =>
+                this.props.updateStatus(this.state.checkedTickets, value)
+              }
+            >
+              <option value="default" selected disabled hidden>
                 Mark as
               </option>
               <option value="pending">Pending</option>
@@ -99,7 +128,12 @@ export default class extends Component {
             </select>
           </div>
           {ticketsToRender.map(ticket => (
-            <WrappedTicket {...ticket} allChecked={allChecked} />
+            <WrappedTicket
+              {...ticket}
+              allChecked={allChecked}
+              isChecked={checkedTickets.includes(ticket.uid)}
+              toggleCheck={this.toggleCheck}
+            />
           ))}
         </main>
       </>

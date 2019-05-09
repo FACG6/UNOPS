@@ -1,5 +1,5 @@
+const { verifyEvent } = require('../authentication/verifyCookie');
 const getTickets = require('../database/queries/getTickets');
-const verifyEvent = require('../authentication/verifyCookie');
 const nodemailer = require('./nodemailer');
 const addNewReply = require('../database/queries/addreply');
 const addTicket = require('../database/queries/addTicket');
@@ -18,9 +18,11 @@ function events(
     verifyEvent(socket)
       .then((res) => {
         if (res) {
-          getTickets().then((result) => {
-            io.to(socket.id).emit('userTickets', result);
-          }).catch(error => io.to(socket.id).emit('error', error));
+          getTickets()
+            .then((result) => {
+              io.to(socket.id).emit('userTickets', result);
+            })
+            .catch(error => io.to(socket.id).emit('error', error));
           triggerGetMailsObj(timeRange, (mailObject) => {
             io.to(socket.id).emit('mails', mailObject);
           });
@@ -121,6 +123,7 @@ function events(
       })
       .catch(err => io.to(socket.id).emit('error', { error: `reports ${err}` }));
   });
+
   socket.on('send reply', (message) => {
     verifyEvent(socket)
       .then((res) => {

@@ -106,7 +106,7 @@ export default class TicketsPage extends Component {
             children={currentCategory}
           />
         )}
-        <main className="tickets-page">
+        <main className="tickets-page" onScroll={this.props.scroll}>
           <div className="tickets-page__header">
             <span className="tickets-page__select-all" onClick={this.toggleAllChecked}>
               Select all

@@ -3,8 +3,9 @@ import './style.css';
 
 export default function SearchSidebar({
   updateSearch,
-  searchValues: { query, user, status },
+  searchValues: { ...searchValues },
   searchAction,
+  sideBarSearch: { ...SearchSidebar },
 }) {
   return (
     <aside className="search-sidebar">
@@ -17,7 +18,7 @@ export default function SearchSidebar({
             className="search-sidebar__searchbar"
             placeholder="Search for tickets"
             onChange={({ target: { value } }) => updateSearch('query', value)}
-            value={query}
+
           />
           <div className="search-sidebar__search-icon-div">
             <i className="fas fa-search search-sidebar__search-icon" />
@@ -26,7 +27,7 @@ export default function SearchSidebar({
         <div className="search-sidebar__label">
           <span className="search-sidebar__label-text">User :</span>
           <select
-            value={user}
+            value={searchValues.user}
             name="users"
             id="users"
             className="search-sidebar__select"
@@ -44,7 +45,7 @@ export default function SearchSidebar({
         <div className="search-sidebar__label">
           <span className="search-sidebar__label-text">Status :</span>
           <select
-            value={status}
+            value={searchValues.status}
             name="users"
             id="users"
             className="search-sidebar__select"

@@ -27,7 +27,6 @@ function events(
         } else io.to(socket.id).emit('error', { error: 'not verified' });
       })
       .catch((err) => {
-        console.log(err);
         io.to(socket.id).emit('error', { error: `verification, ${err}` });
       });
   });

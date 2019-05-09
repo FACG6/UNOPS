@@ -74,14 +74,14 @@ export default class OpenedTicket extends Component {
               <a
                 download={attachment.fileName}
                 href={`data:application/octet-stream;base64,${attachment.content.data}`}
-                className={`${
+                className={ `${ classes[attachment] ?  
                   classes[attachment.fileName.split('.')[1]].general
-                } opened-ticket__attachment-link`}
+                : '' } opened-ticket__attachment-link`}
               >
                 <i
-                  className={`${
+                  className={`${classes[attachment] ?  
                     classes[attachment.fileName.split('.')[1]].icon
-                  } opened-ticket__attachment-icon`}
+                  : '' } opened-ticket__attachment-icon`}
                 />
                 <span className="opened-ticket__attachment-name">{attachment.fileName}</span>
               </a>

@@ -10,7 +10,7 @@ import './App.css';
 import OpenedTicketPage from './components/pages/OpenedTicketPage';
 import SearchPage from './components/pages/SearchPage';
 import { encode } from 'base64-arraybuffer';
-const socket = socketIOClient('https://unops.herokuapp.com/');
+const socket = socketIOClient('http://localhost:7425');
 
 export default class App extends Component {
   state = {
@@ -33,6 +33,7 @@ export default class App extends Component {
     },
     searchResults: null,
     ticketsUids: [],
+    scrollcounter:1,
   };
   // update status function to be used in 'update-status component.
   updateStatus = (uids, markAs) => {
@@ -40,12 +41,50 @@ export default class App extends Component {
     socket.on('update status done', () => window.location.reload());
   };
   // search fuction to be used in search component
-  search = () => {
-    socket.emit('search', { keyword: 'pending' });
-    socket.on('search result', result => {
-      console.log('search result', result);
-    });
-  };
+  updateSearch = (element, value) => {
+    const stateSearch = this.state.search;
+    stateSearch[element] = value;
+    let filtered = {
+      pending: [],
+      closed: [],
+    };
+    switch (element){
+      case 'query':
+      for(let t in this.state.tickets['all-tickets'].pending){
+        let regex = new RegExp(value);
+        if(regex.test(this.state.tickets['all-tickets'].pending[t].from)){
+          filtered.pending.push(this.state.tickets['all-tickets'].pending[t]);
+        }
+      }
+      for(let t in this.state.tickets['all-tickets'].closed){
+        console.log(1111111111,this.state.tickets['all-tickets'].pending[t], value)
+        if(t['all-tickets'].closed[0].from === value){
+          filtered.closed.push(t);
+        }
+      }
+      break;
+      case 'status':
+      if(value == 'pending'){
+        filtered.pending = this.state.tickets['all-tickets'].pending;
+      }else {
+        filtered.closed = this.state.tickets['all-tickets'].closed
+      }
+      break;
+      case 'user':
+      for(let t in this.state.tickets['all-tickets'].pending ){
+        if(this.state.tickets['all-tickets'].pending[t].user){
+          filtered.pending = this.state.tickets['all-tickets'].pending[t];
+        }
+      }
+      for(let t in this.state.tickets['all-tickets'].closed ){
+        console.log(1111111111,this.state.tickets['all-tickets'].pending[t], value)
+        if(this.state.tickets['all-tickets'].closed[t].user){
+          filtered.closed = this.state.tickets['all-tickets'].closed[t];
+        }
+      }
+    }
+    this.setState({search: stateSearch, searchResults:filtered})
+  }
 
   componentDidMount() {
     const from = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
@@ -64,7 +103,8 @@ export default class App extends Component {
     });
 
     socket.on('userTickets', data => {
-      const mail = JSON.parse(data).mailobj;
+      let mail = JSON.parse(data).mailobj;
+      mail.user= true;
 
       if (mail.attachments)
         mail.attachments.forEach((attachment, index) => {
@@ -82,7 +122,6 @@ export default class App extends Component {
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].closed.unshift(mail);
-          newState.tickets['my-tickets'].closed.unshift(mail);
           newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
@@ -90,13 +129,14 @@ export default class App extends Component {
         this.setState(prevState => {
           const newState = { ...prevState };
           newState.tickets['all-tickets'].pending.unshift(mail);
-          newState.tickets['my-tickets'].pending.unshift(mail);
           newState.ticketsUids.unshift(mail.uid);
           return newState;
         });
     });
     socket.on('mails', data => {
       const mail = JSON.parse(data).mailobj;
+      console.log(JSON.parse(data));
+
       if (mail.attachments)
         mail.attachments.forEach((attachment, index) => {
           const arr = new Uint8Array(attachment.content.data);
@@ -137,7 +177,7 @@ export default class App extends Component {
     });
     socket.on('new mail', newMail => {
       const mail = JSON.parse(newMail).mailobj;
-      console.log(mail);
+      console.log(mail)
       const mailAttr = JSON.parse(newMail).attribs;
       mail.body = mail.html;
       mail.from = mail.from[0].address;
@@ -160,13 +200,28 @@ export default class App extends Component {
         });
     });
   }
-
   componentWillUnmount() {
     socket.off('mails');
     socket.off('update status');
     socket.off('notification');
     socket.off('new mail');
   }
+
+  scroll = e => {
+    this.setState({scrollcounter: this.state.scrollcounter+1});
+    let element = e.target
+    if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+      const from = new Date(Date.now() - (1000 * 60 * 60 * 24 * 7*this.state.scrollcounter));
+      const since = from.toDateString().split(' ');
+      const to = new Date(Date.now() - (1000 * 60 * 60 * 24 * 7*(this.state.scrollcounter-1)));
+      const before = to.toDateString().split(' ');
+      socket.emit('getmails', {
+        Since: `${since[2]}-${since[1]}-${since[3]}`,
+        Before: `${before[2]}-${before[1]}-${before[3]}`,
+      });
+    }
+  }
+
 
   getTicketByUid = uid => {
     const { tickets } = this.state;
@@ -221,6 +276,8 @@ export default class App extends Component {
   };
 
   render() {
+    console.log("ticketsss",this.state.tickets)
+    console.log('search',this.state.searchResults)
     const { pending, closed } = this.state.tickets['all-tickets'];
     return pending.length || closed.length ? (
       <Router>
@@ -236,7 +293,7 @@ export default class App extends Component {
                 params: { category },
               },
             }) => {
-              if (category === 'all-tickets' || category === 'my-tickets')
+              if (category === 'all-tickets' || category === 'my-ticekts')
                 return <Redirect to={`/tickets/${category}/pending`} />;
               return <Redirect to="/404" />;
             }}
@@ -246,10 +303,11 @@ export default class App extends Component {
             path="/tickets/:category/:status"
             render={props => {
               const { category, status } = props.match.params;
-              if (category === 'all-tickets' || category === 'my-tickets')
+              if (category === 'all-tickets' || category === 'my-ticekts')
                 if (status === 'pending' || status === 'closed')
                   return (
                     <TicketsPage
+                    scroll = {this.scroll}
                       key="Tickets_Page"
                       {...props}
                       tickets={this.state.tickets}
@@ -289,13 +347,15 @@ export default class App extends Component {
           />
           <Route
             path="/search"
-            component={() => (
+            render={() => (
               <SearchPage
-                {...this.state.search}
-                searchResults={this.searchResults}
-                tickets={this.state.tickets['all-tickets'].pending}
+              scroll = {this.scroll}
+               sideBarSearch={this.state.search}
+                searchResults={ this.state.searchResults !== null ?  [...this.state.searchResults.pending,...this.state.searchResults.closed] : this.state.searchResults }
+                tickets={[...this.state.tickets['all-tickets'].pending, ...this.state.tickets['all-tickets'].closed]}
                 pending={this.allPendingTicketsCount()}
                 closed={this.addClosedTicketsCount()}
+                updateSearch = {this.updateSearch}
               />
             )}
           />

@@ -22,6 +22,7 @@ const mails = (socket, io) => {
             if (er) io.to(socket.id).emit('error', err);
             try {
               const f = imap.fetch(results, { bodies: '' });
+              const f2 = imap.fetch(results, { bodies: '' });
               let data = {};
               let attribs = {};
               let mailobj = {};

@@ -27,29 +27,32 @@ const mails = (socket, io) => {
               let mailobj = {};
               const attrs = [];
               let i = 0;
-              f.on('message', async (msg, seqno) => {
+             f.on('message', async (msg, seqno) => {
                 msg.once('attributes', (attr) => {
                   attrs.push(attr);
                 });
-                if (attrs[i]) {
-                  msg.on('body', async (stream, info) => {
-                    const parser = new MailParser();
-                    parser.on('end', (mailObject) => {
-                      mailobj = mailObject;
-                      attribs = attrs[i];
-                      data = { attribs, mailobj };
-                       i++;
-                      if (!mailObject.headers['in-reply-to']) {
-                        cb(JSON.stringify(data));
-                      } else {
-                        replies.push(data);
-                      }
-                    });
-                    stream.pipe(parser);
+              });
+              f2.on('message', async (msg, seqno) => {
+                msg.on('body', async (stream, info) => {
+                  const parser = new MailParser();
+                  parser.on('end', (mailObject) => {
+                    mailobj = mailObject;
+                    attribs = attrs[i];
+                    data = { attribs, mailobj };
+                    i++;
+                    if (!mailObject.headers['in-reply-to']) {
+                      cb(JSON.stringify(data));
+                    } else {
+                      replies.push(data);
+                    }
                   });
-                }
+                  stream.pipe(parser);
+                });
               });
               f.once('error', (getMailsErr) => {
+                io.to(socket.id).emit('error', `get mails ${getMailsErr}`);
+              });
+              f2.once('error', (getMailsErr) => {
                 io.to(socket.id).emit('error', `get mails ${getMailsErr}`);
               });
             } catch (e) {

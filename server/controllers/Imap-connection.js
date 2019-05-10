@@ -38,13 +38,13 @@ const mails = (socket, io) => {
                       mailobj = mailObject;
                       attribs = attrs[i];
                       data = { attribs, mailobj };
-                      i++;
                       if (!mailObject.headers['in-reply-to']) {
                         cb(JSON.stringify(data));
                       } else {
                         replies.push(data);
                       }
                     });
+                    i++;
                     stream.pipe(parser);
                   });
                 }
